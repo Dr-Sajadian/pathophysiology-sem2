@@ -3,476 +3,280 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>نقشه راه مقدمات غدد</title>
-    <!-- لود فونت فارسی وزیرمتن -->
+    <title>مقدمات غدد</title>
     <link href="https://cdn.jsdelivr.net/gh/rastikerdar/vazirmatn@v33.003/Vazirmatn-font-face.css" rel="stylesheet" type="text/css" />
     <style>
-        /* تنظیمات کلی و تم آبی آسمانی */
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
         body {
             background: linear-gradient(135deg, #e0f2fe 0%, #bae6fd 50%, #7dd3fc 100%);
             background-attachment: fixed;
-            color: #0f172a;
             font-family: Vazirmatn, Tahoma, sans-serif;
-            margin: 0;
-            padding: 20px;
+            min-height: 100vh;
             display: flex;
             flex-direction: column;
             align-items: center;
-            min-height: 100vh;
+            padding: 30px 20px;
             overflow-x: hidden;
         }
 
-        /* افکت‌های نورانی پس‌زمینه */
         body::before, body::after {
             content: '';
             position: fixed;
             border-radius: 50%;
             filter: blur(80px);
-            z-index: -1;
+            z-index: 0;
         }
         body::before {
-            width: 300px;
-            height: 300px;
+            width: 300px; height: 300px;
             background: rgba(255, 255, 255, 0.6);
-            top: -50px;
-            right: -50px;
+            top: -50px; right: -50px;
         }
         body::after {
-            width: 400px;
-            height: 400px;
+            width: 400px; height: 400px;
             background: rgba(56, 189, 248, 0.4);
-            bottom: -100px;
-            left: -100px;
+            bottom: -100px; left: -100px;
+        }
+
+        .header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 8px;
+            z-index: 1;
+        }
+
+        .header-icon {
+            width: 55px; height: 55px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #38bdf8, #0284c7);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 28px;
+            box-shadow: 0 6px 15px rgba(2, 132, 199, 0.3);
         }
 
         .header-title {
-            text-align: center;
             font-size: 24px;
             font-weight: 900;
-            margin-bottom: 30px;
             color: #0c4a6e;
             text-shadow: 0 2px 5px rgba(255,255,255,0.8);
         }
 
+        .subtitle {
+            font-size: 14px;
+            color: #0369a1;
+            margin-bottom: 30px;
+            text-align: center;
+            z-index: 1;
+        }
+
         .container {
             width: 100%;
-            max-width: 600px;
+            max-width: 500px;
             display: flex;
             flex-direction: column;
             gap: 15px;
             z-index: 1;
         }
 
-        /* استایل کارت‌های شیشه‌ای */
         .card {
-            background: rgba(255, 255, 255, 0.45);
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
-            border: 1px solid rgba(255, 255, 255, 0.8);
-            border-radius: 16px;
-            padding: 16px;
+            background: rgba(255, 255, 255, 0.5);
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+            border: 1.5px solid rgba(255, 255, 255, 0.85);
+            border-radius: 20px;
+            padding: 15px 20px;
             text-decoration: none;
             color: inherit;
-            display: block;
-            transition: all 0.3s ease;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            transition: all 0.35s ease;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
         }
 
         .card:hover {
-            background: rgba(255, 255, 255, 0.65);
-            border-color: rgba(255, 255, 255, 1);
-            transform: translateY(-3px);
-            box-shadow: 0 8px 25px rgba(14, 165, 233, 0.2);
+            background: rgba(255, 255, 255, 0.75);
+            transform: translateY(-4px);
+            box-shadow: 0 15px 35px rgba(14, 165, 233, 0.25);
+            border-color: #ffffff;
         }
 
-        .card-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 10px;
-        }
-
-        .right-group {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
-
-        .number {
-            background: linear-gradient(135deg, #38bdf8, #0284c7);
-            color: #ffffff;
-            width: 32px;
-            height: 32px;
+        /* دایره عکس اساتید */
+        .card-icon {
+            width: 55px; height: 55px;
             border-radius: 50%;
             display: flex;
             justify-content: center;
             align-items: center;
-            font-weight: bold;
-            font-size: 14px;
-            box-shadow: 0 3px 8px rgba(2, 132, 199, 0.3);
-            flex-shrink: 0; /* جلوگیری از فشرده شدن دایره شماره */
+            font-size: 24px;
+            flex-shrink: 0;
+            box-shadow: 0 5px 12px rgba(0, 0, 0, 0.12);
+            overflow: hidden; /* برای اینکه عکس داخل دایره بمونه */
+            background: #f0f0f0;
         }
 
-        .title {
-            font-size: 15px;
-            font-weight: 800;
+        /* تنظیمات عکس داخل دایره */
+        .card-icon img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover; /* عکس رو متناسب با دایره برش میده */
+        }
+
+        /* رنگ آیکون نمونه سوالات */
+        .icon-questions {
+            background: linear-gradient(135deg, #fde047, #f59e0b);
+        }
+
+        .card-content { flex: 1; text-align: right; }
+
+        .card-title {
+            font-size: 16px;
+            font-weight: 900;
             color: #0c4a6e;
-            line-height: 1.4;
+            margin-bottom: 4px;
+            line-height: 1.5;
         }
 
-        .left-group {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .badge {
-            font-size: 11px;
-            padding: 4px 10px;
-            border-radius: 20px;
-            border: 1px solid;
-            white-space: nowrap;
-            font-weight: bold;
-        }
-
-        .badge.available {
-            color: #0369a1;
-            border-color: rgba(56, 189, 248, 0.6);
-            background-color: rgba(56, 189, 248, 0.2);
-        }
-
-        .chevron {
-            color: #64748b;
-            font-size: 14px;
-            transition: transform 0.3s, color 0.3s;
-        }
-        
-        .card:hover .chevron {
-            color: #0284c7;
-            transform: translateY(2px);
-        }
-
-        .card-body {
+        .card-desc {
             font-size: 12px;
-            color: #334155;
+            color: #475569;
             line-height: 1.6;
-            margin-right: 44px;
+        }
+
+        .card-arrow {
+            color: #0284c7;
+            font-size: 20px;
+            font-weight: bold;
+            transition: transform 0.3s;
+        }
+
+        .card:hover .card-arrow { transform: translateX(-5px); }
+
+        /* کانتینر دکمه‌های بازگشت */
+        .nav-buttons {
+            display: flex;
+            gap: 12px;
+            margin-top: 35px;
+            z-index: 1;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .back-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 12px 22px;
+            background: rgba(255, 255, 255, 0.6);
+            backdrop-filter: blur(10px);
+            color: #0c4a6e;
+            text-decoration: none;
+            border-radius: 25px;
+            font-weight: bold;
+            font-size: 13px;
+            border: 1.5px solid rgba(255, 255, 255, 0.9);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+            transition: all 0.3s;
+        }
+
+        .back-btn:hover {
+            background: rgba(255, 255, 255, 0.85);
+            transform: translateY(-2px);
+        }
+
+        .back-btn.primary {
+            background: linear-gradient(135deg, #38bdf8, #0284c7);
+            color: white;
+            border-color: rgba(255, 255, 255, 0.5);
+        }
+
+        .back-btn.primary:hover {
+            box-shadow: 0 8px 20px rgba(2, 132, 199, 0.4);
         }
 
         ::-webkit-scrollbar { width: 8px; }
         ::-webkit-scrollbar-track { background: transparent; }
         ::-webkit-scrollbar-thumb { background: rgba(14, 165, 233, 0.4); border-radius: 4px; }
-        ::-webkit-scrollbar-thumb:hover { background: rgba(14, 165, 233, 0.7); }
-    /* کانتینر دکمه‌های بازگشت */
-.nav-buttons {
-    display: flex;
-    gap: 12px;
-    margin-top: 35px;
-    z-index: 1;
-    flex-wrap: wrap;
-    justify-content: center;
-}
-
-.back-btn {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    padding: 12px 22px;
-    background: rgba(255, 255, 255, 0.6);
-    backdrop-filter: blur(10px);
-    color: #0c4a6e;
-    text-decoration: none;
-    border-radius: 25px;
-    font-weight: bold;
-    font-size: 13px;
-    border: 1.5px solid rgba(255, 255, 255, 0.9);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-    transition: all 0.3s;
-}
-
-.back-btn:hover {
-    background: rgba(255, 255, 255, 0.85);
-    transform: translateY(-2px);
-}
-
-.back-btn.primary {
-    background: linear-gradient(135deg, #38bdf8, #0284c7);
-    color: white;
-    border-color: rgba(255, 255, 255, 0.5);
-}
-
-.back-btn.primary:hover {
-    box-shadow: 0 8px 20px rgba(2, 132, 199, 0.4);
-}
     </style>
 </head>
 <body>
 
-    <div class="header-title">نقشه راه مقدمات غدد</div>
+    <div class="header">
+        <div class="header-icon">📖</div>
+        <h1 class="header-title">مقدمات غدد</h1>
+    </div>
+
+    <p class="subtitle">استاد مورد نظر را انتخاب کنید</p>
 
     <div class="container">
-        
-        <!-- جلسه ۱ -->
-        <a href="فیزیوپاتولوژی_غدد_مقدمات.html" class="card">
-            <div class="card-header">
-                <div class="right-group">
-                    <div class="number">۱</div>
-                    <div class="title">فیزیوپاتولوژی غدد مقدمات</div>
-                </div>
-                <div class="left-group">
-                    <div class="badge available">در دسترس</div>
-                    <div class="chevron">⌄</div>
-                </div>
+
+        <!-- استاد جلالی -->
+        <a href="jalali.html" class="card">
+            <div class="card-icon">
+                <img src="images/jalali.jpg" alt="استاد جلالی">
             </div>
-            <div class="card-body">جزوه جلسه ۱: فیزیوپاتولوژی غدد مقدمات</div>
+            <div class="card-content">
+                <div class="card-title">استاد جلالی</div>
+                <div class="card-desc">جزوات و منابع مقدمات غدد</div>
+            </div>
+            <div class="card-arrow">‹</div>
         </a>
 
-        <!-- جلسه ۲ -->
-        <a href="آدنوهیپوفیز_مرور_جامع-1.html" class="card">
-            <div class="card-header">
-                <div class="right-group">
-                    <div class="number">۲</div>
-                    <div class="title">آدنوهیپوفیز - مرور جامع</div>
-                </div>
-                <div class="left-group">
-                    <div class="badge available">در دسترس</div>
-                    <div class="chevron">⌄</div>
-                </div>
+        <!-- استاد حسینی -->
+        <a href="hosseini.html" class="card">
+            <div class="card-icon">
+                <img src="images/hosseini.jpg" alt="استاد حسینی">
             </div>
-            <div class="card-body">جزوه جلسه ۲: آدنوهیپوفیز مرور جامع ۱</div>
+            <div class="card-content">
+                <div class="card-title">استاد حسینی</div>
+                <div class="card-desc">جزوات و منابع مقدمات غدد</div>
+            </div>
+            <div class="card-arrow">‹</div>
         </a>
 
-        <!-- جلسه ۳ -->
-        <a href="Thyroid_Interactive_Review_FA.html" class="card">
-            <div class="card-header">
-                <div class="right-group">
-                    <div class="number">۳</div>
-                    <div class="title">تیروئید - مرور تعاملی (FA)</div>
-                </div>
-                <div class="left-group">
-                    <div class="badge available">در دسترس</div>
-                    <div class="chevron">⌄</div>
-                </div>
+        <!-- استاد رمضانی -->
+        <a href="ramezani.html" class="card">
+            <div class="card-icon">
+                <img src="images/ramezani.jpg" alt="استاد رمضانی">
             </div>
-            <div class="card-body">جزوه جلسه ۳: Thyroid Interactive Review FA</div>
+            <div class="card-content">
+                <div class="card-title">استاد رمضانی</div>
+                <div class="card-desc">جزوات و منابع مقدمات غدد</div>
+            </div>
+            <div class="card-arrow">‹</div>
         </a>
 
-        <!-- جلسه ۴ -->
-        <a href="مقدمات_غدد_کلسیم_تعاملی.html" class="card">
-            <div class="card-header">
-                <div class="right-group">
-                    <div class="number">۴</div>
-                    <div class="title">مقدمات غدد - کلسیم تعاملی</div>
-                </div>
-                <div class="left-group">
-                    <div class="badge available">در دسترس</div>
-                    <div class="chevron">⌄</div>
-                </div>
+        <!-- استاد نعیمی -->
+        <a href="naimi.html" class="card">
+            <div class="card-icon">
+                <img src="images/naimi.jpg" alt="استاد نعیمی">
             </div>
-            <div class="card-body">جزوه جلسه ۴: مقدمات غدد کلسیم تعاملی</div>
+            <div class="card-content">
+                <div class="card-title">استاد نعیمی</div>
+                <div class="card-desc">جزوات و منابع مقدمات غدد</div>
+            </div>
+            <div class="card-arrow">‹</div>
         </a>
 
-        <!-- جلسه ۵ -->
-        <a href="neurohypophysis-1.html" class="card">
-            <div class="card-header">
-                <div class="right-group">
-                    <div class="number">۵</div>
-                    <div class="title">نوروهیپوفیز</div>
-                </div>
-                <div class="left-group">
-                    <div class="badge available">در دسترس</div>
-                    <div class="chevron">⌄</div>
-                </div>
+        <!-- نمونه سوالات -->
+        <a href="moghaddamat-questions.html" class="card">
+            <div class="card-icon icon-questions">📝</div>
+            <div class="card-content">
+                <div class="card-title">نمونه سوالات همراه با پاسخ</div>
+                <div class="card-desc">بانک سوالات مقدمات غدد با پاسخ تشریحی</div>
             </div>
-            <div class="card-body">جزوه جلسه ۵: Neurohypophysis 1</div>
-        </a>
-
-        <!-- جلسه ۶ -->
-        <a href="پاتوفیزیولوژی_دیابت_قسمت_اول-1.html" class="card">
-            <div class="card-header">
-                <div class="right-group">
-                    <div class="number">۶</div>
-                    <div class="title">پاتوفیزیولوژی دیابت (قسمت اول)</div>
-                </div>
-                <div class="left-group">
-                    <div class="badge available">در دسترس</div>
-                    <div class="chevron">⌄</div>
-                </div>
-            </div>
-            <div class="card-body">جزوه جلسه ۶: پاتوفیزیولوژی دیابت قسمت اول ۱</div>
-        </a>
-
-        <!-- جلسه ۷ -->
-        <a href="thyroid_diseases_review.html" class="card">
-            <div class="card-header">
-                <div class="right-group">
-                    <div class="number">۷</div>
-                    <div class="title">مرور بیماری‌های تیروئید</div>
-                </div>
-                <div class="left-group">
-                    <div class="badge available">در دسترس</div>
-                    <div class="chevron">⌄</div>
-                </div>
-            </div>
-            <div class="card-body">جزوه جلسه ۷: Thyroid Diseases Review</div>
-        </a>
-
-        <!-- جلسه ۸ -->
-        <a href="endocrine_semiology-1.html" class="card">
-            <div class="card-header">
-                <div class="right-group">
-                    <div class="number">۸</div>
-                    <div class="title">سمیولوژی غدد</div>
-                </div>
-                <div class="left-group">
-                    <div class="badge available">در دسترس</div>
-                    <div class="chevron">⌄</div>
-                </div>
-            </div>
-            <div class="card-body">جزوه جلسه ۸: Endocrine Semiology 1</div>
-        </a>
-
-        <!-- جلسه ۹ -->
-        <a href="adrenal-cortex-1.html" class="card">
-            <div class="card-header">
-                <div class="right-group">
-                    <div class="number">۹</div>
-                    <div class="title">قشر آدرنال</div>
-                </div>
-                <div class="left-group">
-                    <div class="badge available">در دسترس</div>
-                    <div class="chevron">⌄</div>
-                </div>
-            </div>
-            <div class="card-body">جزوه جلسه ۹: Adrenal Cortex 1</div>
-        </a>
-
-        <!-- جلسه ۱۰ -->
-        <a href="مقدمات_غدد_کلسیم_تعاملی.html" class="card">
-            <div class="card-header">
-                <div class="right-group">
-                    <div class="number">۱۰</div>
-                    <div class="title">مقدمات غدد - کلسیم تعاملی</div>
-                </div>
-                <div class="left-group">
-                    <div class="badge available">در دسترس</div>
-                    <div class="chevron">⌄</div>
-                </div>
-            </div>
-            <div class="card-body">جزوه جلسه ۱۰: مقدمات غدد کلسیم تعاملی</div>
-        </a>
-
-        <!-- جلسه ۱۱ -->
-        <a href="diabetes_pathophysiology_review.html" class="card">
-            <div class="card-header">
-                <div class="right-group">
-                    <div class="number">۱۱</div>
-                    <div class="title">مرور پاتوفیزیولوژی دیابت</div>
-                </div>
-                <div class="left-group">
-                    <div class="badge available">در دسترس</div>
-                    <div class="chevron">⌄</div>
-                </div>
-            </div>
-            <div class="card-body">جزوه جلسه ۱۱: Diabetes Pathophysiology Review</div>
-        </a>
-
-        <!-- جلسه ۱۲ -->
-        <a href="پاتوفیزیولوژی_دیابت_قسمت_سوم.html" class="card">
-            <div class="card-header">
-                <div class="right-group">
-                    <div class="number">۱۲</div>
-                    <div class="title">پاتوفیزیولوژی دیابت (قسمت سوم)</div>
-                </div>
-                <div class="left-group">
-                    <div class="badge available">در دسترس</div>
-                    <div class="chevron">⌄</div>
-                </div>
-            </div>
-            <div class="card-body">جزوه جلسه ۱۲: پاتوفیزیولوژی دیابت قسمت سوم</div>
-        </a>
-
-        <!-- جلسه ۱۳ -->
-        <a href="غدد_آدرنال_مرور_جامع.html" class="card">
-            <div class="card-header">
-                <div class="right-group">
-                    <div class="number">۱۳</div>
-                    <div class="title">غدد آدرنال - مرور جامع</div>
-                </div>
-                <div class="left-group">
-                    <div class="badge available">در دسترس</div>
-                    <div class="chevron">⌄</div>
-                </div>
-            </div>
-            <div class="card-body">جزوه جلسه ۱۳: غدد آدرنال مرور جامع</div>
-        </a>
-
-        <!-- جلسه ۱۴ -->
-        <a href="پاتوفیزیولوژی_و_درمان_دیابت_قسمت_چهارم.html" class="card">
-            <div class="card-header">
-                <div class="right-group">
-                    <div class="number">۱۴</div>
-                    <div class="title">پاتوفیزیولوژی و درمان دیابت (قسمت چهارم)</div>
-                </div>
-                <div class="left-group">
-                    <div class="badge available">در دسترس</div>
-                    <div class="chevron">⌄</div>
-                </div>
-            </div>
-            <div class="card-body">جزوه جلسه ۱۴: پاتوفیزیولوژی و درمان دیابت قسمت چهارم</div>
-        </a>
-
-        <!-- جلسه ۱۵ -->
-        <a href="hyperlipidemia_obesity_review-6.html" class="card">
-            <div class="card-header">
-                <div class="right-group">
-                    <div class="number">۱۵</div>
-                    <div class="title">مرور هایپرلیپیدمی و چاقی</div>
-                </div>
-                <div class="left-group">
-                    <div class="badge available">در دسترس</div>
-                    <div class="chevron">⌄</div>
-                </div>
-            </div>
-            <div class="card-body">جزوه جلسه ۱۵: Hyperlipidemia Obesity Review 6</div>
-        </a>
-
-        <!-- جلسه ۱۶ -->
-        <a href="غدد_جنسی_مردان_مرور_و_آزمون-2.html" class="card">
-            <div class="card-header">
-                <div class="right-group">
-                    <div class="number">۱۶</div>
-                    <div class="title">غدد جنسی مردان - مرور و آزمون</div>
-                </div>
-                <div class="left-group">
-                    <div class="badge available">در دسترس</div>
-                    <div class="chevron">⌄</div>
-                </div>
-            </div>
-            <div class="card-body">جزوه جلسه ۱۶: غدد جنسی مردان مرور و آزمون ۲</div>
-        </a>
-
-        <!-- جلسه ۱۷ -->
-        <a href="غدد_جنسی_زنان_مرور_جامع-4.html" class="card">
-            <div class="card-header">
-                <div class="right-group">
-                    <div class="number">۱۷</div>
-                    <div class="title">غدد جنسی زنان - مرور جامع</div>
-                </div>
-                <div class="left-group">
-                    <div class="badge available">در دسترس</div>
-                    <div class="chevron">⌄</div>
-                </div>
-            </div>
-            <div class="card-body">جزوه جلسه ۱۷: غدد جنسی زنان مرور جامع ۴</div>
+            <div class="card-arrow">‹</div>
         </a>
 
     </div>
 
-<div class="nav-buttons">
-    <a href="ghodad.html" class="back-btn primary">↩ بازگشت به کورس غدد</a>
-    <a href="index.html" class="back-btn">🏠 خانه</a>
-</div>
+    <div class="nav-buttons">
+        <a href="ghodad.html" class="back-btn primary">↩ بازگشت به کورس غدد</a>
+        <a href="index.html" class="back-btn">🏠 خانه</a>
+    </div>
 
 </body>
 </html>
