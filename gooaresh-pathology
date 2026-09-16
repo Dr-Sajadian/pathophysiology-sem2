@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>پاتولوژی گوارش</title>
+    <link href="https://cdn.jsdelivr.net/gh/rastikerdar/vazirmatn@v33.003/Vazirmatn-font-face.css" rel="stylesheet" type="text/css" />
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            background: linear-gradient(135deg, #e0f2fe 0%, #bae6fd 50%, #7dd3fc 100%);
+            background-attachment: fixed;
+            font-family: Vazirmatn, Tahoma, sans-serif;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 30px 20px;
+            overflow-x: hidden;
+        }
+
+        body::before, body::after {
+            content: '';
+            position: fixed;
+            border-radius: 50%;
+            filter: blur(80px);
+            z-index: 0;
+        }
+        body::before {
+            width: 300px; height: 300px;
+            background: rgba(255, 255, 255, 0.6);
+            top: -50px; right: -50px;
+        }
+        body::after {
+            width: 400px; height: 400px;
+            background: rgba(56, 189, 248, 0.4);
+            bottom: -100px; left: -100px;
+        }
+
+        .header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 8px;
+            z-index: 1;
+        }
+
+        .header-icon {
+            width: 55px; height: 55px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #ff8a8a, #c1121f);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 28px;
+            box-shadow: 0 6px 15px rgba(193, 18, 31, 0.3);
+        }
+
+        .header-title {
+            font-size: 24px;
+            font-weight: 900;
+            color: #0c4a6e;
+            text-shadow: 0 2px 5px rgba(255,255,255,0.8);
+        }
+
+        .subtitle {
+            font-size: 14px;
+            color: #0369a1;
+            margin-bottom: 30px;
+            text-align: center;
+            z-index: 1;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 500px;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            z-index: 1;
+        }
+
+        .card {
+            background: rgba(255, 255, 255, 0.5);
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+            border: 1.5px solid rgba(255, 255, 255, 0.85);
+            border-radius: 20px;
+            padding: 18px 20px;
+            text-decoration: none;
+            color: inherit;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            transition: all 0.35s ease;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
+        }
+
+        .card:hover {
+            background: rgba(255, 255, 255, 0.75);
+            transform: translateY(-4px);
+            box-shadow: 0 15px 35px rgba(14, 165, 233, 0.25);
+            border-color: #ffffff;
+        }
+
+        .card-icon {
+            width: 50px; height: 50px;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 24px;
+            flex-shrink: 0;
+            box-shadow: 0 5px 12px rgba(0, 0, 0, 0.12);
+        }
+
+        /* رنگ آیکون‌ها - تم قرمز پاتولوژی */
+        .icon-session1 { background: linear-gradient(135deg, #f87171, #b91c1c); }
+        .icon-session2 { background: linear-gradient(135deg, #fb7185, #9f1239); }
+        .icon-session3 { background: linear-gradient(135deg, #f472b6, #be185d); }
+        .icon-questions { background: linear-gradient(135deg, #fde047, #f59e0b); }
+
+        .card-content { flex: 1; text-align: right; }
+
+        .card-title {
+            font-size: 16px;
+            font-weight: 900;
+            color: #0c4a6e;
+            margin-bottom: 4px;
+            line-height: 1.5;
+        }
+
+        .card-desc {
+            font-size: 12px;
+            color: #475569;
+            line-height: 1.6;
+        }
+
+        .card-arrow {
+            color: #c1121f;
+            font-size: 20px;
+            font-weight: bold;
+            transition: transform 0.3s;
+        }
+
+        .card:hover .card-arrow { transform: translateX(-5px); }
+
+        /* کانتینر دکمه‌های بازگشت */
+        .nav-buttons {
+            display: flex;
+            gap: 12px;
+            margin-top: 35px;
+            z-index: 1;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .back-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 12px 22px;
+            background: rgba(255, 255, 255, 0.6);
+            backdrop-filter: blur(10px);
+            color: #0c4a6e;
+            text-decoration: none;
+            border-radius: 25px;
+            font-weight: bold;
+            font-size: 13px;
+            border: 1.5px solid rgba(255, 255, 255, 0.9);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+            transition: all 0.3s;
+        }
+
+        .back-btn:hover {
+            background: rgba(255, 255, 255, 0.85);
+            transform: translateY(-2px);
+        }
+
+        .back-btn.primary {
+            background: linear-gradient(135deg, #a7c957, #588157);
+            color: white;
+            border-color: rgba(255, 255, 255, 0.5);
+        }
+
+        .back-btn.primary:hover {
+            box-shadow: 0 8px 20px rgba(88, 129, 87, 0.4);
+        }
+
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: rgba(14, 165, 233, 0.4); border-radius: 4px; }
+    </style>
+</head>
+<body>
+
+    <div class="header">
+        <div class="header-icon">🔬</div>
+        <h1 class="header-title">پاتولوژی گوارش</h1>
+    </div>
+
+    <p class="subtitle">منابع مورد نظر را انتخاب کنید</p>
+
+    <div class="container">
+
+        <!-- جزوه جلسه یک -->
+        <a href="gooaresh-pathology-session1.html" class="card">
+            <div class="card-icon icon-session1">📘</div>
+            <div class="card-content">
+                <div class="card-title">جزوه جلسه یک</div>
+                <div class="card-desc">مباحث جلسه اول پاتولوژی گوارش</div>
+            </div>
+            <div class="card-arrow">‹</div>
+        </a>
+
+        <!-- جزوه جلسه دو -->
+        <a href="gooaresh-pathology-session2.html" class="card">
+            <div class="card-icon icon-session2">📗</div>
+            <div class="card-content">
+                <div class="card-title">جزوه جلسه دو</div>
+                <div class="card-desc">مباحث جلسه دوم پاتولوژی گوارش</div>
+            </div>
+            <div class="card-arrow">‹</div>
+        </a>
+
+        <!-- جزوه جلسه سه -->
+        <a href="gooaresh-pathology-session3.html" class="card">
+            <div class="card-icon icon-session3">📙</div>
+            <div class="card-content">
+                <div class="card-title">جزوه جلسه سه</div>
+                <div class="card-desc">مباحث جلسه سوم پاتولوژی گوارش</div>
+            </div>
+            <div class="card-arrow">‹</div>
+        </a>
+
+        <!-- نمونه سوالات -->
+        <a href="gooaresh-pathology-questions.html" class="card">
+            <div class="card-icon icon-questions">📝</div>
+            <div class="card-content">
+                <div class="card-title">نمونه سوالات همراه با پاسخ</div>
+                <div class="card-desc">بانک سوالات پاتولوژی گوارش با پاسخ تشریحی</div>
+            </div>
+            <div class="card-arrow">‹</div>
+        </a>
+
+    </div>
+
+    <div class="nav-buttons">
+        <a href="gooaresh.html" class="back-btn primary">↩ بازگشت به کورس گوارش</a>
+        <a href="index.html" class="back-btn">🏠 خانه</a>
+    </div>
+
+</body>
+</html>
