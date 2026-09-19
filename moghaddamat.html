@@ -47,14 +47,15 @@
         }
 
         .header-icon {
-            width: 55px; height: 55px;
+            width: 60px; height: 60px;
             border-radius: 50%;
             background: linear-gradient(135deg, #38bdf8, #0284c7);
             display: flex;
             justify-content: center;
             align-items: center;
-            font-size: 28px;
+            font-size: 30px;
             box-shadow: 0 6px 15px rgba(2, 132, 199, 0.3);
+            flex-shrink: 0;
         }
 
         .header-title {
@@ -87,7 +88,7 @@
             -webkit-backdrop-filter: blur(15px);
             border: 1.5px solid rgba(255, 255, 255, 0.85);
             border-radius: 20px;
-            padding: 15px 20px;
+            padding: 18px 20px;
             text-decoration: none;
             color: inherit;
             display: flex;
@@ -104,36 +105,26 @@
             border-color: #ffffff;
         }
 
-        /* دایره عکس اساتید */
         .card-icon {
             width: 55px; height: 55px;
             border-radius: 50%;
             display: flex;
             justify-content: center;
             align-items: center;
-            font-size: 24px;
+            font-size: 26px;
             flex-shrink: 0;
             box-shadow: 0 5px 12px rgba(0, 0, 0, 0.12);
-            overflow: hidden; /* برای اینکه عکس داخل دایره بمونه */
-            background: #f0f0f0;
         }
 
-        /* تنظیمات عکس داخل دایره */
-        .card-icon img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover; /* عکس رو متناسب با دایره برش میده */
-        }
-
-        /* رنگ آیکون نمونه سوالات */
-        .icon-questions {
-            background: linear-gradient(135deg, #fde047, #f59e0b);
-        }
+        /* رنگ آیکون‌ها */
+        .icon-1402 { background: linear-gradient(135deg, #38bdf8, #0284c7); }
+        .icon-1401 { background: linear-gradient(135deg, #a78bfa, #7c3aed); }
+        .icon-questions { background: linear-gradient(135deg, #fde047, #f59e0b); }
 
         .card-content { flex: 1; text-align: right; }
 
         .card-title {
-            font-size: 16px;
+            font-size: 17px;
             font-weight: 900;
             color: #0c4a6e;
             margin-bottom: 4px;
@@ -155,7 +146,6 @@
 
         .card:hover .card-arrow { transform: translateX(-5px); }
 
-        /* کانتینر دکمه‌های بازگشت */
         .nav-buttons {
             display: flex;
             gap: 12px;
@@ -209,54 +199,26 @@
         <h1 class="header-title">مقدمات غدد</h1>
     </div>
 
-    <p class="subtitle">استاد مورد نظر را انتخاب کنید</p>
+    <p class="subtitle">یک بخش را انتخاب کنید</p>
 
     <div class="container">
 
-        <!-- استاد جلالی -->
-        <a href="jalali.html" class="card">
-            <div class="card-icon">
-                <img src="images/jalali.jpg" alt="استاد جلالی">
-            </div>
+        <!-- جزوات ۱۴۰۲ -->
+        <a href="moghaddamat-1402.html" class="card">
+            <div class="card-icon icon-1402">📘</div>
             <div class="card-content">
-                <div class="card-title">استاد جلالی</div>
-                <div class="card-desc">جزوات و منابع مقدمات غدد</div>
+                <div class="card-title">جزوات ۱۴۰۲</div>
+                <div class="card-desc">جزوات مقدمات غدد - سال ۱۴۰۲</div>
             </div>
             <div class="card-arrow">‹</div>
         </a>
 
-        <!-- استاد حسینی -->
-        <a href="hosseini.html" class="card">
-            <div class="card-icon">
-                <img src="images/hosseini.jpg" alt="استاد حسینی">
-            </div>
+        <!-- جزوات ۱۴۰۱ (صفحه اساتید) -->
+        <a href="ostad-ha.html" class="card">
+            <div class="card-icon icon-1401">📗</div>
             <div class="card-content">
-                <div class="card-title">استاد حسینی</div>
-                <div class="card-desc">جزوات و منابع مقدمات غدد</div>
-            </div>
-            <div class="card-arrow">‹</div>
-        </a>
-
-        <!-- استاد رمضانی -->
-        <a href="ramezani.html" class="card">
-            <div class="card-icon">
-                <img src="images/ramezani.jpg" alt="استاد رمضانی">
-            </div>
-            <div class="card-content">
-                <div class="card-title">استاد رمضانی</div>
-                <div class="card-desc">جزوات و منابع مقدمات غدد</div>
-            </div>
-            <div class="card-arrow">‹</div>
-        </a>
-
-        <!-- استاد نعیمی -->
-        <a href="naimi.html" class="card">
-            <div class="card-icon">
-                <img src="images/naimi.jpg" alt="استاد نعیمی">
-            </div>
-            <div class="card-content">
-                <div class="card-title">استاد نعیمی</div>
-                <div class="card-desc">جزوات و منابع مقدمات غدد</div>
+                <div class="card-title">جزوات ۱۴۰۱</div>
+                <div class="card-desc">جزوات اساتید: جلالی، حسینی، رمضانی، نعیمی</div>
             </div>
             <div class="card-arrow">‹</div>
         </a>
