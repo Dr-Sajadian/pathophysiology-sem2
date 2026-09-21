@@ -224,5 +224,20 @@ style.innerHTML = `
     body {
         padding-top: 50px !important;
     }
+
+    /* قوانین مخصوص پرینت */
+@media print {
+    #highlight-toolbar {
+        display: none !important;
+    }
+    .my-highlight {
+        background-color: transparent !important;
+        color: #000 !important;
+        padding: 0 !important;
+    }
+    .back-btn, .nav-buttons {
+        display: none !important;
+    }
+}
 `;
 document.head.appendChild(style);
