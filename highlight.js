@@ -1,4 +1,6 @@
-// کد قابلیت هایلایت با ۵ رنگ + حذف تکی با نگه داشتن
+// کد قابلیت هایلایت - نسخه نهایی
+// فقط تکه انتخاب شده رو هایلایت میکنه (نه همه تکرارها)
+
 document.addEventListener('DOMContentLoaded', function() {
     // ۱. ساخت نوار ابزار بالای صفحه
     const toolbar = document.createElement('div');
@@ -14,10 +16,10 @@ document.addEventListener('DOMContentLoaded', function() {
     `;
     document.body.appendChild(toolbar);
 
-    let activeColor = '#fde047'; // رنگ پیش‌فرض (زرد)
-    let savedHighlights = JSON.parse(localStorage.getItem('myHighlights_v2')) || [];
+    let activeColor = '#fde047';
+    let savedHighlights = JSON.parse(localStorage.getItem('myHighlights_v3')) || [];
 
-    // ۲. تنظیم رنگ فعال با کلیک روی دکمه‌ها
+    // ۲. دکمه‌های رنگ
     document.querySelectorAll('.color-btn').forEach(btn => {
         btn.addEventListener('click', function() {
             activeColor = this.getAttribute('data-color');
@@ -26,9 +28,9 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 
-    // ۳. بارگذاری هایلایت‌های قبلی
+    // ۳. بازیابی هایلایت‌های قبلی
     savedHighlights.forEach(item => {
-        applyHighlightToDOM(item.text, item.color);
+        restoreHighlight(item.text, item.color, item.occurrence);
     });
 
     // ۴. هایلایت کردن متن با انتخاب کاربر
@@ -40,33 +42,66 @@ document.addEventListener('DOMContentLoaded', function() {
         const selectedText = selection.toString().trim();
 
         if (selectedText.length > 0) {
-            // اگر روی یک متن هایلایت‌شده کلیک شده باشد، از هایلایت کردن مجدد خودداری کن
+            // اگه داخل نوار ابزار بود، رد کن
+            if (selection.anchorNode && selection.anchorNode.parentNode.closest('#highlight-toolbar')) {
+                return;
+            }
+            
+            // اگه داخل یک هایلایت قبلی بود، رد کن
             if (selection.anchorNode && selection.anchorNode.parentNode.classList.contains('my-highlight')) {
                 selection.removeAllRanges();
                 return;
             }
 
-            // اعمال هایلایت با رنگ فعال
-            applyHighlightToDOM(selectedText, activeColor);
-            
+            const range = selection.getRangeAt(0);
+            const occurrence = getOccurrenceNumber(selectedText, range);
+
             // ذخیره در حافظه
-            if (!savedHighlights.some(item => item.text === selectedText)) {
-                savedHighlights.push({ text: selectedText, color: activeColor });
-                localStorage.setItem('myHighlights_v2', JSON.stringify(savedHighlights));
-            }
+            savedHighlights = savedHighlights.filter(h => 
+                !(h.text === selectedText && h.occurrence === occurrence)
+            );
+            savedHighlights.push({ text: selectedText, color: activeColor, occurrence: occurrence });
+            localStorage.setItem('myHighlights_v3', JSON.stringify(savedHighlights));
+
+            // اعمال هایلایت
+            wrapSelection(selection, activeColor);
             
             selection.removeAllRanges();
         }
     }
 
-    // ۵. تابع کمکی برای پیدا کردن متن و هایلایت کردنش با رنگ مشخص
-    function applyHighlightToDOM(searchText, color) {
+    // ۵. تابع هایلایت کردن انتخاب فعلی
+    function wrapSelection(selection, color) {
+        try {
+            const range = selection.getRangeAt(0);
+            const span = document.createElement('span');
+            span.className = 'my-highlight';
+            span.style.backgroundColor = color;
+            span.style.borderRadius = '3px';
+            span.style.padding = '0 2px';
+            span.style.cursor = 'pointer';
+            
+            attachRemoveHandler(span);
+            
+            const fragment = range.extractContents();
+            span.appendChild(fragment);
+            range.insertNode(span);
+        } catch (e) {
+            console.error('Highlight error:', e);
+        }
+    }
+
+    // ۶. محاسبه شماره تکرار انتخاب فعلی
+    function getOccurrenceNumber(searchText, range) {
         const walker = document.createTreeWalker(
             document.body,
             NodeFilter.SHOW_TEXT,
             {
                 acceptNode: function(node) {
-                    if (node.parentNode.closest('#highlight-toolbar') || node.parentNode.tagName === 'SCRIPT' || node.parentNode.tagName === 'STYLE') {
+                    if (node.parentNode.closest('#highlight-toolbar') || 
+                        node.parentNode.tagName === 'SCRIPT' || 
+                        node.parentNode.tagName === 'STYLE' ||
+                        node.parentNode.closest('.my-highlight')) {
                         return NodeFilter.FILTER_REJECT;
                     }
                     return NodeFilter.FILTER_ACCEPT;
@@ -74,59 +109,96 @@ document.addEventListener('DOMContentLoaded', function() {
             },
             false
         );
-
+        
+        let count = 0;
         let node;
-        const textNodes = [];
+        const startNode = range.startContainer;
+        const startOffset = range.startOffset;
+        
         while (node = walker.nextNode()) {
-            if (node.nodeValue.includes(searchText)) {
-                textNodes.push(node);
+            let textToSearch = node.nodeValue;
+            if (node === startNode) {
+                textToSearch = textToSearch.substring(0, startOffset);
             }
+            
+            let pos = 0;
+            while ((pos = textToSearch.indexOf(searchText, pos)) !== -1) {
+                count++;
+                pos += searchText.length;
+            }
+            
+            if (node === startNode) break;
         }
-
-        textNodes.forEach(node => {
-            const parent = node.parentNode;
-            if (parent.classList.contains('my-highlight')) return;
-
-            const regex = new RegExp(`(${searchText})`, 'gi');
-            const parts = node.nodeValue.split(regex);
-
-            const fragment = document.createDocumentFragment();
-            parts.forEach(part => {
-                if (part.toLowerCase() === searchText.toLowerCase()) {
-                    const span = document.createElement('span');
-                    span.className = 'my-highlight';
-                    span.style.backgroundColor = color;
-                    span.style.borderRadius = '3px';
-                    span.style.padding = '0 2px';
-                    span.style.cursor = 'pointer';
-                    span.textContent = part;
-                    
-                    // اضافه کردن قابلیت حذف تکی
-                    attachRemoveHandler(span);
-                    
-                    fragment.appendChild(span);
-                } else {
-                    fragment.appendChild(document.createTextNode(part));
-                }
-            });
-
-            parent.replaceChild(fragment, node);
-        });
+        
+        return count + 1;
     }
 
-    // ۶. تابع جدید: اضافه کردن قابلیت حذف تکی (Long Press / Right Click)
+    // ۷. بازیابی هایلایت قبلی با شماره تکرار مشخص
+    function restoreHighlight(searchText, color, occurrence) {
+        const walker = document.createTreeWalker(
+            document.body,
+            NodeFilter.SHOW_TEXT,
+            {
+                acceptNode: function(node) {
+                    if (node.parentNode.closest('#highlight-toolbar') || 
+                        node.parentNode.tagName === 'SCRIPT' || 
+                        node.parentNode.tagName === 'STYLE') {
+                        return NodeFilter.FILTER_REJECT;
+                    }
+                    return NodeFilter.FILTER_ACCEPT;
+                }
+            },
+            false
+        );
+        
+        let count = 0;
+        let node;
+        while (node = walker.nextNode()) {
+            if (node.parentNode.closest('.my-highlight')) continue;
+            
+            const text = node.nodeValue;
+            let pos = 0;
+            while ((pos = text.indexOf(searchText, pos)) !== -1) {
+                count++;
+                if (count === occurrence) {
+                    try {
+                        const range = document.createRange();
+                        range.setStart(node, pos);
+                        range.setEnd(node, pos + searchText.length);
+                        
+                        const span = document.createElement('span');
+                        span.className = 'my-highlight';
+                        span.style.backgroundColor = color;
+                        span.style.borderRadius = '3px';
+                        span.style.padding = '0 2px';
+                        span.style.cursor = 'pointer';
+                        
+                        attachRemoveHandler(span);
+                        
+                        const fragment = range.extractContents();
+                        span.appendChild(fragment);
+                        range.insertNode(span);
+                    } catch (e) {
+                        console.error('Restore error:', e);
+                    }
+                    return;
+                }
+                pos += searchText.length;
+            }
+        }
+    }
+
+    // ۸. اضافه کردن قابلیت حذف تکی (نگه داشتن / کلیک راست)
     function attachRemoveHandler(element) {
         let pressTimer = null;
 
-        // شروع نگه داشتن (موبایل)
         element.addEventListener('touchstart', function(e) {
             pressTimer = setTimeout(() => {
                 removeSingleHighlight(element);
-                if (navigator.vibrate) navigator.vibrate(50); // لرزش کوتاه
-            }, 600); // ۶۰۰ میلی‌ثانیه نگه داشتن
+                if (navigator.vibrate) navigator.vibrate(50);
+            }, 600);
         }, { passive: true });
 
-        // لغو نگه داشتن اگر انگشت برداشته شد یا حرکت کرد
         element.addEventListener('touchend', function() {
             clearTimeout(pressTimer);
         });
@@ -134,21 +206,17 @@ document.addEventListener('DOMContentLoaded', function() {
             clearTimeout(pressTimer);
         });
 
-        // کلیک راست (کامپیوتر)
         element.addEventListener('contextmenu', function(e) {
             e.preventDefault();
             removeSingleHighlight(element);
         });
     }
 
-    // ۷. تابع حذف یک هایلایت خاص
+    // ۹. حذف یک هایلایت خاص
     function removeSingleHighlight(element) {
         const textToRemove = element.textContent;
-        
-        // گرفتن رنگ فعلی برای نمایش در پیغام
         const currentColor = element.style.backgroundColor;
         
-        // تبدیل رنگ به نام فارسی برای پیغام زیباتر
         const colorNames = {
             'rgb(167, 201, 87)': 'سبز پسته‌ای',
             'rgb(253, 224, 71)': 'زرد',
@@ -159,30 +227,43 @@ document.addEventListener('DOMContentLoaded', function() {
         const colorName = colorNames[currentColor] || 'این رنگ';
 
         if (confirm(`آیا می‌خواهید هایلایت ${colorName} متن «${textToRemove}» را پاک کنید؟`)) {
-            // حذف از حافظه مرورگر
-            savedHighlights = savedHighlights.filter(item => item.text !== textToRemove);
-            localStorage.setItem('myHighlights_v2', JSON.stringify(savedHighlights));
+            // حذف از حافظه - اولین موردی که با این متن و رنگ مطابقت داره
+            let removed = false;
+            savedHighlights = savedHighlights.filter(item => {
+                if (!removed && item.text === textToRemove && hexToRgb(item.color) === currentColor) {
+                    removed = true;
+                    return false;
+                }
+                return true;
+            });
+            localStorage.setItem('myHighlights_v3', JSON.stringify(savedHighlights));
 
-            // حذف از DOM (تبدیل span به متن ساده)
+            // حذف از DOM
             const parent = element.parentNode;
             const textNode = document.createTextNode(textToRemove);
             parent.replaceChild(textNode, element);
-            
-            // ادغام متن‌های همسایه برای جلوگیری از به‌هم‌ریختگی
             parent.normalize();
         }
     }
 
-    // ۸. دکمه پاک کردن همه هایلایت‌ها
+    // ۱۰. تبدیل رنگ HEX به RGB برای مقایسه
+    function hexToRgb(hex) {
+        const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+        return result ? 
+            `rgb(${parseInt(result[1], 16)}, ${parseInt(result[2], 16)}, ${parseInt(result[3], 16)})` : 
+            null;
+    }
+
+    // ۱۱. دکمه پاک کردن همه
     document.getElementById('clear-highlights').addEventListener('click', function() {
         if (confirm('آیا مطمئن هستید که می‌خواهید همه هایلایت‌ها را پاک کنید؟')) {
-            localStorage.removeItem('myHighlights_v2');
+            localStorage.removeItem('myHighlights_v3');
             location.reload();
         }
     });
 });
 
-// ۹. استایل‌های نوار ابزار
+// ۱۲. استایل‌های نوار ابزار + قوانین پرینت
 const style = document.createElement('style');
 style.innerHTML = `
     #highlight-toolbar {
@@ -225,19 +306,22 @@ style.innerHTML = `
         padding-top: 50px !important;
     }
 
-    /* قوانین مخصوص پرینت */
-@media print {
-    #highlight-toolbar {
-        display: none !important;
+    /* ✅ قوانین مخصوص پرینت */
+    @media print {
+        #highlight-toolbar {
+            display: none !important;
+        }
+        .my-highlight {
+            background-color: transparent !important;
+            color: #000 !important;
+            padding: 0 !important;
+        }
+        .back-btn, .nav-buttons {
+            display: none !important;
+        }
+        body {
+            padding-top: 0 !important;
+        }
     }
-    .my-highlight {
-        background-color: transparent !important;
-        color: #000 !important;
-        padding: 0 !important;
-    }
-    .back-btn, .nav-buttons {
-        display: none !important;
-    }
-}
 `;
 document.head.appendChild(style);
