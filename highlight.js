@@ -325,3 +325,133 @@ style.innerHTML = `
     }
 `;
 document.head.appendChild(style);
+
+// ========================================
+// 📌 قابلیت نمایش لودینگ هنگام کلیک روی لینک‌ها
+// ========================================
+(function() {
+    // ساخت المان لودینگ
+    const loader = document.createElement('div');
+    loader.id = 'page-loader';
+    loader.innerHTML = `
+        <div class="loader-content">
+            <div class="loader-dots">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+            <p class="loader-text">در حال بارگذاری...</p>
+        </div>
+    `;
+    document.body.appendChild(loader);
+
+    // استایل لودینگ
+    const loaderStyle = document.createElement('style');
+    loaderStyle.innerHTML = `
+        #page-loader {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(224, 242, 254, 0.85);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 999999;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+        #page-loader.active {
+            display: flex;
+            opacity: 1;
+        }
+        .loader-content {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 20px;
+        }
+        .loader-dots {
+            display: flex;
+            gap: 12px;
+        }
+        .loader-dots span {
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #38bdf8, #0284c7);
+            box-shadow: 0 4px 10px rgba(2, 132, 199, 0.4);
+            animation: loader-bounce 1.2s infinite ease-in-out;
+        }
+        .loader-dots span:nth-child(1) {
+            animation-delay: -0.24s;
+        }
+        .loader-dots span:nth-child(2) {
+            animation-delay: -0.12s;
+        }
+        .loader-dots span:nth-child(3) {
+            animation-delay: 0s;
+        }
+        @keyframes loader-bounce {
+            0%, 80%, 100% {
+                transform: scale(0.6);
+                opacity: 0.5;
+            }
+            40% {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+        .loader-text {
+            font-family: Vazirmatn, Tahoma, sans-serif;
+            color: #0c4a6e;
+            font-size: 14px;
+            font-weight: bold;
+            margin: 0;
+        }
+
+        /* مخصوص پرینت */
+        @media print {
+            #page-loader {
+                display: none !important;
+            }
+        }
+    `;
+    document.head.appendChild(loaderStyle);
+
+    // شنونده رویداد کلیک روی لینک‌ها
+    document.addEventListener('click', function(e) {
+        // پیدا کردن نزدیک‌ترین لینک
+        const link = e.target.closest('a');
+        
+        if (!link) return;
+        
+        const href = link.getAttribute('href');
+        
+        // نادیده گرفتن لینک‌های خاص
+        if (!href || 
+            href.startsWith('#') || 
+            href.startsWith('javascript:') || 
+            href.startsWith('mailto:') ||
+            href.startsWith('tel:') ||
+            link.target === '_blank') {
+            return;
+        }
+
+        // نمایش لودینگ
+        loader.classList.add('active');
+        
+        // اگه بعد از ۱۰ ثانیه صفحه لود نشد، لودینگ رو مخفی کن (برای جلوگیری از گیر کردن)
+        setTimeout(() => {
+            loader.classList.remove('active');
+        }, 10000);
+    });
+
+    // اگه کاربر با دکمه برگشت مرورگر برگشت، لودینگ رو مخفی کن
+    window.addEventListener('pageshow', function() {
+        loader.classList.remove('active');
+    });
+})();
