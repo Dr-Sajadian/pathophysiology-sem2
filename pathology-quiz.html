@@ -1,0 +1,1087 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>آزمون جامع پاتولوژی غدد</title>
+    <style>
+        @import url('https://v1.fontapi.ir/css/Vazirmatn');
+        
+        :root {
+            /* Dark Theme (Default) */
+            --bg-grad: linear-gradient(135deg, #091a24, #123547, #1b4965);
+            --glass-bg: rgba(255, 255, 255, 0.05);
+            --glass-border: rgba(255, 255, 255, 0.15);
+            --text-main: #e2f1f8;
+            --text-muted: #94b8c9;
+            --accent: #00b4d8;
+            --accent-hover: #0096c7;
+            --correct: #2a9d8f;
+            --incorrect: #e76f51;
+            --warning: #e9c46a;
+            --shadow: rgba(0, 0, 0, 0.4);
+            --panel-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+        }
+
+        [data-theme="light"] {
+            --bg-grad: linear-gradient(135deg, #e0eafc, #cfdef3);
+            --glass-bg: rgba(255, 255, 255, 0.4);
+            --glass-border: rgba(255, 255, 255, 0.6);
+            --text-main: #1d3557;
+            --text-muted: #457b9d;
+            --accent: #2563eb;
+            --accent-hover: #1d4ed8;
+            --correct: #10b981;
+            --incorrect: #ef4444;
+            --warning: #f59e0b;
+            --shadow: rgba(0, 0, 0, 0.1);
+            --panel-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.1);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Vazirmatn', sans-serif;
+            transition: background 0.3s, color 0.3s;
+        }
+
+        body {
+            background: var(--bg-grad);
+            background-attachment: fixed;
+            color: var(--text-main);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+            overflow-x: hidden;
+        }
+
+        /* Glassmorphism Classes */
+        .glass-panel {
+            background: var(--glass-bg);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid var(--glass-border);
+            border-radius: 20px;
+            box-shadow: var(--panel-shadow);
+            padding: 30px;
+            width: 100%;
+            max-width: 900px;
+            margin: 20px auto;
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* Top Bar */
+        header {
+            width: 100%;
+            max-width: 900px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .header-controls button {
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            color: var(--text-main);
+            padding: 8px 12px;
+            border-radius: 12px;
+            cursor: pointer;
+            backdrop-filter: blur(5px);
+            font-size: 1.1em;
+            margin-left: 10px;
+        }
+        .header-controls button:hover {
+            background: var(--accent);
+            color: white;
+        }
+
+        /* Screen Management */
+        .screen {
+            display: none;
+            animation: fadeIn 0.5s ease-out forwards;
+        }
+        .screen.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Login Screen */
+        .login-box {
+            text-align: center;
+        }
+        .login-box h1 { margin-bottom: 20px; font-size: 2em; color: var(--accent); }
+        .login-box input {
+            width: 80%;
+            max-width: 300px;
+            padding: 12px 20px;
+            margin: 15px 0;
+            border-radius: 10px;
+            border: 1px solid var(--glass-border);
+            background: rgba(0,0,0,0.1);
+            color: var(--text-main);
+            font-size: 1.1em;
+            outline: none;
+        }
+        [data-theme="light"] .login-box input { background: rgba(255,255,255,0.5); }
+        .btn-main {
+            background: var(--accent);
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 10px;
+            font-size: 1.2em;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            transition: transform 0.2s;
+        }
+        .btn-main:hover { transform: scale(1.05); background: var(--accent-hover); }
+
+        /* Quiz UI */
+        .quiz-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            border-bottom: 1px solid var(--glass-border);
+            padding-bottom: 15px;
+        }
+        .timer { font-size: 1.5em; font-weight: bold; color: var(--accent); display: flex; align-items: center; gap: 8px;}
+        .timer.danger { color: var(--incorrect); animation: pulse 1s infinite; }
+        
+        @keyframes pulse {
+            0% { opacity: 1; }
+            50% { opacity: 0.5; }
+            100% { opacity: 1; }
+        }
+
+        /* Progress Bar */
+        .progress-container {
+            width: 100%;
+            height: 8px;
+            background: var(--glass-border);
+            border-radius: 4px;
+            margin-bottom: 20px;
+            overflow: hidden;
+        }
+        .progress-fill {
+            height: 100%;
+            background: var(--accent);
+            width: 0%;
+            transition: width 0.4s ease;
+        }
+
+        /* Question Grid */
+        .grid-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            justify-content: center;
+            margin-bottom: 25px;
+        }
+        .grid-item {
+            width: 35px;
+            height: 35px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 8px;
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 0.9em;
+            transition: all 0.2s;
+        }
+        .grid-item.answered { background: var(--correct); color: white; border-color: var(--correct); }
+        .grid-item.active { border-color: var(--accent); box-shadow: 0 0 10px var(--accent); transform: scale(1.1); }
+        
+        /* Question Area */
+        .question-text {
+            font-size: 1.4em;
+            line-height: 1.6;
+            margin-bottom: 25px;
+        }
+
+        .options {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+        .option {
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            padding: 15px 20px;
+            border-radius: 12px;
+            cursor: pointer;
+            font-size: 1.1em;
+            display: flex;
+            align-items: center;
+            transition: all 0.2s;
+        }
+        .option:hover:not(.locked) {
+            background: rgba(255,255,255,0.1);
+            border-color: var(--accent);
+            transform: translateX(-5px);
+        }
+        .option.selected {
+            background: var(--accent);
+            color: white;
+            border-color: var(--accent);
+        }
+        .option.locked { pointer-events: none; }
+        .option-label {
+            background: rgba(0,0,0,0.2);
+            width: 30px; height: 30px;
+            border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            margin-left: 15px; font-weight: bold;
+        }
+
+        /* Nav Buttons */
+        .nav-buttons {
+            display: flex;
+            justify-content: flex-start;
+            margin-top: 30px;
+        }
+        .btn-sec {
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            color: var(--text-main);
+            padding: 10px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+        .btn-sec:hover { background: rgba(255,255,255,0.1); }
+
+        /* Results Screen */
+        .result-header { text-align: center; margin-bottom: 30px; }
+        .score-display {
+            font-size: 3em;
+            font-weight: bold;
+            color: var(--accent);
+            text-shadow: 0 0 20px var(--accent);
+            margin: 15px 0;
+        }
+        .leaderboard {
+            background: rgba(0,0,0,0.2);
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 30px;
+        }
+        .leaderboard h3 { margin-bottom: 15px; color: var(--warning); text-align: center;}
+        .lb-row { display: flex; justify-content: space-between; padding: 8px; border-bottom: 1px solid var(--glass-border); }
+        .lb-row:last-child { border: none; }
+
+        /* Analysis Cards */
+        .analysis-card {
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 25px;
+        }
+        .ac-header {
+            display: flex; justify-content: space-between; margin-bottom: 15px; align-items: flex-start;
+        }
+        .ac-qtext { font-size: 1.2em; font-weight: bold; flex: 1; margin-left: 15px; }
+        .badge {
+            padding: 5px 12px; border-radius: 20px; font-size: 0.85em; font-weight: bold; color: white; white-space: nowrap;
+        }
+        .badge.bg-correct { background: var(--correct); }
+        .badge.bg-incorrect { background: var(--incorrect); }
+        .badge.bg-warning { background: var(--warning); color: #000;}
+
+        .ac-options {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+        .ac-opt {
+            padding: 12px;
+            border-radius: 8px;
+            background: rgba(0,0,0,0.1);
+            border: 1px solid var(--glass-border);
+            display: flex; flex-direction: column;
+        }
+        [data-theme="light"] .ac-opt { background: rgba(255,255,255,0.4); }
+        .ac-opt-top { display: flex; justify-content: space-between; margin-bottom: 8px; align-items: center;}
+        .ac-opt-text { font-weight: bold; }
+        .ac-opt-status { font-size: 0.9em; padding: 2px 8px; border-radius: 4px; }
+        .status-true { background: rgba(16, 185, 129, 0.2); color: var(--correct); border: 1px solid var(--correct); }
+        .status-false { background: rgba(239, 68, 68, 0.2); color: var(--incorrect); border: 1px solid var(--incorrect); }
+        .ac-opt-analysis { font-size: 0.9em; color: var(--text-muted); border-top: 1px dashed var(--glass-border); padding-top: 8px; }
+
+        .ac-feedback {
+            padding: 15px; border-radius: 10px; margin-bottom: 15px; font-weight: bold;
+        }
+        .feedback-red { background: rgba(239, 68, 68, 0.1); border-right: 4px solid var(--incorrect); }
+        .feedback-green { background: rgba(16, 185, 129, 0.1); border-right: 4px solid var(--correct); }
+
+        .ac-meta { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
+        .meta-box { padding: 15px; border-radius: 10px; background: rgba(0,0,0,0.15); }
+        [data-theme="light"] .meta-box { background: rgba(255,255,255,0.5); }
+        .meta-box h4 { margin-bottom: 8px; display: flex; align-items: center; gap: 8px;}
+        .meta-box.tip h4 { color: var(--accent); }
+        .meta-box.trap h4 { color: var(--warning); }
+        .meta-box p { font-size: 0.95em; line-height: 1.5; }
+
+        /* Print Styles */
+        @media print {
+            body { background: white; color: black; display: block; }
+            .glass-panel { box-shadow: none; border: none; background: transparent; padding: 0; max-width: 100%; margin: 0; }
+            header, .nav-buttons, #screen-login, #screen-quiz, .btn-main { display: none !important; }
+            #screen-result { display: block !important; }
+            .analysis-card { border: 1px solid #ccc; page-break-inside: avoid; background: white; color: black;}
+            .ac-opt { border: 1px solid #ddd; background: #fafafa;}
+            .status-true { color: green; border-color: green; }
+            .status-false { color: red; border-color: red; }
+            .feedback-red { background: #ffebeb; border-right-color: red; }
+            .feedback-green { background: #ebffeb; border-right-color: green; }
+            .meta-box { background: #f0f0f0; border: 1px solid #ccc;}
+            .text-muted { color: #555 !important;}
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .ac-meta { grid-template-columns: 1fr; }
+            .quiz-header { flex-direction: column; gap: 10px; align-items: flex-start; }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h2>پاتولوژی غدد</h2>
+        <div class="header-controls">
+            <button onclick="toggleTheme()" title="تغییر تم">🌓</button>
+            <button onclick="toggleSound()" title="قطع/وصل صدا" id="soundBtn">🔊</button>
+        </div>
+    </header>
+
+    <!-- Login Screen -->
+    <div id="screen-login" class="glass-panel screen active">
+        <div class="login-box">
+            <h1>آزمون جامع پاتولوژی غدد</h1>
+            <p style="margin-bottom: 30px; line-height: 1.6;">این آزمون شامل ۳۰ سؤال استاندارد و مفهومی مستخرج از جزوه «پاتولوژی غدد» می‌باشد. زمان پاسخگویی: ۳۰ دقیقه.</p>
+            <input type="text" id="userName" placeholder="نام و نام خانوادگی خود را وارد کنید..." autocomplete="off">
+            <br>
+            <button class="btn-main" onclick="startQuiz()">شروع آزمون 🚀</button>
+        </div>
+    </div>
+
+    <!-- Quiz Screen -->
+    <div id="screen-quiz" class="glass-panel screen">
+        <div class="quiz-header">
+            <div>
+                <span id="q-counter">سؤال ۱ از ۳۰</span>
+                <span style="margin-right: 15px; font-size: 0.9em; opacity: 0.8;" id="participant-name"></span>
+            </div>
+            <div class="timer" id="timer-display">⏱️ 30:00</div>
+        </div>
+        
+        <div class="progress-container">
+            <div class="progress-fill" id="progress-bar"></div>
+        </div>
+        
+        <div class="grid-container" id="nav-grid"></div>
+
+        <div id="question-container">
+            <div class="question-text" id="q-text">متن سوال...</div>
+            <div class="options" id="options-container">
+                <!-- Options rendered here -->
+            </div>
+        </div>
+
+        <div class="nav-buttons">
+            <button class="btn-sec" onclick="prevQuestion()" id="btn-prev" style="display:none;">🔙 سؤال قبلی</button>
+        </div>
+    </div>
+
+    <!-- Result Screen -->
+    <div id="screen-result" class="glass-panel screen">
+        <div class="result-header">
+            <h2>پایان آزمون! کارنامه شما</h2>
+            <div class="score-display" id="final-score">0%</div>
+            <p id="score-msg" style="font-size: 1.2em; margin-bottom: 20px;"></p>
+            <button class="btn-main" onclick="window.print()">🖨️ چاپ کارنامه و تحلیل‌ها</button>
+            <button class="btn-sec" onclick="location.reload()" style="margin-right: 10px;">🔄 آزمون مجدد</button>
+        </div>
+
+        <div class="leaderboard" id="leaderboard-box">
+            <h3>🏆 لیدربورد (۱۰ نفر برتر)</h3>
+            <div id="lb-content"></div>
+        </div>
+
+        <h3 style="margin: 30px 0 15px 0; border-bottom: 2px solid var(--glass-border); padding-bottom: 10px;">تحلیل تشریحی خط‌به‌خط</h3>
+        <div id="analysis-container">
+            <!-- Cards rendered here -->
+        </div>
+    </div>
+
+    <script>
+        /* --- Data: Questions strictly from PDF --- */
+        const rawQuestions = [
+            {
+                question: "از قسمت خلفی (نوروهیپوفیز) غده هیپوفیز کدام هورمون‌ها ترشح می‌شوند؟",
+                options: [
+                    { text: "اکسی‌توسین و ADH", isCorrect: true, analysis: "هیپوفیز خلفی خود هورمون نمی‌سازد بلکه محل ذخیره و ترشح اکسی‌توسین و ADH ساخته‌شده در هیپوتالاموس است." },
+                    { text: "GH و پرولاکتین", isCorrect: false, analysis: "این دو هورمون از سلول‌های آدنوهیپوفیز (هیپوفیز قدامی) ترشح می‌شوند." },
+                    { text: "TSH و ACTH", isCorrect: false, analysis: "این هورمون‌ها نیز محصول قسمت قدامی هیپوفیز هستند." },
+                    { text: "FSH و LH", isCorrect: false, analysis: "گنادوتروپین‌ها از هیپوفیز قدامی ترشح می‌شوند نه خلفی." }
+                ],
+                examTip: "اکسی‌توسین موجب انقباض عضله صاف رحم باردار و مجاری شیری می‌شود و ADH موجب بازجذب آب در کلیه می‌گردد.",
+                trap: "دانشجویان گاهی فکر می‌کنند هیپوفیز خلفی هورمون تولید می‌کند در حالی که فقط هورمون‌های هیپوتالاموسی را ذخیره و آزاد می‌کند."
+            },
+            {
+                question: "کمبود و افزایش ترشح ADH به ترتیب موجب بروز کدام بیماری‌ها می‌شود؟",
+                options: [
+                    { text: "دیابت بی‌مزه و SIADH", isCorrect: true, analysis: "کمبود ADH موجب دیابت بی‌مزه (diabetes insipidus) و افزایش ترشح آن موجب SIADH می‌شود." },
+                    { text: "دیابت ملیتوس و آکرومگالی", isCorrect: false, analysis: "این دو بیماری ارتباطی با ADH ندارند؛ به ترتیب مربوط به انسولین و GH هستند." },
+                    { text: "SIADH و دیابت بی‌مزه", isCorrect: false, analysis: "ترتیب برعکس است؛ کمبود ADH دیابت بی‌مزه ایجاد می‌کند نه SIADH." },
+                    { text: "سندرم شیهان و نلسون", isCorrect: false, analysis: "این دو سندرم به ترتیب با نکروز ایسکمیک هیپوفیز و آدنوم کورتیکوتروف مرتبط‌اند نه با ADH." }
+                ],
+                examTip: "SIADH شایع‌ترین علت آن ترشح اکتوپیک ADH توسط نئوپلاسم‌های بدخیم، به‌ویژه کارسینوم سلول کوچک ریه است.",
+                trap: "دقت شود کمبود ADH باعث کاهش بازجذب آب و دفع حجیم ادرار رقیق می‌شود که همان دیابت بی‌مزه است، نه دیابت قندی."
+            },
+            {
+                question: "کدام گزینه درباره آدنوم‌های هیپوفیز صحیح است؟",
+                options: [
+                    { text: "پرولاکتینوم شایع‌ترین آدنوم عملکردی هیپوفیز و آدنوم با قطر بیش از یک سانتی‌متر ماکروآدنوم نامیده می‌شود", isCorrect: true, analysis: "طبق متن، پرولاکتینوم شایع‌ترین آدنوم عملکردی است و مرز میکرو/ماکروآدنوم یک سانتی‌متر تعیین شده است." },
+                    { text: "آدنوم هیپوفیز همیشه دو هورمون ترشح می‌کند", isCorrect: false, analysis: "بیشتر آدنوم‌ها فقط یک هورمون ترشح می‌کنند؛ ترشح همزمان دو هورمون (رشد و پرولاکتین) فقط گاهی رخ می‌دهد." },
+                    { text: "شایع‌ترین علت پرکاری هیپوفیز، فقدان عملکرد آدنوم است", isCorrect: false, analysis: "آدنوم هیپوفیز شایع‌ترین علت پرکاری هیپوفیز است، نه آدنوم فاقد عملکرد." },
+                    { text: "میکروآدنوم قطری بیش از یک سانتی‌متر دارد", isCorrect: false, analysis: "برعکس است؛ میکروآدنوم قطری کمتر از یک سانتی‌متر دارد و ماکروآدنوم بیشتر از آن." }
+                ],
+                examTip: "میکروآدنوم: قطر کمتر از یک سانتی‌متر / ماکروآدنوم: قطر یک سانتی‌متر یا بیشتر.",
+                trap: "با اینکه اکثر آدنوم‌ها تک‌هورمونی هستند، شایع‌ترین ترکیب دوهورمونی، همزمانی هورمون رشد و پرولاکتین است که ممکن است اشتباهاً قاعده کلی تصور شود."
+            },
+            {
+                question: "بروز اختلال میدان بینایی به شکل bitemporal hemianopia در بیماران با ماکروآدنوم هیپوفیز به چه علتی رخ می‌دهد؟",
+                options: [
+                    { text: "فشار تومور بر کیاسمای اپتیک", isCorrect: true, analysis: "ماکروآدنوم‌ها به دلیل حجم بالا می‌توانند با فشار به کیاسمای اپتیک، این اختلال میدان بینایی تیپیک را ایجاد کنند." },
+                    { text: "خونریزی حاد داخل تومور", isCorrect: false, analysis: "خونریزی حاد داخل آدنوم عامل آپوپلکسی هیپوفیزی با افت هوشیاری است، نه علت اصلی همیانوپیای دوطرفه گیجگاهی." },
+                    { text: "تخریب مستقیم عصب اپتیک", isCorrect: false, analysis: "مکانیسم اصلی فشار بر کیاسما است نه تخریب مستقیم عصب." },
+                    { text: "کاهش ترشح ACTH", isCorrect: false, analysis: "کاهش ACTH ارتباطی به اختلال بینایی ندارد و بیشتر به کم‌کاری آدرنال مربوط است." }
+                ],
+                examTip: "اثرات فشاری ماکروآدنوم شامل bitemporal hemianopia، فلج اعصاب کرانیال و افزایش فشار داخل جمجمه است.",
+                trap: "آپوپلکسی هیپوفیزی (خونریزی حاد) یک عارضه جداگانه با کاهش سطح هوشیاری است و نباید با فشار مزمن تومور بر کیاسما یکی گرفته شود."
+            },
+            {
+                question: "شایع‌ترین شکل نکروز ایسکمیک هیپوفیز قدامی که به دلیل خونریزی شدید در حوالی زایمان ایجاد می‌شود چه نام دارد؟",
+                options: [
+                    { text: "سندرم شیهان", isCorrect: true, analysis: "سندرم شیهان شایع‌ترین شکل نکروز ایسکمیک هیپوفیز قدامی است که پس از خونریزی شدید زایمانی رخ می‌دهد." },
+                    { text: "سندرم نلسون", isCorrect: false, analysis: "سندرم نلسون به بزرگ‌شدن آدنوم کورتیکوتروف پس از برداشتن آدرنال دوطرفه مربوط است." },
+                    { text: "آپوپلکسی هیپوفیزی", isCorrect: false, analysis: "آپوپلکسی به خونریزی حاد داخل آدنوم اشاره دارد نه نکروز ایسکمیک قدامی پس از زایمان." },
+                    { text: "سندرم کوشینگ", isCorrect: false, analysis: "سندرم کوشینگ ناشی از افزایش کورتیزول است و ارتباطی با نکروز ایسکمیک زایمانی ندارد." }
+                ],
+                examTip: "کم‌کاری هیپوفیز تقریباً همیشه با دیابت بی‌مزه منشأ هیپوتالاموسی همراه است.",
+                trap: "سندرم شیهان را با آپوپلکسی هیپوفیزی اشتباه نگیرید؛ شیهان نکروز تدریجی ایسکمیک است و در آپوپلکسی خونریزی حاد داخل تومور رخ می‌دهد."
+            },
+            {
+                question: "در محور تنظیم تیروئید، TRH هیپوتالاموسی موجب ترشح کدام هورمون از هیپوفیز شده و نتیجه نهایی آن چیست؟",
+                options: [
+                    { text: "TSH که تولید بیشتر T4 نسبت به T3 را در فولیکول‌های تیروئید تحریک می‌کند", isCorrect: true, analysis: "TSH پس از اتصال به گیرنده خود بر روی اپیتلیوم فولیکول تیروئید، ساخته‌شدن هورمون‌های تیروئیدی را با میزان بیشتر T4 نسبت به T3 تحریک می‌کند." },
+                    { text: "ACTH که سنتز کورتیزول را افزایش می‌دهد", isCorrect: false, analysis: "ACTH محور هیپوتالاموس-هیپوفیز-آدرنال را فعال می‌کند نه محور تیروئیدی." },
+                    { text: "پرولاکتین که شیردهی را تحریک می‌کند", isCorrect: false, analysis: "پرولاکتین برخلاف بقیه هورمون‌های هیپوفیزی، توسط دوپامین مهار می‌شود نه با TRH تحریک اصلی." },
+                    { text: "GH که رشد استخوانی را تحریک می‌کند", isCorrect: false, analysis: "GH توسط GHRH تحریک می‌شود نه TRH." }
+                ],
+                examTip: "هورمون‌های تیروئیدی پس از ورود به خون به TBG متصل شده و به بافت‌های محیطی منتقل می‌شوند.",
+                trap: "TRH می‌تواند ترشح پرولاکتین را نیز اندکی تحریک کند اما نقش اصلی تنظیمی پرولاکتین بر عهده مهار دوپامینی است، نه محور TRH-TSH."
+            },
+            {
+                question: "در کدام حالت از تیروتوکسیکوز، سطح بالای هورمون‌های تیروئیدی همراه با RAIU (جذب ید رادیواکتیو) پایین دیده می‌شود؟",
+                options: [
+                    { text: "تیروتوکسیکوز ساختگی ناشی از مصرف اگزوژن هورمون تیروئیدی", isCorrect: true, analysis: "در تیروتوکسیکوز ساختگی، هورمون از منبع خارجی وارد بدن می‌شود و در نتیجه غده تیروئید فعالیت کمتری دارد و RAIU پایین می‌آید." },
+                    { text: "بیماری گریوز", isCorrect: false, analysis: "در گریوز به دلیل تحریک مستقیم گیرنده TSH، RAIU معمولاً بالا است." },
+                    { text: "گواتر مولتی ندولار توکسیک", isCorrect: false, analysis: "در این حالت نیز غده به‌طور فعال هورمون می‌سازد و RAIU پایین نیست." },
+                    { text: "آدنوم توکسیک", isCorrect: false, analysis: "آدنوم توکسیک نیز غده فعال دارد و RAIU در ناحیه آدنوم بالا است." }
+                ],
+                examTip: "در تمام مواردی که هورمون تیروئیدی از منبع خارج از غده می‌آید (تیروییدیت‌ها یا مصرف اگزوژن هورمون)، RAIU پایین است.",
+                trap: "تیروییدیت‌های ساختگی و بافت اکتوپیک ترشح‌کننده هورمون (Struma ovarii) نیز مانند تیروتوکسیکوز ساختگی RAIU پایین دارند و ممکن است اشتباهاً هیپرتیروئیدی معمول تصور شوند."
+            },
+            {
+                question: "طوفان تیروئیدی (thyroid storm) چه ویژگی خطرناکی دارد و با چه مکانیسمی مرتبط است؟",
+                options: [
+                    { text: "شدت شدید هیپرتیروئیدی همراه با افزایش حساسیت به کاتکول آمین که می‌تواند آریتمی کشنده ایجاد کند", isCorrect: true, analysis: "طوفان تیروئیدی نوع شدید هیپرتیروئیدی است که با افزایش سطح حساسیت کاتکول آمینی همراه بوده و در صورت عدم درمان می‌تواند با آریتمی قلبی موجب مرگ بیمار شود." },
+                    { text: "کاهش ناگهانی سطح هورمون تیروئیدی", isCorrect: false, analysis: "طوفان تیروئیدی حالت افزایش شدید هورمون است، نه کاهش آن." },
+                    { text: "تشکیل ندول سرد در اسکن رادیوایزوتوپ", isCorrect: false, analysis: "ندول سرد به نئوپلاسم‌های تیروئیدی مربوط است و ربطی به طوفان تیروئیدی ندارد." },
+                    { text: "تجمع کلوئید در فولیکول‌های آتروفیک", isCorrect: false, analysis: "این یافته بیشتر با تیروییدیت هاشیموتو مرتبط است." }
+                ],
+                examTip: "بیماری گریوز شایع‌ترین بستر بروز طوفان تیروئیدی در مقایسه با سایر علل تیروتوکسیکوز است.",
+                trap: "افراد مسن با تیروتوکسیکوز شدید ممکن است علائم کلاسیک نداشته باشند (هیپرتیروئیدی بی‌حالتی)، که نباید با طوفان تیروئیدی که تابلوی حاد و پرالتهاب دارد اشتباه شود."
+            },
+            {
+                question: "کدام مورد شایع‌ترین علت کم‌کاری تیروئید در سطح جهانی است؟",
+                options: [
+                    { text: "کمبود ید", isCorrect: true, analysis: "کمبود ید شایع‌ترین علت هیپوتیروئیدی در سطح جهانی است." },
+                    { text: "تیروییدیت هاشیموتو", isCorrect: false, analysis: "تیروییدیت هاشیموتو شایع‌ترین علت در مناطق بدون کمبود ید است، نه در کل جهان." },
+                    { text: "تیروییدکتومی", isCorrect: false, analysis: "این یک علت پزشکی-جراحی است و شیوع جهانی کمتری نسبت به کمبود ید دارد." },
+                    { text: "مصرف لیتیوم", isCorrect: false, analysis: "لیتیوم یکی از علل دارویی نادرتر هیپوتیروئیدی است." }
+                ],
+                examTip: "هیپوتیروئیدی ثانویه یا مرکزی (نارسایی هیپوفیز یا هیپوتالاموس) در مقایسه با علل اولیه بسیار نادرتر است.",
+                trap: "در مناطقی که کمبود ید وجود ندارد، هاشیموتو شایع‌ترین علت است؛ باید بین شیوع جهانی و شیوع در مناطق دارای ید کافی تمایز قائل شد."
+            },
+            {
+                question: "کدام یک از موارد زیر جزو تظاهرات کرتینیسم (هیپوتیروئیدی دوران شیرخوارگی) محسوب می‌شود؟",
+                options: [
+                    { text: "عقب‌ماندگی ذهنی شدید و قد کوتاه همراه با فتق نافی", isCorrect: true, analysis: "طبق متن، کرتینیسم با عقب‌ماندگی ذهنی شدید، قد کوتاه، صورت خشن، زبان بیرون‌آمده و فتق نافی مشخص می‌شود." },
+                    { text: "افزایش ضریب هوشی و رشد سریع استخوانی", isCorrect: false, analysis: "برعکس است؛ کرتینیسم با کاهش ضریب هوشی و تأخیر رشد استخوانی همراه است." },
+                    { text: "اگزوفتالمی و درموپاتی پره‌تیبیال", isCorrect: false, analysis: "این یافته‌ها مربوط به بیماری گریوز (هیپرتیروئیدی) هستند نه کرتینیسم." },
+                    { text: "لرزش دست و کاهش وزن", isCorrect: false, analysis: "این علائم بیشتر با پرکاری تیروئید همخوانی دارد نه کم‌کاری دوران شیرخوارگی." }
+                ],
+                examTip: "شدت عقب‌ماندگی ذهنی در کرتینیسم بستگی به زمانی دارد که کمبود ید در داخل رحم روی می‌دهد.",
+                trap: "کرتینیسم اسپورادیک بیشتر ناشی از نقایص آنزیمی مادرزادی در نواحی دارای تغذیه یدی کافی است، در حالی که نوع آندمیک با کمبود ید مادرزادی مرتبط است."
+            },
+            {
+                question: "تیروییدیت هاشیموتو در کدام گروه سنی-جنسی شایع‌تر است و مهم‌ترین آنتی‌بادی‌های آن کدام‌اند؟",
+                options: [
+                    { text: "خانم‌های ۴۵ تا ۶۵ ساله؛ آنتی‌بادی ضد تیروگلوبولین و ضد TPO", isCorrect: true, analysis: "طبق متن، هاشیموتو در سنین ۴۵ تا ۶۵ سال و در خانم‌ها ۱۰ تا ۲۰ برابر شایع‌تر است و آنتی‌بادی‌های ضد تیروگلوبولین و ضد TPO در سرم بیماران یافت می‌شود." },
+                    { text: "آقایان جوان زیر ۲۰ سال؛ آنتی‌بادی TSI", isCorrect: false, analysis: "TSI مربوط به بیماری گریوز است، نه هاشیموتو، و هاشیموتو در خانم‌ها شایع‌تر است." },
+                    { text: "کودکان زیر پنج سال؛ آنتی‌بادی ضد گیرنده انسولین", isCorrect: false, analysis: "آنتی‌بادی ضد گیرنده انسولین ارتباطی با تیروییدیت هاشیموتو ندارد." },
+                    { text: "سالمندان بالای ۸۰ سال؛ آنتی‌بادی ضد میکروزومی معده", isCorrect: false, analysis: "آنتی‌بادی ضد میکروزومی معده به کم‌خونی پرنیشیوز مربوط است نه هاشیموتو." }
+                ],
+                examTip: "هاشیموتو شایع‌ترین علت گواتر آندمیک غیر ناشی از کمبود ید در کودکان است.",
+                trap: "در نیمی از خواهر و برادر یا فرزندان مبتلایان به هاشیموتو، احتمال ابتلای دیگری ۴۰ درصد است؛ این عامل ژنتیکی را نباید با عامل محیطی اشتباه گرفت."
+            },
+            {
+                question: "تیروییدیت رایدل چه ویژگی بافت‌شناسی خاصی دارد که آن را از فیبروز واریان هاشیموتو متمایز می‌کند؟",
+                options: [
+                    { text: "فیبروز آن از کپسول غده عبور کرده و ساختمان‌های مجاور گردن را درگیر می‌کند", isCorrect: true, analysis: "بر خلاف تیروییدیت رایدل که فیبروز از کپسول غده تجاوز می‌کند، در فیبروز واریان هاشیموتو فیبروز از کپسول غده تجاوز نمی‌کند." },
+                    { text: "همیشه بدون هیچ‌گونه فیبروز است", isCorrect: false, analysis: "رایدل دقیقاً با فیبروز گسترده شناخته می‌شود، نه فقدان آن." },
+                    { text: "فقط در کودکان دیده می‌شود", isCorrect: false, analysis: "این محدودیت سنی برای رایدل ذکر نشده است." },
+                    { text: "با آنتی‌بادی ضد گیرنده TSH مرتبط است", isCorrect: false, analysis: "آنتی‌بادی ضد گیرنده TSH ویژگی بیماری گریوز است، نه رایدل." }
+                ],
+                examTip: "توده سخت و ثابت رایدل ممکن است بالینی شبیه نئوپلاسم تیروئید به نظر برسد.",
+                trap: "رایدل اغلب با فیبروز ایدیوپاتیک نواحی دیگر بدن (رتروپریتوئن) همراه است که نشانه اتیولوژی اتوایمیون مطرح‌شده برای آن است."
+            },
+            {
+                question: "تریاد کلاسیک بیماری گریوز شامل چه مواردی است؟",
+                options: [
+                    { text: "تیروتوکسیکوز با گواتر منتشر، افتالموپاتی انفیلتراتیو و درموپاتی پره‌تیبیال", isCorrect: true, analysis: "بیماری گریوز با این تریاد مشخصه شناخته می‌شود که شایع‌ترین علت هیپرتیروئیدی آندوژن است." },
+                    { text: "کاهش وزن، برادی‌کاردی و یبوست", isCorrect: false, analysis: "برادی‌کاردی و یبوست بیشتر با هیپوتیروئیدی مرتبط‌اند نه گریوز." },
+                    { text: "میکسدم عمومی، ماکروگلوسی و فتق نافی", isCorrect: false, analysis: "این علائم مربوط به هیپوتیروئیدی شدید (کرتینیسم/میکسدم) هستند." },
+                    { text: "هیپوکلسمی، تتانی و کاتاراکت", isCorrect: false, analysis: "این تظاهرات مربوط به هیپوپاراتیروئیدی است." }
+                ],
+                examTip: "بیماری گریوز در خانم‌ها ۷ برابر آقایان شایع‌تر است و پیک بروز آن ۲۰ تا ۴۰ سالگی است.",
+                trap: "افتالموپاتی گریوز حتی گاهی مستقل از وضعیت هیپرتیروئیدی فعال باقی می‌ماند و نباید صرفاً به شدت تیروتوکسیکوز نسبت داده شود."
+            },
+            {
+                question: "هسته‌های شفاف و شبیه شیشه مات موسوم به Orphan Annie eye در کدام نئوپلاسم تیروئید دیده می‌شوند؟",
+                options: [
+                    { text: "کارسینوم پاپیلاری تیروئید", isCorrect: true, analysis: "تشخیص کارسینوم پاپیلاری بیشتر بر پایه نمای هسته‌ای انجام می‌شود که به‌دلیل کروماتین پراکنده به‌صورت شیشه مات (Orphan Annie eye) دیده می‌شود." },
+                    { text: "کارسینوم فولیکولار تیروئید", isCorrect: false, analysis: "کارسینوم فولیکولار بیشتر بر پایه تهاجم به کپسول یا عروق تشخیص داده می‌شود، نه ویژگی هسته‌ای شیشه مات." },
+                    { text: "کارسینوم مدولاری تیروئید", isCorrect: false, analysis: "کارسینوم مدولاری از سلول‌های C منشا می‌گیرد و کلسی تونین ترشح می‌کند، ویژگی هسته‌ای آن متفاوت است." },
+                    { text: "آدنوم فولیکولار", isCorrect: false, analysis: "آدنوم فولیکولار فاقد نمای هسته‌ای پاپیلاری است." }
+                ],
+                examTip: "کارسینوم پاپیلاری شایع‌ترین شکل سرطان تیروئید است و در تمام سنین رخ می‌دهد و مسئول بیشتر موارد کارسینوم تیروئید پس از رادیاسیون است.",
+                trap: "شبه‌انکلوزیون‌های داخل هسته‌ای (pseudoinclusions) نیز ویژگی مهم دیگر پاپیلاری کارسینوم هستند که ممکن است با انکلوزیون‌های واقعی اشتباه شوند."
+            },
+            {
+                question: "کارسینوم سلول هرتل از نظر رفتار بالینی چه تفاوتی با کارسینوم فولیکولار دارد؟",
+                options: [
+                    { text: "معمولاً رادیو ید را جذب نمی‌کند و متاستاز به غدد لنفاوی و نواحی دورتر بیشتر و مرگ‌ومیر بالاتری دارد", isCorrect: true, analysis: "طبق متن، کارسینوم سلول هرتل در موارد بیشتری مولتی فوکال و دوطرفه است، معمولاً ید رادیواکتیو را جذب نمی‌کند، متاستاز به غدد لنفاوی و نواحی دورتر شایع‌تر است و مرگ‌ومیر بیشتری دارد." },
+                    { text: "همیشه خوش‌خیم است و نیازی به پیگیری ندارد", isCorrect: false, analysis: "کارسینوم سلول هرتل بدخیم است و پیش‌آگهی نامطلوب‌تری نسبت به فولیکولار دارد." },
+                    { text: "شیوع بیشتری در کودکان دارد", isCorrect: false, analysis: "چنین اختصاصی برای این نوع کارسینوم ذکر نشده است." },
+                    { text: "جذب رادیو ید در آن همیشه بالاست", isCorrect: false, analysis: "برعکس؛ این نوع کارسینوم معمولاً ید رادیواکتیو را جذب نمی‌کند." }
+                ],
+                examTip: "کارسینوم سلول هرتل از صفحاتی از سلول‌های ائوزینوفیلیک با تعداد زیاد میتوکندری تشکیل شده است.",
+                trap: "چون کارسینوم هرتل ید رادیواکتیو را جذب نمی‌کند، درمان با ید رادیواکتیو در آن کارایی محدودی دارد که ممکن است اشتباهاً مانند سایر سرطان‌های تیروئید تصور شود."
+            },
+            {
+                question: "کارسینوم آناپلاستیک تیروئید معمولاً در چه سنی رخ می‌دهد و کدام جهش ژنی در آن شایع است؟",
+                options: [
+                    { text: "متوسط سن ۶۵ سال؛ جهش غیرفعال‌کننده TP53", isCorrect: true, analysis: "طبق متن، متوسط سن ابتلا به کارسینوم آناپلاستیک ۶۵ سال است و در آن جهش غیرفعال‌کننده TP53 یافت می‌شود." },
+                    { text: "کودکان زیر ۵ سال؛ جهش RET", isCorrect: false, analysis: "جهش RET با کارسینوم مدولاری در زمینه MEN2 مرتبط است، نه آناپلاستیک." },
+                    { text: "نوجوانان؛ جهش BRAF", isCorrect: false, analysis: "این ترکیب سنی-ژنتیکی در متن ذکر نشده است." },
+                    { text: "میانسالی جوان؛ جهش GNAS1", isCorrect: false, analysis: "GNAS1 در آدنوم سوماتوتروف هیپوفیز ذکر شده است نه کارسینوم آناپلاستیک تیروئید." }
+                ],
+                examTip: "در بررسی هیستولوژیک کارسینوم آناپلاستیک، سلول‌های پلئومورفیک آسای غول، دوکی یا اسکواموئید دیده می‌شود.",
+                trap: "رشد سریع توده گردنی در آناپلاستیک ممکن است با گواتر مولتی ندولار توکسیک که بزرگی ناگهانی یا صدای خشن دارد اشتباه شود، اما آناپلاستیک بسیار تهاجمی‌تر و کشنده‌تر است."
+            },
+            {
+                question: "کارسینوم مدولاری تیروئید از چه سلول‌هایی منشا می‌گیرد و چه هورمونی ترشح می‌کند؟",
+                options: [
+                    { text: "سلول‌های پارافولیکولار یا C؛ کلسی تونین", isCorrect: true, analysis: "کارسینوم مدولاری نوعی نئوپلاسم نوروآندوکرین است که از سلول‌های پارافولیکولار یا C منشا گرفته و کلسی تونین ترشح می‌کند." },
+                    { text: "سلول‌های فولیکولی؛ تیروگلوبولین", isCorrect: false, analysis: "کارسینوم فولیکولار و پاپیلاری از سلول‌های فولیکولی منشا می‌گیرند، نه مدولاری." },
+                    { text: "سلول‌های کرومافین آدرنال؛ کاتکول آمین", isCorrect: false, analysis: "این ویژگی مربوط به فئوکروموسیتوم آدرنال است نه تیروئید." },
+                    { text: "سلول‌های اصلی پاراتیروئید؛ PTH", isCorrect: false, analysis: "سلول‌های اصلی پاراتیروئید هورمون PTH ترشح می‌کنند نه کارسینوم مدولاری تیروئید." }
+                ],
+                examTip: "کارسینوم مدولاری در ۷۰ درصد موارد اسپورادیک و در ۳۰ درصد به شکل فامیلیال یا در زمینه سندرم MEN بروز می‌کند.",
+                trap: "کارسینوم مدولاری گاهی سایر هورمون‌های پلی‌پپتیدی مانند VIP نیز ترشح می‌کند که می‌تواند با گاسترینوما (که اسهال ناشی از VIP ندارد) اشتباه گرفته شود."
+            },
+            {
+                question: "PTH با کدام مکانیسم موجب افزایش سطح کلسیم سرم می‌شود؟",
+                options: [
+                    { text: "افزایش بازجذب کلسیم توبولی کلیه، افزایش فعالیت استئوکلاست و افزایش فعال‌سازی ویتامین D", isCorrect: true, analysis: "PTH با افزایش بازجذب کلسیم از توبول‌های کلیوی، افزایش دفع فسفات، افزایش تبدیل ویتامین D به فرم فعال و افزایش فعالیت استئوکلاست‌ها کلسیم سرم را بالا می‌برد." },
+                    { text: "افزایش بازجذب فسفات در توبول‌های کلیوی", isCorrect: false, analysis: "PTH موجب افزایش دفع فسفات در ادرار می‌شود، نه بازجذب آن." },
+                    { text: "مهار فعالیت استئوکلاست‌ها", isCorrect: false, analysis: "PTH فعالیت استئوکلاست‌ها را افزایش می‌دهد، نه مهار." },
+                    { text: "کاهش جذب گوارشی کلسیم", isCorrect: false, analysis: "PTH با فعال‌کردن ویتامین D، جذب گوارشی کلسیم را افزایش می‌دهد نه کاهش." }
+                ],
+                examTip: "فعالیت غده پاراتیروئید توسط سطح کلسیم آزاد پلاسما کنترل می‌شود، نه هورمون‌های هیپوفیز یا هیپوتالاموس.",
+                trap: "برخلاف تومورهای تیروئید که با ترشح زیاد هورمون تشخیص داده می‌شوند، تومورهای پاراتیروئید بیشتر به دلیل اثرات توده‌ای تشخیص داده نمی‌شوند بلکه به علت ترشح زیاد PTH شناسایی می‌شوند."
+            },
+            {
+                question: "شایع‌ترین علت هیپرپاراتیروییدی اولیه کدام است؟",
+                options: [
+                    { text: "آدنوم پاراتیروئید (۸۵ تا ۹۵ درصد موارد)", isCorrect: true, analysis: "طبق متن، آدنوم شایع‌ترین علت هیپرپاراتیروییدی اولیه با ۸۵ تا ۹۵ درصد موارد است." },
+                    { text: "کارسینوم پاراتیروئید", isCorrect: false, analysis: "کارسینوم پاراتیروئید تنها حدود یک درصد موارد را تشکیل می‌دهد و نادرترین علت است." },
+                    { text: "هیپرپلازی اولیه پاراتیروئید", isCorrect: false, analysis: "هیپرپلازی اولیه ۵ تا ۱۰ درصد موارد را شامل می‌شود، کمتر از آدنوم." },
+                    { text: "نارسایی مزمن کلیوی", isCorrect: false, analysis: "نارسایی کلیوی مزمن علت شایع هیپرپاراتیروییدی ثانویه است، نه اولیه." }
+                ],
+                examTip: "بدخیمی با مکانیسم پارانئوپلاستیک متاستاتیک شایع‌ترین علت هیپرکلسمی علامت‌دار در بزرگسالان است، نه هیپرپاراتیروییدی خود.",
+                trap: "هیپرپاراتیروییدی اولیه ممکن است در زمینه سندرم‌های MEN1 یا MEN2A نیز روی دهد که نباید با فرم اسپورادیک شایع‌تر اشتباه گرفته شود."
+            },
+            {
+                question: "تومور قهوه‌ای (Brown tumor) در هیپرپاراتیروییدی چگونه ایجاد می‌شود؟",
+                options: [
+                    { text: "تجمع استئوکلاست‌ها، سلول‌های غول آسای واکنشی و بقایای خونریزی در استخوان", isCorrect: true, analysis: "طبق متن، تجمعات استئوکلاست‌ها، سلول‌های غول آسای واکنشی و بقایای خونریزی توده‌هایی ایجاد می‌کنند که تومور قهوه‌ای نامیده می‌شود." },
+                    { text: "رسوب مستقیم کلسیم در بافت نرم", isCorrect: false, analysis: "رسوب کلسیم در بافت نرم بیشتر با کلسیفیلاکسی در نارسایی کلیوی مرتبط است، نه مکانیسم تومور قهوه‌ای." },
+                    { text: "تکثیر بدخیم سلول‌های فولیکولی تیروئید در استخوان", isCorrect: false, analysis: "تومور قهوه‌ای ارتباطی با سلول‌های تیروئیدی ندارد و ضایعه‌ای استخوانی در هیپرپاراتیروییدی است." },
+                    { text: "عفونت مزمن استخوانی ناشی از استئومیلیت", isCorrect: false, analysis: "تومور قهوه‌ای منشا عفونی ندارد بلکه پیامد افزایش فعالیت استئوکلاستی است." }
+                ],
+                examTip: "استئوپنی، نازکی کورتکس و osteitis fibrosa cystica از دیگر یافته‌های استخوانی هیپرپاراتیروییدی هستند.",
+                trap: "تومور قهوه‌ای یک ضایعه واکنشی خوش‌خیم است و نباید با نئوپلاسم واقعی استخوان اشتباه گرفته شود."
+            },
+            {
+                question: "سندرم دی جرج (DiGeorge) با چه مکانیسمی موجب هیپوپاراتیروییدی می‌شود؟",
+                options: [
+                    { text: "فقدان مادرزادی غدد پاراتیروئید همراه با آپلازی تیموس", isCorrect: true, analysis: "طبق متن، فقدان مادرزادی غدد پاراتیروئید در همراهی با آپلازی تیموس و نقایص قلبی مطرح‌کننده سندرم دی جرج است." },
+                    { text: "تخریب اتوایمیون غدد پاراتیروئید در بزرگسالی", isCorrect: false, analysis: "این مکانیسم مربوط به هیپوپاراتیروییدی اتوایمیون است، نه سندرم دی جرج مادرزادی." },
+                    { text: "برداشت جراحی ناخواسته پاراتیروئید حین تیروییدکتومی", isCorrect: false, analysis: "این علت شایع‌ترین علت هیپوپاراتیروییدی به‌طور کلی است اما مختص سندرم دی جرج نیست." },
+                    { text: "افزایش ترشح کلسی تونین از تیروئید", isCorrect: false, analysis: "کلسی تونین ارتباطی مستقیم با مکانیسم سندرم دی جرج ندارد." }
+                ],
+                examTip: "خارج کردن غیرعمدی غده پاراتیروئید حین تیروییدکتومی شایع‌ترین علت هیپوپاراتیروییدی به‌طور کلی است.",
+                trap: "هیپوپاراتیروییدی اتوایمیون را نباید با سندرم دی جرج که مادرزادی و همراه با نقص ایمنی تیموسی است اشتباه گرفت؛ این دو مکانیسم کاملاً متفاوت دارند."
+            },
+            {
+                question: "تشخیص دیابت ملیتوس بر اساس کدام معیار زیر قابل انجام است؟",
+                options: [
+                    { text: "گلوکز ناشتای بیشتر یا مساوی ۱۲۶ میلی‌گرم در دسی‌لیتر در بیش از یک نوبت اندازه‌گیری", isCorrect: true, analysis: "این یکی از سه معیار ذکرشده برای تشخیص دیابت ملیتوس است." },
+                    { text: "گلوکز ناشتای بین ۱۰۰ تا ۱۲۵ میلی‌گرم در دسی‌لیتر", isCorrect: false, analysis: "این محدوده معرف اختلال گلوکز ناشتا (IFG) است، نه تشخیص قطعی دیابت." },
+                    { text: "گلوکز دو ساعته پس از تست تحمل گلوکز بین ۱۴۰ تا ۲۰۰ میلی‌گرم در دسی‌لیتر", isCorrect: false, analysis: "این محدوده معرف اختلال تحمل گلوکز (IGT) و پیش‌دیابت است، نه دیابت قطعی." },
+                    { text: "گلوکز رندوم کمتر از ۲۰۰ میلی‌گرم در دسی‌لیتر بدون علامت", isCorrect: false, analysis: "برای تشخیص با گلوکز رندوم، باید مقدار ۲۰۰ میلی‌گرم در دسی‌لیتر یا بیشتر همراه با علائم کلاسیک باشد." }
+                ],
+                examTip: "بر اساس رفرانس‌های هاریسون و نلسون، گلوکز ناشتای بین ۱۰۰ تا ۱۲۶ میلی‌گرم در دسی‌لیتر IFG نامیده می‌شود.",
+                trap: "پیش‌دیابت (IFG یا IGT) با دیابت آشکار تفاوت دارد؛ افراد پیش‌دیابتی هر سال ۵ تا ۱۰ درصد در معرض ابتلا به دیابت قرار می‌گیرند اما هنوز دیابتی محسوب نمی‌شوند."
+            },
+            {
+                question: "دیابت نوع یک با چه مکانیسم بافت‌شناسی مشخصی همراه است؟",
+                options: [
+                    { text: "انسولیت (نفوذ لنفوسیتی به جزایر) به‌واسطه سلول T و تخریب اتوایمیون سلول‌های بتا", isCorrect: true, analysis: "دیابت نوع یک پس از تخریب بیش از ۹۰ درصد سلول‌های بتا با مکانیسم اتوایمیون معمولاً به‌واسطه سلول T ایجاد می‌شود که در ابتدا به‌صورت انسولیت دیده می‌شود." },
+                    { text: "رسوب آمیلویید در جزایر لانگرهانس", isCorrect: false, analysis: "رسوب آمیلویید بیشتر ویژگی دیابت نوع دو است، نه نوع یک." },
+                    { text: "مقاومت محیطی به انسولین بدون تخریب سلولی", isCorrect: false, analysis: "مقاومت محیطی بدون تخریب سلولی بیشتر با دیابت نوع دو در مراحل ابتدایی مرتبط است." },
+                    { text: "چاقی احشایی و افزایش آدیپوکین‌ها", isCorrect: false, analysis: "این عوامل بیشتر با پاتوژنز دیابت نوع دو مرتبط هستند." }
+                ],
+                examTip: "حدود ۷۰ تا ۸۰ درصد بیماران دیابت نوع یک آنتی‌بادی ضد اسید گلوتامیک دکربوکسیلاز (GAD) در خون دارند.",
+                trap: "ویروس‌های محیطی مانند سرخک یا کوکساکی ممکن است عامل آغازگر تلقی شوند اما تخریب اصلی توسط پاسخ ایمنی سلولی خود بدن صورت می‌گیرد، نه اثر مستقیم ویروسی."
+            },
+            {
+                question: "کدام یک مهم‌ترین عامل ایجادکننده مقاومت به انسولین در دیابت نوع دو است؟",
+                options: [
+                    { text: "چاقی شکمی یا احشایی (visceral obesity)", isCorrect: true, analysis: "طبق متن، چاقی مهم‌ترین عامل ایجادکننده مقاومت به انسولین است و چاقی شکمی یا احشایی با بروز دیابت نوع دو ارتباط دارد." },
+                    { text: "انسولیت لنفوسیتی", isCorrect: false, analysis: "انسولیت با مکانیسم اتوایمیون سلول T بیشتر ویژگی دیابت نوع یک است." },
+                    { text: "کمبود مادرزادی گیرنده انسولین", isCorrect: false, analysis: "این مکانیسم اختصاصی دیابت نوع دو نیست و نوع دو عمدتاً اکتسابی است." },
+                    { text: "افزایش ترشح گلوکاگون بدون ارتباط با چاقی", isCorrect: false, analysis: "گلوکاگون در تنظیم گلوکز نقش دارد اما عامل اصلی مقاومت به انسولین در متن، چاقی معرفی شده است." }
+                ],
+                examTip: "در سندرم متابولیک، چاقی شکمی، هیپرگلیسمی، هیپرتانسیون، هیپرتری‌گلیسیریدمی و کاهش HDL همزمان دیده می‌شود.",
+                trap: "اسیدهای چرب آزاد، التهاب و آدیپوکین‌ها نیز نقش دارند اما چاقی احشایی به‌طور خاص به‌عنوان مهم‌ترین عامل ایجادکننده مقاومت به انسولین در متن ذکر شده است."
+            },
+            {
+                question: "کدام مورد درباره انسولینوما صحیح است؟",
+                options: [
+                    { text: "شایع‌ترین تومور نوروآندوکرین پانکراس است و موجب حملات هیپوگلیسمی می‌شود", isCorrect: true, analysis: "طبق متن، انسولینوما شایع‌ترین تومور نوروآندوکرین پانکراس بوده و موجب حملات هیپوگلیسمی با تظاهرات عصبی مانند کنفوزیون، استوپور یا کاهش سطح هوشیاری می‌شود." },
+                    { text: "همیشه بدخیم است و متاستاز گسترده می‌دهد", isCorrect: false, analysis: "انسولینوما در ۱۰ درصد موارد بدخیم است و بیشتر موارد خوش‌خیم هستند." },
+                    { text: "با اسهال شدید ناشی از VIP همراه است", isCorrect: false, analysis: "این ویژگی مربوط به تومور سلول‌های PP یا VIPoma است نه انسولینوما." },
+                    { text: "قطری بیش از ۵ سانتی‌متر دارد", isCorrect: false, analysis: "انسولینوما معمولاً قطری کمتر از ۲ سانتی‌متر دارد." }
+                ],
+                examTip: "در بررسی هیستولوژیک انسولینوما، سلول‌هایی همراه با رسوب آمیلویید در بافت خارج سلولی دیده می‌شود.",
+                trap: "بدخیمی انسولینوما بر اساس معیارهای سیتولوژیک تشخیص داده نمی‌شود بلکه بر اساس تهاجم موضعی یا متاستاز تعیین می‌گردد."
+            },
+            {
+                question: "مثلث گاسترینوما (Gastrinoma triangle) شامل چه نواحی‌ای است و علائم اصلی گاسترینوما چیست؟",
+                options: [
+                    { text: "پانکراس، دئودنوم و بافت نرم اطراف؛ زخم پپتیک، اسهال و GERD (سندرم زولینگر الیسون)", isCorrect: true, analysis: "گاسترینوما در منطقه مثلث پانکراس، دئودنوم و بافت نرم اطراف ایجاد شده و موجب زخم پپتیک، اسهال و GERD می‌شود که مجموعاً سندرم زولینگر الیسون نامیده می‌شود." },
+                    { text: "کبد، طحال و کلیه؛ زردی و درد شکمی", isCorrect: false, analysis: "این ناحیه ارتباطی با مثلث گاسترینوما ندارد." },
+                    { text: "هیپوفیز، تیروئید و پاراتیروئید؛ هیپرکلسمی", isCorrect: false, analysis: "این ترکیب اندام‌ها مربوط به MEN1 است نه محل آناتومیک گاسترینوما." },
+                    { text: "معده، مری و روده بزرگ؛ یبوست مزمن", isCorrect: false, analysis: "این ناحیه و علامت با گاسترینوما مطابقت ندارد." }
+                ],
+                examTip: "حدود ۲۵ درصد موارد گاسترینوما یکی از تظاهرات سندرم MEN1 است.",
+                trap: "زخم‌های متعدد، مقاوم به درمان دارویی و در محل‌های غیرمعمول مانند ژژونوم، احتمال سندرم زولینگر الیسون را افزایش می‌دهند و نباید صرفاً به‌عنوان زخم پپتیک معمولی تلقی شوند."
+            },
+            {
+                question: "شایع‌ترین علت سندرم کوشینگ کدام است؟",
+                options: [
+                    { text: "مصرف گلوکوکورتیکویید اگزوژن (ایتروژنیک)", isCorrect: true, analysis: "طبق متن، مصرف گلوکوکورتیکویید اگزوژن شایع‌ترین علت سندرم کوشینگ است." },
+                    { text: "آدنوم هیپوفیز ترشح‌کننده ACTH (بیماری کوشینگ)", isCorrect: false, analysis: "این علت شایع‌ترین علت آندوژن است اما نه شایع‌ترین علت کلی سندرم کوشینگ که به مصرف دارویی مربوط است." },
+                    { text: "کارسینوم سلول کوچک ریه", isCorrect: false, analysis: "این تومور شایع‌ترین علت ترشح اکتوپیک ACTH است، نه شایع‌ترین علت کلی سندرم کوشینگ." },
+                    { text: "نئوپلاسم اولیه آدرنال", isCorrect: false, analysis: "نئوپلاسم اولیه آدرنال یکی از علل کمتر شایع سندرم کوشینگ است." }
+                ],
+                examTip: "بیماری کوشینگ (آدنوم هیپوفیزی) در خانم‌ها ۴ برابر آقایان شایع‌تر و معمولاً در دهه دوم و سوم زندگی دیده می‌شود.",
+                trap: "بیماری کوشینگ (Cushing disease) اصطلاح اختصاصی برای علت هیپوفیزی است و نباید با اصطلاح عمومی‌تر سندرم کوشینگ که شامل تمام علل از جمله مصرف دارویی می‌شود اشتباه گرفته شود."
+            },
+            {
+                question: "سندرم کان (Conn syndrome) چیست و چه یافته بافت‌شناسی مشخصی دارد؟",
+                options: [
+                    { text: "آدنوم آدرنال ترشح‌کننده آلدوسترون همراه با اجسام اسپیرونولاکتون پس از درمان", isCorrect: true, analysis: "سندرم کان یکی از علل هیپرآلدوسترونیسم اولیه است که با آدنوم آدرنال ایجاد می‌شود و پس از درمان با اسپیرونولاکتون، اجسام اسپیرونولاکتون در سلول‌های تولیدکننده آلدوسترون دیده می‌شود." },
+                    { text: "هیپرپلازی منتشر دوطرفه قشر آدرنال بدون رابطه با آلدوسترون", isCorrect: false, analysis: "این حالت هیپرآلدوسترونیسم ایدیوپاتیک است نه سندرم کان که ناشی از آدنوم است." },
+                    { text: "نارسایی مزمن آدرنال با هیپرپیگمانتاسیون پوستی", isCorrect: false, analysis: "این توصیف مربوط به بیماری آدیسون است، نه سندرم کان." },
+                    { text: "کاهش سطح رنین پلاسما همراه با هیپرکالمی", isCorrect: false, analysis: "در هیپرآلدوسترونیسم اولیه کاهش رنین پلاسما همراه با هیپوکالمی است، نه هیپرکالمی." }
+                ],
+                examTip: "هیپرتانسیون همراه با هیپوکالمی، شاه علامت هیپرآلدوسترونیسم اولیه است.",
+                trap: "هیپرآلدوسترونیسم ثانویه با افزایش سطح رنین پلاسما همراه است در حالی که در نوع اولیه (مانند کان) سطح رنین کاهش می‌یابد؛ این تفاوت کلیدی نباید فراموش شود."
+            },
+            {
+                question: "فئوکروموسیتوم بر اساس قانون معروف «قانون ده‌ها» با کدام ویژگی‌ها مرتبط است؟",
+                options: [
+                    { text: "حدود ۱۰ درصد آن‌ها خارج آدرنال، دوطرفه یا در سندرم‌های فامیلیال هستند", isCorrect: true, analysis: "طبق متن، ۱۰ درصد فئوکروموسیتوم‌ها خارج آدرنال، ۱۰ درصد دوطرفه و درصد قابل توجهی مرتبط با سندرم‌های فامیلیال مانند MEN2A/B، NF1 و بیماری فون هیپل لیندو هستند." },
+                    { text: "همیشه بدخیم هستند", isCorrect: false, analysis: "طبق متن حدود ۱۰ درصد فئوکروموسیتوم‌های آدرنال بدخیم هستند، نه همه آن‌ها." },
+                    { text: "فقط در کودکان زیر ۵ سال دیده می‌شوند", isCorrect: false, analysis: "چنین محدودیت سنی خاصی برای فئوکروموسیتوم ذکر نشده است." },
+                    { text: "هیچ ارتباطی با جهش‌های ژنتیکی ندارند", isCorrect: false, analysis: "طبق متن، ۲۵ درصد افراد مبتلا به فئوکروموسیتوم و پاراگانگلیوم دچار جهش‌های ژنتیکی مانند VHL، NF1، RET هستند." }
+                ],
+                examTip: "فئوکروموسیتوم کاتکول آمین ترشح می‌کند و موجب هیپرتانسیون مزمن یا پایدار یا اپیزودیک می‌شود.",
+                trap: "علائم فئوکروموسیتوم مانند تپش قلب، تعریق و اضطراب ممکن است با حمله پانیک اشتباه گرفته شود که تشخیص صحیح آن اهمیت بالینی زیادی دارد."
+            },
+            {
+                question: "سندرم واترهاوس فریدریکسن (Waterhouse-Friderichsen) با چه مکانیسمی رخ می‌دهد؟",
+                options: [
+                    { text: "خونریزی وسیع آدرنال در زمینه سپسیس شدید، کلاسیک در منینگوکوکسمی", isCorrect: true, analysis: "طبق متن، این سندرم به دلیل آسیب عروقی ناشی از آندوتوکسین با DIC همراه است و کلاسیک آن در زمینه سپسیس منینگوکوکی رخ می‌دهد، هرچند سایر ارگانیسم‌ها نیز می‌توانند عامل باشند." },
+                    { text: "تخریب تدریجی اتوایمیون قشر آدرنال", isCorrect: false, analysis: "این مکانیسم مربوط به بیماری آدیسون مزمن است نه واترهاوس فریدریکسن که حاد و ناشی از خونریزی است." },
+                    { text: "آدنوم خوش‌خیم ترشح‌کننده کورتیزول", isCorrect: false, analysis: "این توصیف با سندرم کوشینگ همخوانی دارد نه واترهاوس فریدریکسن." },
+                    { text: "کمبود مادرزادی آنزیم ۲۱ هیدروکسیلاز", isCorrect: false, analysis: "این توصیف مربوط به سندرم آدرنوژنیتال (CAH) است، نه واترهاوس فریدریکسن." }
+                ],
+                examTip: "نارسایی حاد آدرنال با استفراغ مقاوم، درد شکمی، هیپوتانسیون و کلاپس عروقی تظاهر می‌کند.",
+                trap: "پنوموکوک و هموفیلوس آنفلوانزا نیز می‌توانند عامل این سندرم باشند، بنابراین منینگوکوکسمی تنها علت کلاسیک است نه علت انحصاری آن."
+            }
+        ];
+
+        /* --- Application Logic --- */
+        let questions = [];
+        let currentQIndex = 0;
+        let answers = [];
+        let timerInterval;
+        let timeLeft = 1800; // 30 mins
+        let isAnswered = false;
+
+        // Web Audio API
+        const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        let soundEnabled = true;
+
+        function playTone(freq, type, duration, vol=0.1) {
+            if(!soundEnabled) return;
+            if(audioCtx.state === 'suspended') audioCtx.resume();
+            const oscillator = audioCtx.createOscillator();
+            const gainNode = audioCtx.createGain();
+            oscillator.type = type;
+            oscillator.frequency.setValueAtTime(freq, audioCtx.currentTime);
+            gainNode.gain.setValueAtTime(vol, audioCtx.currentTime);
+            gainNode.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + duration);
+            oscillator.connect(gainNode);
+            gainNode.connect(audioCtx.destination);
+            oscillator.start();
+            oscillator.stop(audioCtx.currentTime + duration);
+        }
+
+        function playClick() { playTone(600, 'sine', 0.1); }
+        function playPass() {
+            playTone(440, 'triangle', 0.2);
+            setTimeout(() => playTone(554, 'triangle', 0.2), 100);
+            setTimeout(() => playTone(659, 'triangle', 0.4), 200);
+        }
+        function playFail() {
+            playTone(300, 'sawtooth', 0.3, 0.15);
+            setTimeout(() => playTone(250, 'sawtooth', 0.5, 0.15), 200);
+        }
+
+        function toggleSound() {
+            soundEnabled = !soundEnabled;
+            document.getElementById('soundBtn').innerText = soundEnabled ? '🔊' : '🔇';
+        }
+
+        function toggleTheme() {
+            const body = document.body;
+            const currentTheme = body.getAttribute('data-theme');
+            if(currentTheme === 'light') {
+                body.removeAttribute('data-theme');
+            } else {
+                body.setAttribute('data-theme', 'light');
+            }
+        }
+
+        // Shuffle Array
+        function shuffle(array) {
+            let currentIndex = array.length, randomIndex;
+            while (currentIndex != 0) {
+                randomIndex = Math.floor(Math.random() * currentIndex);
+                currentIndex--;
+                [array[currentIndex], array[randomIndex]] = [array[randomIndex], array[currentIndex]];
+            }
+            return array;
+        }
+
+        function initData() {
+            // Deep copy and shuffle questions
+            questions = JSON.parse(JSON.stringify(rawQuestions));
+            shuffle(questions);
+            questions.forEach(q => {
+                shuffle(q.options);
+                // Assign A,B,C,D
+                const labels = ['الف', 'ب', 'ج', 'د'];
+                q.options.forEach((opt, idx) => opt.label = labels[idx]);
+            });
+            answers = new Array(questions.length).fill(null);
+        }
+
+        function startQuiz() {
+            const nameInput = document.getElementById('userName').value.trim();
+            if(!nameInput) {
+                alert("لطفاً نام خود را وارد کنید.");
+                return;
+            }
+            if(audioCtx.state === 'suspended') audioCtx.resume();
+            
+            document.getElementById('participant-name').innerText = "داوطلب: " + nameInput;
+            initData();
+            
+            document.getElementById('screen-login').classList.remove('active');
+            document.getElementById('screen-quiz').classList.add('active');
+            
+            buildNavGrid();
+            renderQuestion();
+            startTimer();
+        }
+
+        function startTimer() {
+            const display = document.getElementById('timer-display');
+            timerInterval = setInterval(() => {
+                timeLeft--;
+                let m = Math.floor(timeLeft / 60);
+                let s = timeLeft % 60;
+                display.innerText = `⏱️ ${m.toString().padStart(2, '0')}:${s.toString().padStart(2, '0')}`;
+                
+                if(timeLeft <= 60) display.classList.add('danger');
+                
+                if(timeLeft <= 0) {
+                    clearInterval(timerInterval);
+                    finishQuiz();
+                }
+            }, 1000);
+        }
+
+        function buildNavGrid() {
+            const grid = document.getElementById('nav-grid');
+            grid.innerHTML = '';
+            for(let i=0; i<questions.length; i++) {
+                const box = document.createElement('div');
+                box.className = 'grid-item';
+                box.innerText = i + 1;
+                box.id = 'grid-box-' + i;
+                box.onclick = () => {
+                    if(isAnswered) return; // Prevent jump during auto-transition delay
+                    currentQIndex = i;
+                    renderQuestion();
+                };
+                grid.appendChild(box);
+            }
+        }
+
+        function updateNavGrid() {
+            for(let i=0; i<questions.length; i++) {
+                const box = document.getElementById('grid-box-' + i);
+                box.className = 'grid-item' + (answers[i] !== null ? ' answered' : '') + (i === currentQIndex ? ' active' : '');
+            }
+            const progress = (answers.filter(a => a !== null).length / questions.length) * 100;
+            document.getElementById('progress-bar').style.width = progress + '%';
+        }
+
+        function renderQuestion() {
+            isAnswered = false;
+            updateNavGrid();
+            const q = questions[currentQIndex];
+            
+            document.getElementById('q-counter').innerText = `سؤال ${currentQIndex + 1} از ${questions.length}`;
+            document.getElementById('q-text').innerText = q.question;
+            
+            const optsContainer = document.getElementById('options-container');
+            optsContainer.innerHTML = '';
+            
+            q.options.forEach((opt, idx) => {
+                const div = document.createElement('div');
+                div.className = 'option';
+                if(answers[currentQIndex] === idx) div.classList.add('selected');
+                
+                div.innerHTML = `<span class="option-label">${opt.label}</span> <span style="margin-right:15px">${opt.text}</span>`;
+                
+                div.onclick = () => handleSelect(idx);
+                optsContainer.appendChild(div);
+            });
+
+            document.getElementById('btn-prev').style.display = currentQIndex > 0 ? 'block' : 'none';
+        }
+
+        function handleSelect(idx) {
+            if(isAnswered) return;
+            isAnswered = true;
+            playClick();
+            
+            answers[currentQIndex] = idx;
+            
+            // Lock UI
+            const opts = document.querySelectorAll('.option');
+            opts.forEach((o, i) => {
+                o.classList.add('locked');
+                if(i === idx) o.classList.add('selected');
+                else o.classList.remove('selected');
+            });
+            
+            updateNavGrid();
+
+            setTimeout(() => {
+                if(currentQIndex < questions.length - 1) {
+                    currentQIndex++;
+                    renderQuestion();
+                } else {
+                    finishQuiz();
+                }
+            }, 500);
+        }
+
+        function prevQuestion() {
+            if(isAnswered) return;
+            if(currentQIndex > 0) {
+                currentQIndex--;
+                renderQuestion();
+            }
+        }
+
+        function finishQuiz() {
+            clearInterval(timerInterval);
+            document.getElementById('screen-quiz').classList.remove('active');
+            document.getElementById('screen-result').classList.add('active');
+            
+            let correctCount = 0;
+            answers.forEach((ans, idx) => {
+                if(ans !== null && questions[idx].options[ans].isCorrect) correctCount++;
+            });
+            
+            const percent = Math.round((correctCount / questions.length) * 100);
+            document.getElementById('final-score').innerText = percent + '%';
+            
+            const msgEl = document.getElementById('score-msg');
+            if(percent >= 60) {
+                msgEl.innerText = "🎉 تبریک! شما آزمون را با موفقیت گذراندید.";
+                msgEl.style.color = "var(--correct)";
+                playPass();
+            } else {
+                msgEl.innerText = "⚠️ نیاز به مطالعه بیشتر! نمره شما کمتر از حد نصاب است.";
+                msgEl.style.color = "var(--incorrect)";
+                playFail();
+            }
+
+            saveScore(percent);
+            renderAnalysis();
+        }
+
+        function saveScore(percent) {
+            const name = document.getElementById('userName').value.trim();
+            let records = JSON.parse(localStorage.getItem('anatomyQuizScores') || '[]');
+            records.push({ name: name, score: percent, date: new Date().toLocaleDateString('fa-IR') });
+            records.sort((a,b) => b.score - a.score);
+            records = records.slice(0, 10);
+            localStorage.setItem('anatomyQuizScores', JSON.stringify(records));
+            
+            const lbBox = document.getElementById('lb-content');
+            lbBox.innerHTML = '';
+            records.forEach((r, i) => {
+                lbBox.innerHTML += `<div class="lb-row"><span>${i+1}. ${r.name}</span><span>${r.score}% (${r.date})</span></div>`;
+            });
+        }
+
+        function renderAnalysis() {
+            const container = document.getElementById('analysis-container');
+            container.innerHTML = '';
+
+            questions.forEach((q, idx) => {
+                const userAnsIdx = answers[idx];
+                let isCorrect = false;
+                let statusBadge = `<span class="badge bg-warning">⚠️ بی‌پاسخ</span>`;
+                
+                if(userAnsIdx !== null) {
+                    isCorrect = q.options[userAnsIdx].isCorrect;
+                    if(isCorrect) statusBadge = `<span class="badge bg-correct">🟢 صحیح</span>`;
+                    else statusBadge = `<span class="badge bg-incorrect">🔴 نادرست</span>`;
+                }
+
+                let optionsHTML = '';
+                let feedbackHTML = '';
+
+                q.options.forEach((opt, optIdx) => {
+                    let optClass = '';
+                    let labelStatus = '';
+                    if(opt.isCorrect) {
+                        optClass = 'status-true';
+                        labelStatus = '✓ پاسخ صحیح';
+                    } else if (userAnsIdx === optIdx) {
+                        optClass = 'status-false';
+                        labelStatus = '← انتخاب شما';
+                    }
+
+                    optionsHTML += `
+                        <div class="ac-opt ${optClass}">
+                            <div class="ac-opt-top">
+                                <span class="ac-opt-text">${opt.label}) ${opt.text}</span>
+                                <span class="ac-opt-status">${labelStatus}</span>
+                            </div>
+                            <div class="ac-opt-analysis">تحلیل: ${opt.analysis}</div>
+                        </div>
+                    `;
+                });
+
+                if(userAnsIdx !== null) {
+                    if(isCorrect) {
+                        feedbackHTML = `<div class="ac-feedback feedback-green">🟢 چرا پاسخ من درست بود؟ آفرین! شما گزینه صحیح (${q.options[userAnsIdx].label}) را انتخاب کردید. تحلیل دقیق را در باکس گزینه‌ها بخوانید.</div>`;
+                    } else {
+                        const correctOpt = q.options.find(o => o.isCorrect);
+                        feedbackHTML = `<div class="ac-feedback feedback-red">🔴 چرا پاسخ من غلط بود؟ شما گزینه (${q.options[userAnsIdx].label}) را انتخاب کردید در حالی که پاسخ صحیح گزینه (${correctOpt.label}) است. اشتباه شما احتمالاً به دلیل بی‌دقتی در مفاهیم مشابه بوده است.</div>`;
+                    }
+                }
+
+                const cardHTML = `
+                    <div class="analysis-card">
+                        <div class="ac-header">
+                            <span style="font-size:1.2em; font-weight:bold; color:var(--accent);">${idx+1}.</span>
+                            <div class="ac-qtext">${q.question}</div>
+                            ${statusBadge}
+                        </div>
+                        ${feedbackHTML}
+                        <div class="ac-options">
+                            ${optionsHTML}
+                        </div>
+                        <div class="ac-meta">
+                            <div class="meta-box tip">
+                                <h4>🎯 نکته امتحانی</h4>
+                                <p>${q.examTip}</p>
+                            </div>
+                            <div class="meta-box trap">
+                                <h4>⚠️ دام تستی</h4>
+                                <p>${q.trap}</p>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                container.innerHTML += cardHTML;
+            });
+        }
+    </script>
+
+  <script src="highlight.js"></script>
+</body>
+</html>
