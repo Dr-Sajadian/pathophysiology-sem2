@@ -20,7 +20,6 @@
             overflow-x: hidden;
         }
 
-        /* افکت‌های نورانی پس‌زمینه */
         body::before, body::after {
             content: '';
             position: fixed;
@@ -39,25 +38,24 @@
             bottom: -100px; left: -100px;
         }
 
-        /* هدر */
         .header {
             display: flex;
             align-items: center;
             gap: 12px;
-            margin-bottom: 15px;
+            margin-bottom: 8px;
             z-index: 1;
         }
 
         .header-icon {
-            width: 55px;
-            height: 55px;
+            width: 60px; height: 60px;
             border-radius: 50%;
             background: linear-gradient(135deg, #a7c957, #588157);
             display: flex;
             justify-content: center;
             align-items: center;
-            font-size: 28px;
+            font-size: 30px;
             box-shadow: 0 6px 15px rgba(88, 129, 87, 0.3);
+            flex-shrink: 0;
         }
 
         .header-title {
@@ -68,14 +66,13 @@
         }
 
         .subtitle {
-            text-align: center;
             font-size: 14px;
             color: #0369a1;
             margin-bottom: 30px;
+            text-align: center;
             z-index: 1;
         }
 
-        /* کانتینر کارت‌ها */
         .container {
             width: 100%;
             max-width: 500px;
@@ -85,7 +82,6 @@
             z-index: 1;
         }
 
-        /* کارت‌ها */
         .card {
             background: rgba(255, 255, 255, 0.5);
             backdrop-filter: blur(15px);
@@ -110,8 +106,7 @@
         }
 
         .card-icon {
-            width: 50px;
-            height: 50px;
+            width: 50px; height: 50px;
             border-radius: 50%;
             display: flex;
             justify-content: center;
@@ -119,19 +114,33 @@
             font-size: 24px;
             flex-shrink: 0;
             box-shadow: 0 5px 12px rgba(0, 0, 0, 0.12);
-            background: linear-gradient(135deg, #a7c957, #588157); /* تم سبز برای فارما */
+            background: linear-gradient(135deg, #a7c957, #588157);
         }
 
-        .card-content {
-            flex: 1;
+        .card-content { flex: 1; text-align: right; }
+
+        .card-title {
+            font-size: 14px;
+            font-weight: 900;
+            color: #0c4a6e;
+            margin-bottom: 4px;
+            line-height: 1.6;
+            direction: ltr;
             text-align: right;
         }
 
-        .card-title {
-            font-size: 16px;
+        .card-title-fa {
+            font-size: 15px;
             font-weight: 900;
             color: #0c4a6e;
+            margin-bottom: 4px;
             line-height: 1.5;
+        }
+
+        .card-desc {
+            font-size: 12px;
+            color: #475569;
+            line-height: 1.6;
         }
 
         .card-arrow {
@@ -141,28 +150,32 @@
             transition: transform 0.3s;
         }
 
-        .card:hover .card-arrow {
-            transform: translateX(-5px);
+        .card:hover .card-arrow { transform: translateX(-5px); }
+
+        .nav-buttons {
+            display: flex;
+            gap: 12px;
+            margin-top: 35px;
+            z-index: 1;
+            flex-wrap: wrap;
+            justify-content: center;
         }
 
-        /* دکمه بازگشت */
         .back-btn {
             display: inline-flex;
             align-items: center;
             gap: 8px;
-            margin-top: 35px;
-            padding: 12px 28px;
+            padding: 12px 22px;
             background: rgba(255, 255, 255, 0.6);
             backdrop-filter: blur(10px);
             color: #0c4a6e;
             text-decoration: none;
             border-radius: 25px;
             font-weight: bold;
-            font-size: 14px;
+            font-size: 13px;
             border: 1.5px solid rgba(255, 255, 255, 0.9);
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
             transition: all 0.3s;
-            z-index: 1;
         }
 
         .back-btn:hover {
@@ -170,50 +183,19 @@
             transform: translateY(-2px);
         }
 
+        .back-btn.primary {
+            background: linear-gradient(135deg, #38bdf8, #0284c7);
+            color: white;
+            border-color: rgba(255, 255, 255, 0.5);
+        }
+
+        .back-btn.primary:hover {
+            box-shadow: 0 8px 20px rgba(2, 132, 199, 0.4);
+        }
+
         ::-webkit-scrollbar { width: 8px; }
         ::-webkit-scrollbar-track { background: transparent; }
         ::-webkit-scrollbar-thumb { background: rgba(14, 165, 233, 0.4); border-radius: 4px; }
-    /* کانتینر دکمه‌های بازگشت */
-.nav-buttons {
-    display: flex;
-    gap: 12px;
-    margin-top: 35px;
-    z-index: 1;
-    flex-wrap: wrap;
-    justify-content: center;
-}
-
-.back-btn {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    padding: 12px 22px;
-    background: rgba(255, 255, 255, 0.6);
-    backdrop-filter: blur(10px);
-    color: #0c4a6e;
-    text-decoration: none;
-    border-radius: 25px;
-    font-weight: bold;
-    font-size: 13px;
-    border: 1.5px solid rgba(255, 255, 255, 0.9);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-    transition: all 0.3s;
-}
-
-.back-btn:hover {
-    background: rgba(255, 255, 255, 0.85);
-    transform: translateY(-2px);
-}
-
-.back-btn.primary {
-    background: linear-gradient(135deg, #38bdf8, #0284c7);
-    color: white;
-    border-color: rgba(255, 255, 255, 0.5);
-}
-
-.back-btn.primary:hover {
-    box-shadow: 0 8px 20px rgba(2, 132, 199, 0.4);
-}
     </style>
 </head>
 <body>
@@ -227,11 +209,12 @@
 
     <div class="container">
 
-        <!-- هورمون جنسی -->
-        <a href="gonadal-hormones-tree-20.html" class="card">
-            <div class="card-icon">🧬</div>
+        <!-- Hypothalamic and pituitary hormones -->
+        <a href="hypothalamic-pituitary-hormones.html" class="card">
+            <div class="card-icon">🧠</div>
             <div class="card-content">
-                <div class="card-title">هورمون جنسی</div>
+                <div class="card-title">Hypothalamic and pituitary hormones</div>
+                <div class="card-desc">هورمون‌های هیپوتالاموس و هیپوفیز</div>
             </div>
             <div class="card-arrow">‹</div>
         </a>
@@ -240,7 +223,7 @@
         <a href="thyroid-pharmacology-tree-1.html" class="card">
             <div class="card-icon">🦋</div>
             <div class="card-content">
-                <div class="card-title">تیروئید</div>
+                <div class="card-title-fa">تیروئید</div>
             </div>
             <div class="card-arrow">‹</div>
         </a>
@@ -249,7 +232,7 @@
         <a href="diabetes-pharmacology-tree.html" class="card">
             <div class="card-icon">🩸</div>
             <div class="card-content">
-                <div class="card-title">دیابت</div>
+                <div class="card-title-fa">دیابت</div>
             </div>
             <div class="card-arrow">‹</div>
         </a>
@@ -258,7 +241,7 @@
         <a href="corticosteroids-pharmacology-tree.html" class="card">
             <div class="card-icon">💊</div>
             <div class="card-content">
-                <div class="card-title">کورتیکواستروئید</div>
+                <div class="card-title-fa">کورتیکواستروئید</div>
             </div>
             <div class="card-arrow">‹</div>
         </a>
@@ -267,7 +250,7 @@
         <a href="hypophysis-pharmacology-tree.html" class="card">
             <div class="card-icon">🧠</div>
             <div class="card-content">
-                <div class="card-title">هیپوفیز</div>
+                <div class="card-title-fa">هیپوفیز</div>
             </div>
             <div class="card-arrow">‹</div>
         </a>
@@ -276,25 +259,26 @@
         <a href="pharmacology-total-review-tree.html" class="card">
             <div class="card-icon">📚</div>
             <div class="card-content">
-                <div class="card-title">مرور کل فارماکولوژی غدد</div>
+                <div class="card-title-fa">مرور کل فارماکولوژی غدد</div>
             </div>
             <div class="card-arrow">‹</div>
         </a>
 
-    <!-- نمونه سوالات -->
-<a href="pharmacology-questions.html" class="card">
-    <div class="card-icon">📝</div>
-    <div class="card-content">
-        <div class="card-title">نمونه سوالات همراه با پاسخ</div>
-    </div>
-    <div class="card-arrow">‹</div>
-</a>
-    
+        <!-- نمونه سوالات -->
+        <a href="pharmacology-questions.html" class="card">
+            <div class="card-icon">📝</div>
+            <div class="card-content">
+                <div class="card-title-fa">نمونه سوالات همراه با پاسخ</div>
+            </div>
+            <div class="card-arrow">‹</div>
+        </a>
+
     </div>
 
     <div class="nav-buttons">
-    <a href="ghodad.html" class="back-btn primary">↩ بازگشت به کورس غدد</a>
-    <a href="index.html" class="back-btn">🏠 خانه</a>
+        <a href="ghodad.html" class="back-btn primary">↩ بازگشت به کورس غدد</a>
+        <a href="index.html" class="back-btn">🏠 خانه</a>
     </div>
+
 </body>
 </html>
