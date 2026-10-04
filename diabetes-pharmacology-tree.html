@@ -1,803 +1,209 @@
 <!DOCTYPE html>
 <html lang="fa" dir="rtl">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>نقشهٔ درختی فارماکولوژی داروهای ضددیابت و مدیریت DKA</title>
-<link rel="preconnect" href="https://cdnjs.cloudflare.com">
-<style>
-@font-face{
-  font-family:'Vazirmatn';
-  src:url('https://cdn.jsdelivr.net/gh/rastikerdar/vazirmatn@v33.003/fonts/webfonts/Vazirmatn-Regular.woff2') format('woff2');
-  font-weight:400; font-style:normal; font-display:swap;
-}
-@font-face{
-  font-family:'Vazirmatn';
-  src:url('https://cdn.jsdelivr.net/gh/rastikerdar/vazirmatn@v33.003/fonts/webfonts/Vazirmatn-Bold.woff2') format('woff2');
-  font-weight:700; font-style:normal; font-display:swap;
-}
-@font-face{
-  font-family:'Vazirmatn';
-  src:url('https://cdn.jsdelivr.net/gh/rastikerdar/vazirmatn@v33.003/fonts/webfonts/Vazirmatn-Medium.woff2') format('woff2');
-  font-weight:500; font-style:normal; font-display:swap;
-}
-
-:root{
-  --bg:#0f1720; --panel:#182231; --panel2:#1f2c3f; --text:#e7edf5; --muted:#9fb0c3;
-  --accent:#38bdf8; --accent2:#34d399; --star:#fbbf24; --border:#2b3a4f; --shadow:rgba(0,0,0,.35);
-  --pill:#24344a;
-}
-[data-theme="night"]{
-  --bg:#0b1220; --panel:#131e2e; --panel2:#182741; --text:#e6edf6; --muted:#93a5bb;
-  --accent:#5eb6ff; --accent2:#37e0a3; --star:#ffd166; --border:#223148; --shadow:rgba(0,0,0,.5);
-  --pill:#1c2a3f;
-}
-[data-theme="emerald"]{
-  --bg:#f2faf6; --panel:#ffffff; --panel2:#e7f6ee; --text:#0e2a20; --muted:#4b6a5c;
-  --accent:#0e9f6e; --accent2:#059669; --star:#d97706; --border:#cdeada; --shadow:rgba(15,60,45,.12);
-  --pill:#e3f4ec;
-}
-[data-theme="sunset"]{
-  --bg:#2a1a2e; --panel:#3a2140; --panel2:#472a4c; --text:#fbe9f0; --muted:#d9a8c0;
-  --accent:#ff8a65; --accent2:#ffb74d; --star:#ffe066; --border:#5a3457; --shadow:rgba(20,5,15,.4);
-  --pill:#4a2b4f;
-}
-[data-theme="ice"]{
-  --bg:#eef5fb; --panel:#ffffff; --panel2:#e5f1fb; --text:#0d2436; --muted:#4c6b83;
-  --accent:#2563eb; --accent2:#0ea5e9; --star:#d97706; --border:#cfe3f4; --shadow:rgba(15,45,80,.1);
-  --pill:#dfeefb;
-}
-
-*{box-sizing:border-box}
-html,body{margin:0;padding:0}
-body{
-  font-family:'Vazirmatn', Tahoma, sans-serif;
-  background:var(--bg); color:var(--text);
-  min-height:100vh; transition:background .3s, color .3s;
-  padding-bottom:60px;
-}
-a{color:inherit}
-
-.topbar{
-  position:sticky; top:0; z-index:50;
-  background:linear-gradient(135deg, var(--panel), var(--panel2));
-  border-bottom:1px solid var(--border);
-  box-shadow:0 4px 18px var(--shadow);
-  padding:14px 18px;
-}
-.topbar-inner{max-width:1100px; margin:0 auto;}
-.title-row{display:flex; align-items:center; gap:12px; flex-wrap:wrap; justify-content:space-between;}
-.title-main{display:flex; align-items:center; gap:10px;}
-.pill-icon{
-  font-size:28px; background:var(--pill); border-radius:14px; padding:8px 12px;
-  box-shadow:inset 0 0 0 1px var(--border);
-}
-.title-text h1{margin:0; font-size:19px; font-weight:700;}
-.title-text p{margin:2px 0 0; font-size:12.5px; color:var(--muted);}
-
-.stats-row{
-  display:flex; gap:10px; flex-wrap:wrap; margin-top:12px;
-}
-.stat-chip{
-  background:var(--pill); border:1px solid var(--border); border-radius:12px;
-  padding:8px 14px; font-size:12.5px; display:flex; align-items:center; gap:6px;
-  min-width:120px;
-}
-.stat-chip b{font-size:14px;}
-.progress-wrap{flex:1; min-width:180px; display:flex; align-items:center; gap:8px;}
-.progress-bar{flex:1; height:8px; background:var(--border); border-radius:6px; overflow:hidden;}
-.progress-fill{height:100%; background:linear-gradient(90deg,var(--accent),var(--accent2)); width:0%; transition:width .4s;}
-
-.controls-row{
-  display:flex; gap:8px; flex-wrap:wrap; margin-top:12px; align-items:center;
-}
-.btn{
-  background:var(--pill); border:1px solid var(--border); color:var(--text);
-  padding:8px 13px; border-radius:10px; cursor:pointer; font-family:inherit;
-  font-size:13px; transition:transform .15s, box-shadow .15s; display:flex; align-items:center; gap:6px;
-}
-.btn:hover{transform:translateY(-1px); box-shadow:0 4px 12px var(--shadow);}
-.btn.active{background:var(--accent); color:#fff; border-color:var(--accent);}
-.theme-dot{width:16px; height:16px; border-radius:50%; display:inline-block; border:2px solid var(--border);}
-.theme-dot.night{background:#12233b;}
-.theme-dot.emerald{background:#0e9f6e;}
-.theme-dot.sunset{background:#ff8a65;}
-.theme-dot.ice{background:#2563eb;}
-
-.search-box{
-  flex:1; min-width:200px; display:flex; align-items:center; gap:6px;
-  background:var(--pill); border:1px solid var(--border); border-radius:10px; padding:6px 12px;
-}
-.search-box input{
-  background:transparent; border:none; outline:none; color:var(--text); font-family:inherit;
-  font-size:13px; width:100%;
-}
-
-.fontctl{display:flex; align-items:center; gap:4px; background:var(--pill); border:1px solid var(--border); border-radius:10px; padding:4px;}
-.fontctl button{border:none; background:transparent; color:var(--text); font-size:15px; width:28px; height:28px; border-radius:8px; cursor:pointer;}
-.fontctl button:hover{background:var(--border);}
-
-.exam-toggle-wrap{display:flex; align-items:center; gap:6px; font-size:13px;}
-.switch{position:relative; width:42px; height:22px; background:var(--border); border-radius:20px; cursor:pointer; transition:.2s;}
-.switch.on{background:var(--star);}
-.switch .knob{position:absolute; top:2px; right:2px; width:18px; height:18px; border-radius:50%; background:#fff; transition:.2s;}
-.switch.on .knob{right:22px;}
-
-main{max-width:1100px; margin:20px auto; padding:0 16px;}
-
-.tree{list-style:none; margin:0; padding:0;}
-.tree ul{list-style:none; margin:0; padding-inline-start:22px; border-inline-start:2px dashed var(--border);}
-.node{margin:6px 0;}
-.node-row{
-  display:flex; align-items:flex-start; gap:8px; background:var(--panel);
-  border:1px solid var(--border); border-radius:12px; padding:9px 12px;
-  box-shadow:0 2px 8px var(--shadow); cursor:pointer; transition:background .2s, transform .1s;
-}
-.node-row:hover{background:var(--panel2);}
-.node-row.leaf{cursor:default;}
-.toggle-ico{
-  width:22px; height:22px; flex:none; border-radius:7px; background:var(--pill);
-  display:flex; align-items:center; justify-content:center; font-size:12px;
-  transition:transform .25s; border:1px solid var(--border);
-}
-.node.open > .node-row .toggle-ico{transform:rotate(90deg);}
-.node-row.leaf .toggle-ico{visibility:hidden;}
-.node-title{font-weight:600; font-size:14.5px; flex:1; display:flex; align-items:center; gap:6px; flex-wrap:wrap;}
-.star-badge{color:var(--star); font-size:14px;}
-.node-desc{
-  display:none; margin:6px 4px 4px 4px; padding:10px 14px; background:var(--pill);
-  border-radius:10px; font-size:13.5px; line-height:2.05; color:var(--text); white-space:pre-line;
-  border-inline-start:3px solid var(--accent);
-}
-.node.desc-open > .node-desc{display:block;}
-.node-img{
-  display:block; max-width:100%; border-radius:10px; margin-top:8px; border:1px solid var(--border);
-}
-.hl-btn{
-  border:none; background:transparent; cursor:pointer; font-size:14px; color:var(--muted); padding:2px 4px; border-radius:6px;
-}
-.hl-btn:hover{background:var(--border);}
-.node-row.highlighted{box-shadow:0 0 0 2px var(--star) inset, 0 2px 8px var(--shadow);}
-.children-wrap{display:none;}
-.node.open > .children-wrap{display:block;}
-
-.exam-mode .node:not(.has-star) { display:none; }
-.exam-mode .node.has-star > .children-wrap{display:block;}
-.exam-mode .node.has-star{display:block;}
-.exam-mode .tree, .exam-mode ul{display:block;}
-
-mark{background:var(--star); color:#111; border-radius:4px; padding:0 2px;}
-
-.footer{
-  max-width:1100px; margin:30px auto 10px; padding:16px 18px; text-align:center;
-  color:var(--muted); font-size:12.5px; border-top:1px solid var(--border);
-}
-
-.poll{
-  background:var(--panel); border:1px solid var(--border); border-radius:12px; padding:14px 16px; margin:18px 0;
-}
-.poll h3{margin:0 0 10px; font-size:14.5px;}
-.poll-opts{display:flex; gap:8px; flex-wrap:wrap;}
-.poll-opt{background:var(--pill); border:1px solid var(--border); border-radius:10px; padding:7px 14px; font-size:13px; cursor:pointer;}
-.poll-opt.voted{background:var(--accent); color:#fff;}
-.poll-result{font-size:12px; color:var(--muted); margin-top:8px;}
-
-@media print{
-  .topbar, .poll, .footer .noprint{display:none !important;}
-  body{background:#fff; color:#000;}
-  .node-row{box-shadow:none; border:1px solid #ccc;}
-  .node-desc{display:block !important; background:#f7f7f7; border-inline-start:3px solid #444;}
-  .children-wrap{display:block !important;}
-  .tree ul{border-inline-start:1px solid #ccc;}
-  main{max-width:100%;}
-}
-@media (max-width:640px){
-  .title-text h1{font-size:16px;}
-  .node-title{font-size:13.5px;}
-}
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Diabetes Mellitus</title>
+    <link href="https://cdn.jsdelivr.net/gh/rastikerdar/vazirmatn@v33.003/Vazirmatn-font-face.css" rel="stylesheet" type="text/css" />
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            background: linear-gradient(135deg, #e0f2fe 0%, #bae6fd 50%, #7dd3fc 100%);
+            background-attachment: fixed;
+            font-family: Vazirmatn, Tahoma, sans-serif;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 30px 20px;
+            overflow-x: hidden;
+        }
+        body::before, body::after {
+            content: '';
+            position: fixed;
+            border-radius: 50%;
+            filter: blur(80px);
+            z-index: 0;
+        }
+        body::before {
+            width: 300px; height: 300px;
+            background: rgba(255, 255, 255, 0.6);
+            top: -50px; right: -50px;
+        }
+        body::after {
+            width: 400px; height: 400px;
+            background: rgba(56, 189, 248, 0.4);
+            bottom: -100px; left: -100px;
+        }
+        .header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 8px;
+            z-index: 1;
+        }
+        .header-icon {
+            width: 60px; height: 60px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #a7c957, #588157);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 30px;
+            box-shadow: 0 6px 15px rgba(88, 129, 87, 0.3);
+            flex-shrink: 0;
+        }
+        .header-title {
+            font-size: 20px;
+            font-weight: 900;
+            color: #0c4a6e;
+            text-shadow: 0 2px 5px rgba(255,255,255,0.8);
+            line-height: 1.4;
+        }
+        .subtitle {
+            font-size: 14px;
+            color: #0369a1;
+            margin-bottom: 30px;
+            text-align: center;
+            z-index: 1;
+        }
+        .container {
+            width: 100%;
+            max-width: 500px;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            z-index: 1;
+        }
+        .card {
+            background: rgba(255, 255, 255, 0.5);
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+            border: 1.5px solid rgba(255, 255, 255, 0.85);
+            border-radius: 20px;
+            padding: 18px 20px;
+            text-decoration: none;
+            color: inherit;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            transition: all 0.35s ease;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
+        }
+        .card:hover {
+            background: rgba(255, 255, 255, 0.75);
+            transform: translateY(-4px);
+            box-shadow: 0 15px 35px rgba(14, 165, 233, 0.25);
+            border-color: #ffffff;
+        }
+        .card-icon {
+            width: 50px; height: 50px;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 24px;
+            flex-shrink: 0;
+            box-shadow: 0 5px 12px rgba(0, 0, 0, 0.12);
+        }
+        .icon-jozve { background: linear-gradient(135deg, #38bdf8, #0284c7); }
+        .icon-mindmap { background: linear-gradient(135deg, #a78bfa, #7c3aed); }
+        .card-content { flex: 1; text-align: right; }
+        .card-title {
+            font-size: 16px;
+            font-weight: 900;
+            color: #0c4a6e;
+            margin-bottom: 4px;
+            line-height: 1.5;
+        }
+        .card-desc {
+            font-size: 12px;
+            color: #475569;
+            line-height: 1.6;
+        }
+        .card-arrow {
+            color: #588157;
+            font-size: 20px;
+            font-weight: bold;
+            transition: transform 0.3s;
+        }
+        .card:hover .card-arrow { transform: translateX(-5px); }
+        .nav-buttons {
+            display: flex;
+            gap: 12px;
+            margin-top: 35px;
+            z-index: 1;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+        .back-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 12px 22px;
+            background: rgba(255, 255, 255, 0.6);
+            backdrop-filter: blur(10px);
+            color: #0c4a6e;
+            text-decoration: none;
+            border-radius: 25px;
+            font-weight: bold;
+            font-size: 13px;
+            border: 1.5px solid rgba(255, 255, 255, 0.9);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+            transition: all 0.3s;
+        }
+        .back-btn:hover {
+            background: rgba(255, 255, 255, 0.85);
+            transform: translateY(-2px);
+        }
+        .back-btn.primary {
+            background: linear-gradient(135deg, #a7c957, #588157);
+            color: white;
+            border-color: rgba(255, 255, 255, 0.5);
+        }
+        .back-btn.primary:hover {
+            box-shadow: 0 8px 20px rgba(88, 129, 87, 0.4);
+        }
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: rgba(14, 165, 233, 0.4); border-radius: 4px; }
+    </style>
 </head>
-<body data-theme="night">
+<body>
 
-<div class="topbar">
-  <div class="topbar-inner">
-    <div class="title-row">
-      <div class="title-main">
-        <div class="pill-icon">💊</div>
-        <div class="title-text">
-          <h1>نقشهٔ درختی فارماکولوژی غدد — داروهای ضددیابت و DKA</h1>
-          <p>بر اساس جزوهٔ «Anti-diabetic drugs and Management of DKA» — دکتر مهدی مشهدی (Pharm D, PhD)</p>
-        </div>
-      </div>
+    <div class="header">
+        <div class="header-icon">🩸</div>
+        <h1 class="header-title">Diabetes Mellitus</h1>
     </div>
 
-    <div class="stats-row">
-      <div class="stat-chip">🌿 تعداد شاخه‌ها: <b id="stat-nodes">0</b></div>
-      <div class="stat-chip">⭐ نکات پرتکرار: <b id="stat-stars">0</b></div>
-      <div class="stat-chip">🖍️ هایلایت‌شده: <b id="stat-hl">0</b></div>
-      <div class="progress-wrap">
-        <span>پیشرفت مطالعه</span>
-        <div class="progress-bar"><div class="progress-fill" id="progress-fill"></div></div>
-        <b id="progress-pct">0%</b>
-      </div>
+    <p class="subtitle">منابع مورد نظر را انتخاب کنید</p>
+
+    <div class="container">
+
+        <a href="diabetes-mellitus-jozve.html" class="card">
+            <div class="card-icon icon-jozve">📘</div>
+            <div class="card-content">
+                <div class="card-title">جزوه کامل</div>
+                <div class="card-desc">جزوه جامع داروهای دیابت</div>
+            </div>
+            <div class="card-arrow">‹</div>
+        </a>
+
+        <a href="diabetes-mellitus-mindmap.html" class="card">
+            <div class="card-icon icon-mindmap">🗺️</div>
+            <div class="card-content">
+                <div class="card-title">مایند مپ</div>
+                <div class="card-desc">نقشه ذهنی داروهای دیابت</div>
+            </div>
+            <div class="card-arrow">‹</div>
+        </a>
+
     </div>
 
-    <div class="controls-row">
-      <button class="btn" id="btn-open-all">🔽 باز کردن همه</button>
-      <button class="btn" id="btn-close-all">🔼 بستن همه</button>
-      <button class="btn" id="btn-print">🖨️ ذخیره PDF</button>
-      <div class="search-box">
-        <span>🔎</span>
-        <input id="search-input" type="text" placeholder="جستجو در جزوه...">
-      </div>
-      <div class="fontctl">
-        <button id="font-dec">A-</button>
-        <button id="font-inc">A+</button>
-      </div>
-      <div class="exam-toggle-wrap">
-        <span>🌙 حالت شب امتحان</span>
-        <div class="switch" id="exam-switch"><div class="knob"></div></div>
-      </div>
+    <div class="nav-buttons">
+        <a href="pharmacology.html" class="back-btn primary">↩ بازگشت به فارماکولوژی غدد</a>
+        <a href="index.html" class="back-btn">🏠 خانه</a>
     </div>
 
-    <div class="controls-row">
-      <span style="font-size:12.5px;color:var(--muted)">تم رنگی:</span>
-      <button class="btn theme-btn" data-theme="night"><span class="theme-dot night"></span> شب</button>
-      <button class="btn theme-btn" data-theme="emerald"><span class="theme-dot emerald"></span> زمرد</button>
-      <button class="btn theme-btn" data-theme="sunset"><span class="theme-dot sunset"></span> غروب</button>
-      <button class="btn theme-btn" data-theme="ice"><span class="theme-dot ice"></span> یخ</button>
-    </div>
-  </div>
-</div>
-
-<main>
-  <ul class="tree" id="tree-root"></ul>
-
-  <div class="poll noprint">
-    <h3>📊 این جزوه چقدر برایت مفید بود؟</h3>
-    <div class="poll-opts" id="poll-opts">
-      <div class="poll-opt" data-v="5">عالی ⭐⭐⭐⭐⭐</div>
-      <div class="poll-opt" data-v="4">خوب ⭐⭐⭐⭐</div>
-      <div class="poll-opt" data-v="3">متوسط ⭐⭐⭐</div>
-      <div class="poll-opt" data-v="2">ضعیف ⭐⭐</div>
-    </div>
-    <div class="poll-result" id="poll-result"></div>
-  </div>
-</main>
-
-<div class="footer">
-  <div>منبع: جزوهٔ «Anti-diabetic drugs and Management of DKA» — دانشگاه علوم پزشکی و داروسازی — مؤلف: دکتر مهدی مشهدی (Pharm D, PhD)</div>
-  <div class="noprint" style="margin-top:6px">این نقشهٔ درختی برای مرور و مطالعهٔ سریع تهیه شده و مرجع کامل، همان جزوهٔ اصلی است.</div>
-</div>
-
-<script>
-/* ============================= DATA ============================= */
-const treeData = [
-{t:"بخش اول: هورمون‌های پانکراس", children:[
-  {t:"ساختار غدهٔ پانکراس", d:"غدهٔ پانکراس شامل دو نوع بافت است:\nالف) بافت تشکیل‌شده از سلول‌های آسینی (Acinar cells): ترشح آنزیم‌های گوارشی ← ترشح اگزوکراین\nب) جزایر لانگرهانس (Islet of Longerhans): که حداقل شامل پنج ردهٔ سلولی‌اند.", star:true, children:[
-    {t:"سلول‌های α (۲۰٪)", d:"ترشح گلوکاگون"},
-    {t:"سلول‌های β (۷۵٪)", d:"ترشح انسولین + آمیلین (انسولین + پروانسولین + C-peptide)", star:true},
-    {t:"سلول‌های Δ (۳-۵٪)", d:"ترشح سوماتوستاتین"},
-    {t:"سلول‌های F (۱٪)", d:"ترشح پلی‌پپتید پانکراس"},
-    {t:"سلول‌های G (۱٪)", d:"ترشح گاسترین"},
-  ], img:"pancreas1"},
-]},
-
-{t:"بخش دوم: انسولین — ساختار، ترشح و تخریب", children:[
-  {t:"انسولین: پپتیدی دورشته‌ای", d:"ترشح انسولین به‌صورت preproinsulin است:\nپره‌پروانسولین (ER) ← پروانسولین (GA) ← انسولین (Portal vein)\nانسولین شامل زنجیرهٔ A و B است که با پیوندهای دی‌سولفیدی (S-S) به هم متصل‌اند و C-peptide بین آن‌ها قرار دارد.\nInsulin is stored in form of crystals consisting of 2 atoms of Zn + 6 molecules of insulin.", star:true, img:"proinsulin"},
-
-  {t:"Insulin Degradation (تخریب انسولین)", children:[
-    {t:"انسولین اندوژن", d:"۶۰٪ متابولیزه شدن در کبد و ۴۰-۳۵٪ حذف توسط کلیه"},
-    {t:"انسولین اگزوژن (انسولینی که SC تزریق می‌شود)", d:"۶۰٪ حذف توسط کلیه و ۴۰-۳۵٪ متابولیزه شدن در کبد"},
-    {t:"نیمه‌عمر انسولین اندوژن", d:"انسولین ساخته‌شده در بدن سریع اثر می‌کند و سریع نیز اثرش خاتمه می‌یابد.\n← نیمه‌عمر انسولین اندوژن در گردش خون سیستمیک: ۳ تا ۵ دقیقه\nاغلب انسولین‌هایی که زیرجلدی تزریق می‌شوند (به‌جز سریع‌الاثرها) اثرشان دیرتر شروع می‌شود ولی مدت بیشتری دوام می‌آورند.", star:true},
-  ]},
-
-  {t:"فیزیولوژی ترشح انسولین", children:[
-    {t:"دو نوع ترشح", d:"۱. ترشح پایهٔ انسولین\n۲. ترشح انسولین القاشده بوسیلهٔ گلوکز ← بطور معمول بعد از وعده‌های غذایی\nمتوسط ترشح روزانهٔ انسولین ۰.۲۵ تا ۰.۵ واحد به ازای هر کیلوگرم وزن بدن است.\n← اگر انسولینِ تجویزی به‌صورت کاملاً فعال باشد هر واحد از آن برابر با ۴۰ میکروگرم انسولین است"},
-    {t:"مکانیسم القای ترشح انسولین بوسیلهٔ گلوکز", star:true, d:"مراحل به‌ترتیب:", children:[
-      {t:"A. Hyperglycemia", d:"ورود گلوکز از Glucose transporter type 2 (GLUT-2) به سلول بتا"},
-      {t:"B. افزایش نسبت ATP/ADP", d:""},
-      {t:"C. بسته‌شدن کانال‌های پتاسیمی", d:"و مثبت‌تر شدن پتانسیل داخل سلول"},
-      {t:"D. بازشدن کانال‌های کلسیمی", d:"و ورود کلسیم به داخل سلول"},
-      {t:"E. اگزوسیتوز گرانول‌های انسولین", d:"به گردش خون سیستمیک"},
-    ], img:"insulinsecretion"},
-  ]},
-
-  {t:"Glucose Transporters (GLUTs)", d:"جدول ناقلین گلوکز:", children:[
-    {t:"جدول GLUTs", d:"GLUT 1 — بافت‌ها: همهٔ بافت‌ها، به‌ویژه گلبول‌های قرمز و مغز — عملکرد: جذب پایهٔ گلوکز؛ عبور از سد خونی-مغزی\nGLUT 2 — بافت‌ها: سلول‌های بتای پانکراس؛ کبد، کلیه؛ روده — عملکرد: تنظیم ترشح انسولین و سایر جنبه‌های هومئوستاز گلوکز\nGLUT 3 — بافت‌ها: مغز، کلیه، جفت، سایر بافت‌ها — عملکرد: جذب به نورون‌ها و سایر بافت‌ها\nGLUT 4 — بافت‌ها: عضله، بافت چربی — عملکرد: جذب گلوکز با میانجی‌گری انسولین\nGLUT 5 — بافت‌ها: روده، کلیه — عملکرد: جذب فروکتوز"},
-  ]},
-
-  {t:"اثرات انسولین در بدن", d:"انسولین یک هورمون آنابولیزان است ← شبیه هورمون رشد!", star:true, children:[
-    {t:"اثرات روی متابولیسم کربوهیدرات", d:"افزایش ورود گلوکز به داخل سلول\nافزایش مصرف گلوکز ← ↑ گلیکولیز (Glycolysis) - ↑ گلیکوژنز (glycogenesis)\nکاهش تولید گلوکز ← ↓ گلوکونئوژنز (Gluconeogenesis) - ↓ گلیکوژنولیز (Glycogenolysis)"},
-    {t:"اثرات روی متابولیسم لیپید و پروتئین", d:"↑ ساخت تری‌گلیسریدها، ↓ هیدرولیز چربی‌ها\n↑ پروتئین‌سازی، ↓ کاتابولیسم پروتئین‌ها ← پیشبرد رشد\n↓ تبدیل آمینواسیدها و اسیدهای چرب به کتواسیدها\n↑ ترانسپورت آمینواسیدها"},
-    {t:"اثر روی گلوکاگون", d:"← ↓ ترشح گلوکاگون", star:true},
-    {t:"مسیرهای پیام‌رسانی داخل سلولی انسولین", d:"شامل مسیرهای PI3K/Akt، mTORC1/2، AMPK، MAPK/Erk و غیره که در نهایت منجر به Glycogen synthesis، Protein synthesis، Glucose uptake، Lipogenesis، و مهار Gluconeogenesis، Lipolysis، Proteolysis و Ketogenesis می‌شوند.", img:"signaling"},
-  ]},
-
-  {t:"کنترل ترشح انسولین", children:[
-    {t:"عوامل تحریک‌کننده", star:true, d:"↑ قند خون (مهم‌ترین عامل تحریک‌کننده)\nاسیدهای آمینه (لیزین، لوسین و آرژنین)\nاینکرتین‌ها: Glucagon-like polypeptide-1 (GLP-1)، Glucose-dependent insulinotropic polypeptide (GIP)\nهورمون‌های دیگر: گلوکاگون، هورمون رشد، کورتیزول و ...\nفعالیت واگ\nفعالیت β-Adrenoceptor\nداروهای محرک ترشح انسولین (سولفونیل‌اوره‌ها و مگلیتینیدها)"},
-    {t:"عوامل مهارکننده", d:"↓ قند خون\nسوماتوستاتین (مهار پاراکراین)\nلپتین\nمهارکننده‌های α-Adrenoceptor\nداروها: Diazoxide, Phenytoin, Vinblastine, Colchicine"},
-  ]},
-]},
-
-{t:"بخش سوم: گلوکاگون", children:[
-  {t:"عوامل ترشح و مهار", d:"مهم‌ترین عامل ترشح: ↓ قند خون (هایپوگلایسمی)\nمهم‌ترین مهارکنندهٔ ترشح: ↑ قند خون (هایپرگلایسمی)"},
-  {t:"اثرات فیزیولوژیک", star:true, d:"افزایش تخریب گلیکوژن: ↑ قند خون\nافزایش ساخت گلوکز از پروتئین و لیپید (گلوکونئوژنز): ↑ قند خون"},
-  {t:"کاربرد درمانی", d:"هایپوگلایسمی شدید، مسمومیت با آنتاگونیست‌های بتا", star:true},
-]},
-
-{t:"بخش چهارم: دیابت — تعریف و انواع", children:[
-  {t:"دیابت (تعریف)", d:"دیابت یعنی پرادراری!\nدیابت شیرین (Mellitus) ← حضور قند در ادرار\nدیابت بی‌مزه (Insipidus) ← کاهش ترشح یا عملکرد هورمون ADH (وازوپرسین)\n\nدیابت شیرین یک بیماری است که به علت نقص در ترشح انسولین و یا حساسیت بافت‌ها به انسولین ایجاد می‌شود و اختلال در متابولیسم چربی، پروتئین و کربوهیدرات را در پی دارد.\nهیچ ارگانی از بدن نیست که در صورت عدم کنترل دیابت در درازمدت از آسیب در امان بماند.", star:true},
-
-  {t:"عوارض دیابت شیرین (میکرو و ماکرواسکولار)", star:true, children:[
-    {t:"آسیب به عروق", d:"← آترواسکلروزیس ← رتینوپاتی (آسیب به شبکیه)"},
-    {t:"پرفشاری خون", d:""},
-    {t:"نفروپاتی", d:"آسیب به توبول‌های کلیه ← نارسایی کلیه"},
-    {t:"نوروپاتی", d:"آسیب به اعصاب ← نوروپاتی محیطی و مرکزی ← از دردهای شدید محیطی تا بی‌حسی و کرختی\nدو داروی مورد تأیید FDA برای تسکین درد نوروپاتی دیابتی: Duloxetin (یک SNRI) و Pregabalin (یک Anti Seizure)", star:true},
-    {t:"عوارض متابولیک", d:"افزایش کلسترول و تری‌گلیسرید خون ← کتواسیدوزیس"},
-    {t:"سایر عوارض", d:"فلج سیستم گوارش، کاتراکت (آب مروارید)، گلوکوم (آب سیاه)، عفونت‌های گوناگون (UTI) و ...\n← پای دیابتی ← قطع عضو (Amputation)"},
-  ]},
-
-  {t:"انواع Diabetes Mellitus (DM)", children:[
-    {t:"تایپ I", d:"شروع در دوران کودکی\nعامل اصلی: تخریب اتوایمیون سلول‌های بتای پانکراس\nدرمان: فقط تزریق انسولین", star:true},
-    {t:"تایپ II", d:"مقاومت به اثر انسولین و کاهش ظرفیت ترشح انسولین\nشیوع عمدتاً در بزرگسالی و مرتبط با چاقی\nبسیار شایع‌تر از نوع I\nدرمان — مراحل اولیه: داروهای غیرانسولینی ضددیابت\nدرمان — مراحل انتهایی: داروهای غیرانسولینی ضددیابت + انسولین", star:true},
-    {t:"تایپ III", d:"دیابت بارداری (Gestation DM)"},
-    {t:"تایپ IV", d:"سندروم‌های بالابودن هورمون‌های Counter regulatory"},
-  ]},
-]},
-
-{t:"بخش پنجم: ترکیبات و اشکال انسولین", children:[
-  {t:"ترکیبات انسولین", d:"فراورده‌های طبیعی انسولین از برخی جهات متفاوت می‌باشند ← تکنیک تولید، توالی اسید آمینه، غلظت، قابلیت انحلال و زمان شروع و طول اثر\nساخت انسولین‌های سریع‌الاثر، کوتاه‌اثر، متوسط‌اثر و طولانی‌اثر", img:"insulincompounds"},
-
-  {t:"اشکال انسولین — چهار دسته", star:true, d:"(1) Rapid-acting\n(2) Short-acting\n(3) Intermediate-acting\n(4) Long-acting", children:[
-    {t:"سریع‌الاثر (Rapid-acting)", star:true, d:"لیزپرو، آسپارت، گلولیزین\n← مصرف قبل از غذا، مصرف در اورژانس DKA\n\nاین انسولین‌ها بیشترین شباهت را به کینتیک انسولین طبیعی بدن دارند (انسولین طبیعی بسیار سریع عمل می‌کند و سریع نیز اثرش خاتمه می‌یابد):\n✓ به‌صورت زیرجلدی درست قبل از شروع غذا تزریق می‌شوند\n✓ اثرشان در عرض ۵ تا ۱۵ دقیقه شروع می‌شود و حداکثر تا ۴ ساعت تداوم می‌یابد ← کاهش ریسک post-meal hypoglycemia تأخیری\n• بیشترین قابلیت استفاده در تجهیزات Continuous SC insulin infusion را دارا هستند.\n• اگر بیمار دیابتی در یک مهمانی قصد ناپرهیزی (مصرف غذای قندی) داشت، بهترین انتخاب‌اند.", children:[
-      {t:"انسولین آسپارت (Insulin Aspart) — Novorapid", d:"به‌صورت قلم (Pen) ۳۰۰ واحدی (۳ میلی‌لیتری) موجود است.\nظاهری شفاف دارند.\nجایگزینی پرولین با آسپارتیک‌اسید در زنجیرهٔ B انسولین سبب کاهش تجمع مولکول‌های انسولین و کاهش طول اثر آن شده است.", img:"novorapid"},
-      {t:"انسولین گلولیزین (Insulin glulisine) — Apidra", d:"جایگزینی آسپارژین با لایزین و گلوتامات با لایزین در زنجیرهٔ B انسولین سبب کاهش تجمع مولکول‌های انسولین و کاهش طول اثر آن شده است.\nمشابه انسولین Novorapid است.", img:"apidra"},
-    ]},
-    {t:"کوتاه‌اثر (Short-acting) — انسولین رگولار", star:true, d:"Insulin Regular (Crystalline zinc insulin)\n✓ ۳۰ دقیقه پس از تزریق اثرش شروع می‌شود و ۲-۳ ساعت بعد به پیک می‌رسد.\n← نسبت به دستهٔ قبل اثرشان دیرتر شروع می‌شود و اثرشان ماندگارتر است.\n← ↑ ریسک Postprandial hypoglycemia تأخیری\n✓ محلولی شفاف‌رنگ است ← تنها فرمی از انسولین که قابلیت تزریق وریدی دارد.\n← قابلیت استفاده در شرایط اورژانس (DKA، جراحی و ...) به‌صورت وریدی\n✓ حداقل ۳۰ دقیقه قبل از غذا باید تزریق شود (دستهٔ قبلی ۵-۱۵ دقیقه بود)\n✓ هر ویال آن ۱۰ سی‌سی معادل ۱۰۰۰ واحد است.\nنکته: البته انسولین‌های آسپارت و گلولیزین نیز قابلیت تزریق وریدی دارند!", img:"regular"},
-    {t:"متوسط‌اثر (Intermediate-acting) — NPH", d:"NPH (Neutral Protamine Hagedorn یا Isophane insulin)\n✓ نسبت به دو دستهٔ قبل، جذب تأخیری و شروع اثر آهسته‌تر دارد. ← شروع اثر طی ۲-۵ ساعت و ماندگاری ۴ تا ۱۲ ساعت\n✓ همان انسولین رگولار کمپلکس‌داده‌شده با پروتامین است ← شیری‌رنگ و کدر است.\n✓ به‌طور معمول با انسولین رگولار مخلوط می‌شود و حداقل روزانه ۲ بار تزریق می‌شود.", img:"nph"},
-    {t:"طولانی‌اثر (Long-acting)", d:"", children:[
-      {t:"Insulin Glargine (Lantus) / Peakless Insulin", star:true, d:"✓ آسپارژین با گلایسین در زنجیرهٔ A جابجا شده است.\n✓ ماهیت اسیدی دارد و در pH خنثی زیرجلد رسوب کرده و به‌آهستگی انسولین از این مجموعهٔ رسوبی آزاد می‌شود.\n✓ ظاهری شفاف داشته ولی قابلیت مخلوط شدن با انسولین دیگر را ندارد.\n✓ یک ساعت پس از تزریق اثرش شروع شده و به plateau می‌رسد و ۱۱-۲۴ ساعت نیز باقی می‌ماند.\n✓ ریسک هایپوگلایسمی با آن نسبت به NPH کمتر است.", img:"lantus"},
-      {t:"Insulin Detemir (Levemir)", d:"✓ Myristic acid به اسیدآمینهٔ لایزین زنجیرهٔ B متصل شده است ← قابلیت اتصال برگشت‌پذیر به آلبومین و همچنین self-aggregation پیدا کرده است. از این کمپلکس به‌آهستگی انسولین آزاد می‌شود.\n✓ ریسک هایپوگلایسمی با آن نسبت به NPH کمتر است.\n✓ یک ساعت پس از تزریق اثرش شروع شده و به plateau می‌رسد و ۱۱-۲۴ ساعت نیز باقی می‌ماند.", img:"levemir"},
-    ]},
-    {t:"نمودار طول و شدت اثر انواع انسولین", d:"نمودار میزان و مدت اثر انواع انسولین بر اساس نرخ تزریق گلوکز لازم برای حفظ غلظت ثابت گلوکز (mg/kg/min) در طول زمان (ساعت): از سریع به کند به‌ترتیب Insulin lispro/aspart/glulisine، Regular، NPH، Insulin detemir، Insulin glargine. مدت اثر رگولار و NPH با افزایش دوز به‌طور قابل‌توجهی افزایش می‌یابد.", img:"kinetics-graph"},
-  ]},
-
-  {t:"کینتیک ترکیبات انسولین (جدول)", star:true, d:"نوع — شروع اثر (ساعت) — پیک اثر (ساعت) — طول اثر (ساعت) — راه تزریق:\nسریع‌الاثرها — ۵-۲۵ دقیقه — ۳۰-۹۰ دقیقه — کمتر از پنج ساعت — SC\nکوتاه‌اثر (رگولار) — ۰.۵-۱ — ۲-۳ — ۵-۸ — IV-IM-SC\nمتوسط‌الاثر (NPH) — ۲-۴ — ۴-۱۲ — ۱۲-۱۸ — SC\nطولانی‌اثر — ۱.۵ — پیک واضح ندارد — ۲۰-۲۴ — SC"},
-
-  {t:"اشکال انسولین قلمی موجود در ایران", d:"Novomix Pen: انسولین آسپارت + پروتامین (متوسط‌اثر) + آسپارت (کوتاه و سریع)\nNovorapid Pen: آسپارت (کوتاه و سریع)\nLantus (گلارژین): طولانی‌اثر\nDetemir یا Levemir: طولانی‌اثر", img:"pensiran"},
-
-  {t:"Insulin Delivery Systems (سیستم‌های تحویل انسولین)", d:"Standard mode: s.c., conventional disposable needles and syringes\nPortable Pen Injectors\nContinuous Subcutaneous Insulin Infusion Devices (Insulin Pumps)", img:"delivery"},
-]},
-
-{t:"بخش ششم: درمان با انسولین (Insulin Therapy)", children:[
-  {t:"اندیکاسیون‌های مصرف انسولین", star:true, d:"• دیابت نوع یک\n• دیابت نوع دو پیشرفته\n• بیمار دیابتی بستری: جراحی، MI، عفونت و ...\nهدف: جایگزینی اثرات طبیعی انسولین اندوژن در کنترل قند خون با انسولین اگزوژن\n\nGlycemic control:\n✓ Fasting plasma glucose (or FBS) of <130 mg/dL\n✓ Glycosylated hemoglobin A1C ≤7%\n✓ ↓Risk of microvascular complications\n\n• Diabetic ketoacidosis ← در ادامه بحث می‌شود\n• دیابت بارداری (Gestational DM)\n• هایپرکالمیا"},
-
-  {t:"درمان مرسوم (Conventional therapy)", d:"تخمین کل نیاز روزانهٔ انسولین برحسب واحد:\n\n۲/۳ نیاز روزانه صبح دریافت شود:\n  - ۱/۳ از این ۲/۳ با انسولین کوتاه‌اثر\n  - ۲/۳ از این ۲/۳ با انسولین طولانی‌اثر\n\n۱/۳ نیاز روزانه شب دریافت شود:\n  - ۱/۳ از این ۱/۳ با انسولین کوتاه‌اثر\n  - ۲/۳ از این ۱/۳ با انسولین طولانی‌اثر\n\nولی در کل توصیه بر Intensive Insulin Therapy (IIT) است: بیمار دائم قند خون را چک کند و بر اساس آن دفعات تزریق و دوز انسولین را تعدیل نماید.\nTight control = Better glycemic control", star:true},
-
-  {t:"عوارض درمان با انسولین (Complications of Insulin Therapy)", children:[
-    {t:"Hypoglycemia", star:true, d:"محتمل‌ترین عارضهٔ انسولین است: بیماری که غذا نخورده ولی انسولینش را با دوز کامل زده، یا ورزش کرده یا انسولین را زیاد زده ...\nعلائم: Tachycardia, palpitations, sweating, tremor, nausea, hunger and may progress to convulsions and coma", img:"hypoglycemia-symptoms", children:[
-      {t:"درمان هایپوگلایسمیا", star:true, d:"• تجویز گلوکز ← به بیمار هوشیار قند خوراکی بدهیم (گلوکز = دکستروز)\n• بیماری که هوشیار نیست: ۲۰-۵۰ mL of 50% glucose solution by i.v. طی ۲-۳ دقیقه\n• اگر تزریق وریدی ممکن نبود: 1 mg of Glucagon s.c. or i.m.", img:"glucagon-kit"},
-    ]},
-    {t:"Insulin Allergy", d:""},
-    {t:"Immune Insulin Resistance", d:""},
-    {t:"Lipodystrophy and Hypertrophy at Injection Sites", d:"← بهتر است محل تزریق را دائم تغییر دهیم"},
-    {t:"Increased Cancer Risk", d:""},
-    {t:"پیشگیری از پدیده‌های خاص", d:"از somogyi effect (SOMOgyi = SO MOch insulin) و dawn phenomenon (Dawn = Down insulin) پیشگیری کنیم.", star:true},
-  ]},
-]},
-
-{t:"بخش هفتم: درمان دیابت تیپ دو و داروهای غیرانسولینی", children:[
-  {t:"مراحل کلی درمان دیابت تیپ دو", star:true, d:"قدم اول: تغییر شیوهٔ زندگی (Therapeutic Lifestyle Changes / TLC)\n✓ کاهش وزن در افراد چاق، کاهش مصرف کالری، چربی، نمک و کلسترول، ورزش، قطع سیگار\n\n✓ دارودرمانی (غیرانسولینی)\n✓ دارودرمانی (انسولینی)\nبرای پایش اثر انسولین تجویزی می‌توان از ۳ مارکر استفاده کرد: ۱. مقدار هیپوگلیسمی ۲. مقدار کاهش اجسام کتونی ۳. pH پلاسما\n✓ درمان Complicationهای احتمالی"},
-
-  {t:"الف) محرک‌های ترشح انسولین", star:true, children:[
-    {t:"۱. سولفونیل‌اوره‌ها", d:"نسل اول: تولبوتاماید و کلرپروپاماید (ریسک بسیار بالای هایپوگلایسمی) — از بازار حذف شدند\nنسل دوم: گلی‌بنکلاماید (Glyburide) و گلی‌پزاید", star:true, children:[
-      {t:"سولفونیل‌اوره‌های نسل دوم — جزئیات", d:"Glibenclamide (Glyburide) ✓ Gliclazide ✓\n• خوردن آن‌ها درست مثل تزریق انسولین است. ← سلول‌های بتا را وادار به ترشح انسولین می‌کنند، پس باید قبل از غذا مصرف شوند.\n• Protein Binding بسیار بالا دارند ← تداخل با بسیاری از داروهای دیگر\n← مهم‌ترین عارضه: هایپوگلایسمیا\n• منع مصرف در hepatic and renal insufficiency\n• از گلی‌کلازید اشکال آهسته‌رهش نیز موجود است: کاهش ریسک هایپوگلایسمی\n• ساختمان سولفونامیدی دارند: تمام مشکلاتی که سولفونامیدها دارند، سولفونیل‌اوره‌ها هم دارند: حساسیت و واکنش‌های آلرژیک، منع مصرف در G6PD و ..."},
-    ]},
-    {t:"۲. مگلیتینیدها", d:"ریپاگلیناید (ریسک کمتر هایپوگلایسمی)\nRepaglinide: یک محرک ترشح انسولین با ساختمان غیرسولفونامیدی است ← مثل گلی‌بنکلاماید است ولی مشکلات سولفونامیدها را ندارد."},
-    {t:"مکانیسم اثر مشترک", d:"اتصال به کانال‌های پتاسیمی وابسته به ATP، بسته‌شدن کانال‌های پتاسیمی و مثبت‌تر شدن پتانسیل داخل سلول، بازشدن کانال‌های کلسیمی و ورود کلسیم به داخل سلول، اگزوسیتوز گرانول‌های انسولین به گردش خون سیستمیک", star:true, img:"sulfonylurea"},
-  ]},
-
-  {t:"ب) بای‌گوانیدها: متفورمین", star:true, d:"✓ خط اول درمان DM تایپ دو است\n✓ اتصال پروتئینی بالایی ندارد، متابولیسم کبدی ندارد، عمدتاً از راه کلیه دفع می‌شود ← تداخلات دارویی و مشکلات کمتر نسبت به دستهٔ قبل\n✓ کاهش‌دهندهٔ عوارض Microvascular و Macrovascular\n✓ کاهش‌دهندهٔ وزن و حتی لاغرکننده!\n✓ ریسک هایپوگلایسمی: صفر!\n✓ کاهش‌دهندهٔ پروفایل لیپید ← بهترین انتخاب DM توأم با سندروم متابولیک، کبدچرب و ...\n✓ قابل تجویز در بارداری\n✓ بهترین انتخاب جهت پیشگیری در مراحل اولیهٔ دیابت و حتی IGT\n✓ القاکنندهٔ تخمک‌گذاری ← درمان Polycystic ovarian syndrome (PCO)\nمکانیسم اثر: جلوگیری از جذب گلوکز، کاهش ساخت گلوکز (↓AMPK)، ↑ حساسیت به انسولین", children:[
-    {t:"عوارض و ملاحظات متفورمین", d:"✓ شایع‌ترین عارضه: عوارض گوارشی (نفخ، درد، بی‌اشتهایی و تهوع) ← حتماً با معدهٔ پر (همراه با غذا) مصرف شود. ← اشکال آهسته‌رهش نیز موجود است.\n✓ مصرف طولانی‌مدت: کاهش جذب فولیک‌اسید و Vit B12\n✓ تعدیل دوز در نارسایی کلیوی خفیف و منع مصرف در نارسایی شدید کلیوی ← منجر به لاکتیک اسیدوزیس می‌شود.\nدر نارسایی شدید کبدی هم منع مصرف دارد ← چون جلوی گلوکونئوژنز را می‌گیرد.\nکاربرد جدید متفورمین: اضافه‌شونده به رژیم‌های شیمی‌درمانی سرطان ...", star:true, img:"metformin"},
-  ]},
-
-  {t:"ج) تیازولیدین‌دیون‌ها (پیوگلیتازون)", d:"افزایش حساسیت بافت‌های هدف به انسولین و کاهش مقاومت به انسولین ← کاربرد به‌عنوان داروی اضافه‌شونده به دیگر داروها", children:[
-    {t:"مکانیسم اثر", d:"لیگاند گیرندهٔ هسته‌ای: Peroxisome proliferator-activated receptor-γ (PPAR-γ): نقش این گیرنده در lipid and glucose metabolism و insulin signal transduction است.\nلیگاند گیرندهٔ هسته‌ای: Peroxisome proliferator-activated receptor-α (PPAR-α): نقش این گیرنده در lipid metabolism است ← از این نظر شبیه فیبرات‌ها اند", star:true},
-    {t:"عوارض", d:"عوارض دارویی زیاد (منع مصرف در نارسایی قلبی) و تداخلات فراوان", star:true, img:"pioglitazone"},
-  ]},
-
-  {t:"د) مهارکننده‌های آلفا-گلوکوزیداز (Acarbose)", d:"✓ مهارکنندهٔ α-glucosidases روده‌ای‌اند ← جلوگیری از جذب قند غذا\n✓ داروی کمکی و اضافه‌شونده به داروهای دیگر اند.\n✓ حتماً باید در شروع غذا (با اولین لقمه) میل شوند.\n✓ قند اگر جذب نشود منجر به نفخ می‌شود؛ عوارض گوارشی", img:"acarbose"},
-
-  {t:"ه) افزایش‌دهنده‌های دفع ادراری گلوکز (SGLT2 inhibitors)", d:"Dapagliflozin, Canagliflozin, Empagliflozin\n✓ مهارکننده‌های GLUT-2 ← جلوگیری از بازجذب گلوکز\nریسک UTI را بالا می‌برند، چرا؟", star:true, img:"sglt2"},
-
-  {t:"و) داروهای مبتنی بر Incretin effect", star:true, d:"اینکرتین‌ها (Insulin Secretin = Incretin) میانجی‌گرهایی هستند که از GI در پاسخ به قند خوراکی ترشح می‌شوند و محرک ترشح انسولین‌اند.\nاثر اینکرتین در افراد سالم (Control subjects) بسیار بیشتر از افراد دیابتی نوع دو است — یعنی در دیابت نوع دو، پاسخ انسولین به گلوکز خوراکی نسبت به گلوکز وریدی کمتر تقویت می‌شود.", img:"incretin-graph", children:[
-    {t:"انواع اینکرتین‌های اندوژن", d:"Glucagon-like peptide-1 (GLP-1)\nGlucose-dependent insulinotropic peptide (GIP)\nAmylin (عمدتاً از سلول‌های بتا ترشح می‌شود ولی شبیه اینکرتین‌ها عمل می‌کند)"},
-    {t:"داروهای مهارکنندهٔ آنزیم تخریب‌کنندهٔ اینکرتین‌ها (DPP-4 inhibitors)", star:true, d:"سیتگلیپتین و لیناگلیپتین (Dipeptidyl peptidase-4 inhibitors)\n✓ ↑GLP-1 and GIP\n✓ ↑Glucose-mediated insulin secretion\n✓ ↓Glucagon\nمهم‌ترین عارضهٔ سیتگلیپتین: ↑ ریسک عفونت نازوفارنکس", img:"sitagliptin"},
-    {t:"آنالوگ‌های سنتزی GLP-1", star:true, d:"Exenatide, Liraglutide\n▪ ↑Glucose-mediated insulin secretion\n▪ ↑beta-cell mass\n▪ ↓Postprandial glucagon release\n▪ Slowed gastric emptying\n▪ ↓Appetite\nمهم‌ترین عارضهٔ اگزناتاید: ↑ ریسک پانکراتیت\nآنالوگ‌های Amylin: پراملینتاید", img:"exenatide", children:[
-      {t:"Liraglutide — جزئیات و کاربرد در چاقی", star:true, d:"❑ افزایش سطح انسولین\n❑ کاهش سطح گلوکاگون\n❑ کاهش اشتها\n❑ نیز افزایش حس سیری\n❑ کاهش تولید گلوکز کبدی\n❑ تزریق فقط یک نوبت در روز\n\nVictoza برای دیابت و Saxenda برای کاهش وزن:\nدوز بزرگ‌تر لیراگلوتاید در ساکسندا به کاهش وزن بیشتر کمک می‌کند؛ به‌طور متوسط بیماران در کارآزمایی‌های بالینی حدود ۵ تا ۷ درصد از وزن بدن خود را کاهش دادند، هرچند بیش از یک نفر از هر چهار بیمار بیش از ۱۰٪ وزن بدن خود را از دست داد.\nنکته: ۰.۶ میلی‌گرم روزانه تا حداکثر ۲.۴ میلی‌گرم روزانه از ساکسندا برای چاقی تأیید شده است.", img:"liraglutide"},
-      {t:"Wegovy (Semaglutide) — تأیید FDA برای چاقی", d:"FDA approves Wegovy (semaglutide) injection for chronic weight management in adults with obesity or overweight. (Ozempic نام تجاری فرم دیابتی سماگلوتاید با تزریق هفتگی است.)", img:"wegovy"},
-      {t:"عوارض جانبی و اثربخشی GLP-1 (لیراگلوتاید) — نمای کلی", d:"عوارض جانبی: ↑ تهوع و استفراغ، ↑ heart rate، ریسک پانکراتیت.\nاثرات مفید: ↑ Insulin biosynthesis، ↑ beta cell proliferation، ↓ beta cell apoptosis، ↑ neuroprotection، ↓ appetite، ↓ gastric emptying، ↑ insulin sensitivity، ↓ glucose production.", img:"glp1-effects"},
-    ]},
-  ]},
-
-  {t:"مروری بر عوارض داروهای ضددیابتی غیرانسولینی", star:true, d:"✓ هایپوگلایسمی:\n  - بیشترین احتمال هایپوگلایسمی ← سولفونیل‌اوره‌ها خصوصاً نسل اول\n  - کمترین احتمال هایپوگلایسمی ← پیوگلیتازون، آکاربوز\n  - متفورمین ← امکان هایپوگلایسمی وجود ندارد.\n✓ نفخ، اسهال و دل‌درد ← متفورمین، آکاربوز\n✓ افزایش وزن ← سولفونیل‌اوره‌ها\n✓ افزایش فشار خون ← تیازولیدین‌دیون‌ها\n✓ لاکتیک اسیدوزیس ← متفورمین"},
-
-  {t:"جدول خلاصهٔ مداخلات کاهندهٔ گلوکز (Summary of glucose-lowering interventions)", d:"Tier 1 — Well-validated core:\n- Lifestyle: کاهش A1C ۱.۰-۲.۰٪؛ مزیت: منافع گسترده؛ عیب: برای اکثر افراد در سال اول کافی نیست\n- Metformin: کاهش A1C ۱.۰-۲.۰٪؛ مزیت: خنثی از نظر وزن؛ عیب: عوارض گوارشی، منع در نارسایی کلیوی\n- Insulin (افزوده‌شونده): کاهش A1C ۱.۵-۳.۵٪؛ مزیت: بدون سقف دوز، اثر سریع، بهبود پروفایل لیپید؛ عیب: ۱ تا ۴ تزریق روزانه، پایش، افزایش وزن، هایپوگلایسمی، آنالوگ‌ها گران‌اند\n- Sulfonylurea: کاهش A1C ۱.۰-۲.۰٪؛ مزیت: اثر سریع؛ عیب: افزایش وزن، هایپوگلایسمی (به‌ویژه با گلی‌بنکلاماید یا کلرپروپاماید)\n\nTier 2 — Less well validated:\n- TZD: کاهش A1C ۰.۵-۱.۴٪؛ مزیت: بهبود پروفایل لیپید (پیوگلیتازون)، کاهش احتمالی MI (پیوگلیتازون)؛ عیب: احتباس مایعات، نارسایی قلبی، افزایش وزن، شکستگی استخوان، گران، افزایش احتمالی MI (روزیگلیتازون)\n- GLP-1 agonist: کاهش A1C ۰.۵-۱.۰٪؛ مزیت: کاهش وزن؛ عیب: نیازمند تزریق، عوارض گوارشی مکرر، ایمنی درازمدت اثبات‌نشده، گران\n\nسایر درمان‌ها:\n- Alpha-glucosidase inhibitor: کاهش A1C ۰.۵-۰.۸٪؛ مزیت: خنثی از نظر وزن؛ عیب: عوارض گوارشی مکرر، دوز سه‌بار در روز، گران\n- Glinide: کاهش A1C ۰.۵-۱.۵٪؛ مزیت: اثر سریع؛ عیب: افزایش وزن، دوز سه‌بار در روز، هایپوگلایسمی، گران\n- Pramlintide: کاهش A1C ۰.۵-۱.۰٪؛ مزیت: کاهش وزن؛ عیب: سه تزریق روزانه، عوارض گوارشی مکرر، ایمنی درازمدت اثبات‌نشده، گران\n- DPP-4 inhibitor: کاهش A1C ۰.۵-۰.۸٪؛ مزیت: خنثی از نظر وزن؛ عیب: ایمنی درازمدت اثبات‌نشده، گران، احتمال افزایش ریسک نارسایی قلبی با ساکساگلیپتین\n- SGLT2 inhibitor: کاهش A1C ۰.۵-۰.۷٪؛ مزیت: کاهش وزن، کاهش فشار خون سیستولیک؛ عیب: کاندیدیازیس ولوواژینال، عفونت مجاری ادراری، ایمنی درازمدت اثبات‌نشده\n\n(منبع: UpToDate)", img:"summary-table1"},
-]},
-
-{t:"بخش هشتم: کتواسیدوز دیابتی (DKA)", star:true, children:[
-  {t:"تعریف کتواسیدوز دیابتی (Diabetic Keto Acidosis / DKA)", star:true, d:"فصل مشترک ۳ مسئله است:\n✓ هایپرگلایسمیا\n✓ کتوزیس (کتون‌های خون یا ادرار بالاست)\n✓ اسیدوزیس (افت pH توأم با افت بی‌کربنات)\n← مهم‌ترین اورژانس دیابت است که منجر به مرگ می‌شود!\n\nعامل اصلی این رخداد:\n✓ کاهش شدید انسولین\n✓ افزایش شدید هورمون‌های Counter regulatory (گلوکاگون، هورمون رشد و ...)\n← گاهی اولین نشانهٔ دیابت همین DKA است"},
-
-  {t:"علل DKA", star:true, d:"✓ قطع مصرف انسولین، کاهش یا فراموشی مصرف انسولین\n✓ افزایش نیاز بدن به انسولین در عفونت‌ها، استرس و ایسکمی (MI، CVA و ...)\n✓ بارداری + استرس\n← بنابراین در این شرایط تمامی داروهای خوراکی ضددیابت قطع شده و بیمار فقط با انسولین تحت درمان قرار می‌گیرد."},
-
-  {t:"علائم DKA", star:true, d:"✓ تهوع و استفراغ ← اگر در بیمار دیابتی دیدیم یاد DKA بیفتیم.\n✓ افزایش قند خون تا ۶۰۰ ← هایپراسمولاریتی\n✓ افزایش تری‌گلیسریدها ← پانکراتیت ← درد شکم\n✓ تولید کتون‌بادی‌ها ← ↓ بی‌کربنات ← اسیدوز\n✓ پرنوشی و پرادراری برای دفع این همه قند! ← فرد ۵ تا ۶ لیتر آب از دست می‌دهد و به شدت دهیدراته می‌شود.", children:[
-    {t:"علائم ادامه — دهیدراتاسیون شدید", d:"✓ دهیدراته‌شدن شدید علائمی شبیه شوک هایپوولمیک ایجاد می‌کند: تاکی‌کاردی، هایپوتنشن، Kussmoul respiration، shut down شدن کلیه و ... .\n✓ هایپوکالمیا به علت اسیدوز (گاهی در آزمایش نمی‌بینیم!)\n✓ درنهایت اسیدوز عامل رفتن فرد به کما و در نهایت مرگ می‌شود.", star:true, img:"dka-emergencies"},
-  ]},
-
-  {t:"درمان DKA", star:true, children:[
-    {t:"جبران کمبود مایعات", d:"Serum normal Saline up to BS<200 mg/dl → Hold.,\nthen Serum Half saline up to normal BP → Hold"},
-    {t:"دادن انسولین", star:true, d:"Insulin regular 0.1 U/Kg/h up to BS<200.,\nThen Insulin + Serum Dextrose.\n← حواسمان به پتاسیم هم باشد، زیرا انسولین پتاسیم سرم را هم کم می‌کند:\nIf serum potassium < 3.3 → Hold"},
-    {t:"نرمال کردن الکترولیت‌ها", d:"هایپوکالمیا ← پتاسیم کلراید\nاسیدمیا ← سدیم بی‌کربنات"},
-    {t:"پیگیری علت اولیه", d:"به دنبال عامل اولیه (MI، sepsis و ...) می‌گردیم!"},
-    {t:"جمع‌بندی حافظه‌یار: KING UFC", star:true, d:"K+ (potassium) — پتاسیم را بررسی و جایگزین کن\nInsulin — معمولاً ۵ واحد در ساعت (توجه: sliding scale دیگر در انگلستان توصیه نمی‌شود)\nNasogastic tube — در صورت کمای بیمار\nGlucose — پس از رسیدن سطح سرمی به حدود ۱۲ (mmol/L) شروع دکستروز\nUrea — بررسی شود\nFluids — کریستالوئیدها\nCreatinine — بررسی شود / کاتتریزاسیون\n\nDiabetic ketoacidosis (DKA) یک عارضهٔ جدی و بالقوه تهدیدکنندهٔ حیات دیابت است (Joint British Diabetes Societies, 2013). این یک وضعیت متابولیک پیچیده و نامنظم است که با هایپرگلایسمی (افزایش قند خون)، اسیدوز (عدم تعادل pH) و کتونمی (افزایش کتون‌های خون) مشخص می‌شود.", img:"kinguf"},
-  ]},
-]},
-];
-
-/* ============================= IMAGE PLACEHOLDERS ============================= */
-/* Textual descriptions of figures from the original slides, shown as styled notes since
-   original image files are not re-hosted; kept faithful to slide content. */
-const imgNotes = {
-  pancreas1:"🖼️ تصویر: نمای آناتومیک پانکراس به همراه مجرای پانکراس، سلول‌های آسینی (ترشح آنزیم گوارشی و بی‌کربنات) و جزایر لانگرهانس (بخش اندوکرین) که هورمون‌های انسولین و گلوکاگون را مستقیماً به جریان خون ترشح می‌کنند. تصویر دوم مقطع یک جزیرهٔ لانگرهانس را نشان می‌دهد با سلول‌های آلفا (حاشیه)، بتا (مرکز، اکثریت)، دلتا و مویرگ‌های میانی.",
-  proinsulin:"🖼️ تصویر: ساختار پروانسولین انسانی (FIGURE 41-1) شامل زنجیرهٔ C-peptide، زنجیرهٔ A و زنجیرهٔ B که با پیوندهای دی‌سولفیدی به هم متصل‌اند. انسولین بخش سایه‌دار (نارنجی) زنجیره‌های A و B است.",
-  insulinsecretion:"🖼️ تصویر: مسیر ترشح انسولین در سلول بتا — ورود گلوکز از GLUT-2، فسفوریلاسیون توسط Glucokinase، تولید ATP از طریق گلیکولیز و چرخهٔ کربس، بسته‌شدن کانال K+ (وابسته به SUR1)، ورود Ca2+ و آزادسازی گرانول‌های ترشحی انسولین از رتیکولوم اندوپلاسمی.",
-  signaling:"🖼️ تصویر: نمودار جامع مسیر پیام‌رسانی گیرندهٔ انسولین شامل IRS-1، PI3K/Akt، PDK1، mTORC1/2، AMPK، GSK-3، ERK1/2 و اثرات نهایی روی GLUT4 translocation، Glycogen synthesis، Protein synthesis، Lipolysis/Lipogenesis و Gluconeogenesis؛ در مقایسه با مسیر TNF/inflammation.",
-  novorapid:"🖼️ تصویر: قلم انسولین NovoRapid FlexPen (آسپارت).",
-  apidra:"🖼️ تصویر: قلم انسولین Apidra SoloStar (گلولیزین).",
-  regular:"🖼️ تصویر: ویال انسولین رگولار (Lansulin R) با محلول شفاف.",
-  nph:"🖼️ تصویر: ویال انسولین NPH (Lansulin N) با ظاهر شیری و کدر.",
-  lantus:"🖼️ تصویر: قلم Lantus SoloStar (انسولین گلارژین ۱۰۰ واحد در میلی‌لیتر).",
-  levemir:"🖼️ تصویر: قلم و ویال Levemir FlexPen (انسولین دتمیر).",
-  "kinetics-graph":"🖼️ نمودار (FIGURE 41-5): نرخ تزریق گلوکز لازم برای حفظ گلوکز ثابت در برابر زمان برای انواع انسولین: Lispro/Aspart/Glulisine (پیک تیز و سریع)، Regular (پیک کمی دیرتر)، NPH (پیک میانی پهن)، Detemir و Glargine (بدون پیک مشخص، پوشش تا ۲۴ ساعت).",
-  pensiran:"🖼️ تصویر: انواع قلم‌های انسولین موجود در بازار ایران — Novomix، Novorapid، Lantus، Levemir.",
-  delivery:"🖼️ تصویر: روش‌های تحویل انسولین — سرنگ و ویال معمولی، قلم‌های تزریق قابل‌حمل، و پمپ انسولین با کانولای زیرجلدی متصل به دستگاه (مانند MiniMed 508) که در کودکان و بزرگسالان استفاده می‌شود.",
-  "hypoglycemia-symptoms":"🖼️ تصویر: علائم هایپوگلایسمی به‌صورت آیکون — Tachycardia (تپش قلب سریع)، Confusion (گیجی)، Vertigo (سرگیجه)، Diaphoresis (تعریق).",
-  "glucagon-kit":"🖼️ تصویر: کیت اورژانسی Glucagon for Injection (rDNA origin) شامل ویال و سرنگ آماده برای تزریق عضلانی یا زیرجلدی در هایپوگلایسمی شدید.",
-  sulfonylurea:"🖼️ تصویر: بسته‌بندی داروهای گلی‌بن‌کلامید (نازو ۵ میلی‌گرم) و گلی‌کلازید (۸۰ میلی‌گرم)، و بسته‌بندی قرص‌های ریپاگلینید در دوزهای ۰.۵، ۱ و ۲ میلی‌گرم.",
-  metformin:"🖼️ تصویر: بسته‌بندی متفورمین ۵۰۰ میلی‌گرم (اکسیر).",
-  pioglitazone:"🖼️ تصویر: بسته‌بندی قرص پیوگلیتازون ۱۵ میلی‌گرم.",
-  acarbose:"🖼️ تصویر: بسته‌بندی قرص آکاربوز (آکاریبکس ۵۰).",
-  sglt2:"🖼️ تصویر: بسته‌بندی قرص امپاگلیفلوزین (گلوریپا ۱۰).",
-  "incretin-graph":"🖼️ نمودار: اثر اینکرتین (Incretin effect = GIP + GLP-1) — مقایسهٔ ترشح انسولین پس از بارگذاری خوراکی گلوکز (خط قرمز) در برابر انفوزیون وریدی گلوکز (خط زرد) در افراد سالم (اختلاف بزرگ = اثر اینکرتین قوی) در مقابل افراد مبتلا به دیابت نوع دو (اختلاف کوچک‌تر = اثر اینکرتین ضعیف‌تر). منبع: Nauck et al. Diabetologia. 1986.",
-  sitagliptin:"🖼️ تصویر: بسته‌بندی قرص سیتاگلیپتین (Sitavix 50).",
-  exenatide:"🖼️ تصویر: قلم Byetta (اگزناتاید ۱۰ میکروگرم) برای تزریق زیرجلدی.",
-  liraglutide:"🖼️ تصویر: قلم Victoza (لیراگلوتاید، برای دیابت) و قلم/بسته‌بندی Saxenda (لیراگلوتاید با دوز بالاتر، برای کاهش وزن، در دوزهای ۰.۶ تا ۳.۰ میلی‌گرم).",
-  wegovy:"🖼️ تصویر: بسته‌بندی قلم Ozempic (سماگلوتاید، تزریق هفتگی) — نمونهٔ فرم تجاری سماگلوتاید؛ Wegovy فرم تأییدشده برای کاهش وزن است.",
-  "glp1-effects":"🖼️ تصویر: نمودار اثرات لیراگلوتاید (GLP-1) روی اندام‌های مختلف — اثرات جانبی (تهوع/استفراغ در روده، افزایش ضربان قلب، ریسک پانکراتیت) در برابر اثرات مفید (پانکراس: افزایش بیوسنتز انسولین و تکثیر سلول بتا، کاهش آپوپتوز؛ مغز: نوروپروتکشن و کاهش اشتها؛ معده: کاهش تخلیهٔ معده؛ کبد: افزایش حساسیت به انسولین و کاهش تولید گلوکز).",
-  "summary-table1":"🖼️ جدول: خلاصهٔ مقایسه‌ای مداخلات کاهندهٔ گلوکز شامل درصد کاهش A1C، مزایا و معایب هر گروه دارویی (منبع: UpToDate).",
-  "dka-emergencies":"🖼️ تصویر: نمودار ارتباط بین اورژانس‌های دیابتی — Hypoglycaemia، Hyperglycaemia، Metabolic Acidosis، Ketotic (که با هم DKA را می‌سازند) در برابر Hyperglycaemia، High Serum Osmolality، Absence of Significant Acidosis (که HHS/سندروم هایپراسمولار هایپرگلیسمیک را می‌سازند).",
-  kinguf:"🖼️ تصویر آموزشی: خلاصهٔ حافظه‌یار KING UFC برای مدیریت DKA به همراه شخصیت کارتونی پرستار و پادشاه (UFC)."
-};
-
-/* ============================= RENDER ============================= */
-let nodeCounter = 0;
-let starCount = 0;
-
-function buildNode(nodeData, path){
-  nodeCounter++;
-  const id = "n" + nodeCounter;
-  nodeData._id = id;
-  if(nodeData.star) starCount++;
-
-  const li = document.createElement('li');
-  li.className = 'node' + (nodeData.star ? ' has-star' : '');
-  li.dataset.id = id;
-
-  const hasChildren = nodeData.children && nodeData.children.length;
-  const hasDesc = !!(nodeData.d && nodeData.d.trim().length) || !!nodeData.img;
-
-  const row = document.createElement('div');
-  row.className = 'node-row' + (!hasChildren && !hasDesc ? ' leaf' : '');
-
-  const toggleIco = document.createElement('div');
-  toggleIco.className = 'toggle-ico';
-  toggleIco.textContent = '▶';
-  row.appendChild(toggleIco);
-
-  const titleDiv = document.createElement('div');
-  titleDiv.className = 'node-title';
-  const titleSpan = document.createElement('span');
-  titleSpan.className = 'title-text-inline';
-  titleSpan.textContent = nodeData.t;
-  titleDiv.appendChild(titleSpan);
-  if(nodeData.star){
-    const star = document.createElement('span');
-    star.className = 'star-badge';
-    star.title = 'نکتهٔ پرتکرار';
-    star.textContent = '⭐';
-    titleDiv.appendChild(star);
-  }
-  row.appendChild(titleDiv);
-
-  if(hasDesc){
-    const hlBtn = document.createElement('button');
-    hlBtn.className = 'hl-btn';
-    hlBtn.title = 'هایلایت کن';
-    hlBtn.textContent = '🖍️';
-    hlBtn.onclick = (e)=>{ e.stopPropagation(); toggleHighlight(id, row); };
-    row.appendChild(hlBtn);
-  }
-
-  li.appendChild(row);
-
-  if(hasDesc){
-    const desc = document.createElement('div');
-    desc.className = 'node-desc';
-    if(nodeData.d && nodeData.d.trim().length){
-      desc.textContent = nodeData.d;
-    }
-    if(nodeData.img && imgNotes[nodeData.img]){
-      const imgP = document.createElement('div');
-      imgP.className = 'node-img';
-      imgP.style.padding = '10px';
-      imgP.style.background = 'var(--panel2)';
-      imgP.style.fontSize = '12.5px';
-      imgP.style.color = 'var(--muted)';
-      imgP.textContent = imgNotes[nodeData.img];
-      desc.appendChild(imgP);
-    }
-    li.appendChild(desc);
-  }
-
-  if(hasChildren){
-    const childWrap = document.createElement('div');
-    childWrap.className = 'children-wrap';
-    const ul = document.createElement('ul');
-    nodeData.children.forEach(c => ul.appendChild(buildNode(c, path.concat(nodeData.t))));
-    childWrap.appendChild(ul);
-    li.appendChild(childWrap);
-  }
-
-  row.addEventListener('click', ()=>{
-    if(hasChildren){
-      li.classList.toggle('open');
-    }
-    if(hasDesc){
-      li.classList.toggle('desc-open');
-    }
-    saveProgressState();
-    updateStats();
-  });
-
-  return li;
-}
-
-function renderTree(){
-  const root = document.getElementById('tree-root');
-  root.innerHTML = '';
-  nodeCounter = 0;
-  starCount = 0;
-  treeData.forEach(n => root.appendChild(buildNode(n, [])));
-  document.getElementById('stat-nodes').textContent = nodeCounter;
-  document.getElementById('stat-stars').textContent = starCount;
-}
-
-/* ============================= STATE / STORAGE ============================= */
-const STORAGE_KEY = 'diabetesTreeState_v1';
-
-function loadState(){
-  try{
-    return JSON.parse(localStorage.getItem(STORAGE_KEY)) || {};
-  }catch(e){ return {}; }
-}
-function saveState(state){
-  try{ localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); }catch(e){}
-}
-
-function saveProgressState(){
-  const state = loadState();
-  const openIds = [];
-  document.querySelectorAll('.node.open, .node.desc-open').forEach(n=>{
-    openIds.push(n.dataset.id + (n.classList.contains('desc-open') ? ':desc' : ':open'));
-  });
-  state.openIds = openIds;
-  saveState(state);
-}
-
-function restoreProgressState(){
-  const state = loadState();
-  if(!state.openIds) return;
-  state.openIds.forEach(entry=>{
-    const parts = entry.split(':');
-    const id = parts[0]; const mode = parts[1];
-    const el = document.querySelector('.node[data-id="'+id+'"]');
-    if(el){
-      if(mode === 'open') el.classList.add('open');
-      if(mode === 'desc') el.classList.add('desc-open');
-    }
-  });
-}
-
-function toggleHighlight(id, row){
-  const state = loadState();
-  state.highlights = state.highlights || {};
-  if(state.highlights[id]){
-    delete state.highlights[id];
-    row.classList.remove('highlighted');
-  } else {
-    state.highlights[id] = true;
-    row.classList.add('highlighted');
-  }
-  saveState(state);
-  updateStats();
-}
-
-function restoreHighlights(){
-  const state = loadState();
-  if(!state.highlights) return;
-  Object.keys(state.highlights).forEach(id=>{
-    const el = document.querySelector('.node[data-id="'+id+'"] > .node-row');
-    if(el) el.classList.add('highlighted');
-  });
-}
-
-function updateStats(){
-  const total = nodeCounter;
-  const uniqueOpened = new Set();
-  document.querySelectorAll('.node.open, .node.desc-open').forEach(n=>uniqueOpened.add(n.dataset.id));
-  const pct = total ? Math.min(100, Math.round((uniqueOpened.size/total)*100)) : 0;
-  document.getElementById('progress-fill').style.width = pct+'%';
-  document.getElementById('progress-pct').textContent = pct+'%';
-  const hlCount = document.querySelectorAll('.node-row.highlighted').length;
-  document.getElementById('stat-hl').textContent = hlCount;
-}
-
-/* ============================= THEME / FONT ============================= */
-function applyTheme(theme){
-  document.body.setAttribute('data-theme', theme);
-  const state = loadState();
-  state.theme = theme;
-  saveState(state);
-  document.querySelectorAll('.theme-btn').forEach(b=>{
-    b.classList.toggle('active', b.dataset.theme === theme);
-  });
-}
-
-function applyFontSize(size){
-  document.documentElement.style.fontSize = size + 'px';
-  const state = loadState();
-  state.fontSize = size;
-  saveState(state);
-}
-
-/* ============================= EXAM MODE ============================= */
-function setExamMode(on){
-  document.body.classList.toggle('exam-mode', on);
-  document.getElementById('exam-switch').classList.toggle('on', on);
-  const state = loadState();
-  state.examMode = on;
-  saveState(state);
-  if(on){
-    document.querySelectorAll('.node.has-star').forEach(n=>{
-      n.classList.add('desc-open');
-    });
-  }
-}
-
-/* ============================= OPEN/CLOSE ALL ============================= */
-function openAll(){
-  document.querySelectorAll('.node').forEach(n=>{
-    n.classList.add('open');
-    if(n.querySelector(':scope > .node-desc')) n.classList.add('desc-open');
-  });
-  saveProgressState();
-  updateStats();
-}
-function closeAll(){
-  document.querySelectorAll('.node').forEach(n=>{
-    n.classList.remove('open');
-    n.classList.remove('desc-open');
-  });
-  saveProgressState();
-  updateStats();
-}
-
-/* ============================= SEARCH ============================= */
-function doSearch(q){
-  q = q.trim();
-  document.querySelectorAll('.node').forEach(n=> n.style.display = '');
-  if(!q){ return; }
-  document.querySelectorAll('.node').forEach(n=>{
-    const titleEl = n.querySelector(':scope > .node-row .title-text-inline');
-    const descEl = n.querySelector(':scope > .node-desc');
-    const titleText = titleEl ? titleEl.textContent : '';
-    const descText = descEl ? descEl.textContent : '';
-    const match = titleText.includes(q) || descText.includes(q);
-    if(match){
-      n.classList.add('open');
-      if(descEl) n.classList.add('desc-open');
-      let p = n.parentElement;
-      while(p){
-        const parentLi = p.closest('.node');
-        if(parentLi){ parentLi.classList.add('open'); }
-        p = parentLi ? parentLi.parentElement : null;
-      }
-    }
-  });
-}
-
-/* ============================= PRINT ============================= */
-function handlePrint(){
-  document.querySelectorAll('.node').forEach(n=>{
-    n.classList.add('open');
-    if(n.querySelector(':scope > .node-desc')) n.classList.add('desc-open');
-  });
-  setTimeout(()=>window.print(), 150);
-}
-
-/* ============================= POLL ============================= */
-function initPoll(){
-  const state = loadState();
-  const container = document.getElementById('poll-opts');
-  if(state.pollVote){
-    highlightVote(state.pollVote);
-  }
-  container.querySelectorAll('.poll-opt').forEach(opt=>{
-    opt.addEventListener('click', ()=>{
-      const v = opt.dataset.v;
-      const st = loadState();
-      st.pollVote = v;
-      saveState(st);
-      highlightVote(v);
-    });
-  });
-}
-function highlightVote(v){
-  document.querySelectorAll('.poll-opt').forEach(o=>{
-    o.classList.toggle('voted', o.dataset.v === v);
-  });
-  document.getElementById('poll-result').textContent = 'ثبت شد، سپاسگزاریم از بازخورد شما! ✅';
-}
-
-/* ============================= INIT ============================= */
-document.addEventListener('DOMContentLoaded', ()=>{
-  renderTree();
-  restoreProgressState();
-  restoreHighlights();
-  updateStats();
-
-  const state = loadState();
-  applyTheme(state.theme || 'night');
-  applyFontSize(state.fontSize || 16);
-  if(state.examMode) setExamMode(true);
-
-  document.getElementById('btn-open-all').onclick = openAll;
-  document.getElementById('btn-close-all').onclick = closeAll;
-  document.getElementById('btn-print').onclick = handlePrint;
-  document.getElementById('search-input').addEventListener('input', (e)=>doSearch(e.target.value));
-
-  document.querySelectorAll('.theme-btn').forEach(b=>{
-    b.addEventListener('click', ()=>applyTheme(b.dataset.theme));
-  });
-
-  document.getElementById('font-inc').onclick = ()=>{
-    const cur = parseInt(getComputedStyle(document.documentElement).fontSize) || 16;
-    applyFontSize(Math.min(22, cur+1));
-  };
-  document.getElementById('font-dec').onclick = ()=>{
-    const cur = parseInt(getComputedStyle(document.documentElement).fontSize) || 16;
-    applyFontSize(Math.max(12, cur-1));
-  };
-
-  document.getElementById('exam-switch').addEventListener('click', ()=>{
-    const isOn = document.getElementById('exam-switch').classList.contains('on');
-    setExamMode(!isOn);
-  });
-
-  initPoll();
-});
-</script>
-<script src="highlight.js"></script>
 </body>
 </html>
