@@ -119,18 +119,20 @@
 
         .card-content { flex: 1; text-align: right; }
 
-        .card-title {
-            font-size: 14px;
+        /* عنوان انگلیسی */
+        .card-title-en {
+            font-size: 15px;
             font-weight: 900;
             color: #0c4a6e;
             margin-bottom: 4px;
-            line-height: 1.6;
+            line-height: 1.5;
             direction: ltr;
-            text-align: right;
+            text-align: left;
         }
 
+        /* عنوان فارسی */
         .card-title-fa {
-            font-size: 15px;
+            font-size: 16px;
             font-weight: 900;
             color: #0c4a6e;
             margin-bottom: 4px;
@@ -184,13 +186,13 @@
         }
 
         .back-btn.primary {
-            background: linear-gradient(135deg, #38bdf8, #0284c7);
+            background: linear-gradient(135deg, #a7c957, #588157);
             color: white;
             border-color: rgba(255, 255, 255, 0.5);
         }
 
         .back-btn.primary:hover {
-            box-shadow: 0 8px 20px rgba(2, 132, 199, 0.4);
+            box-shadow: 0 8px 20px rgba(88, 129, 87, 0.4);
         }
 
         ::-webkit-scrollbar { width: 8px; }
@@ -209,48 +211,52 @@
 
     <div class="container">
 
-        <!-- Hypothalamic & pituitary hormones -->
+        <!-- Hypothalamic and pituitary hormones -->
         <a href="hypothalamic-pituitary-hormones.html" class="card">
             <div class="card-icon">🧠</div>
             <div class="card-content">
-                <div class="card-title">Hypothalamic & pituitary hormones</div>
+                <div class="card-title-en">Hypothalamic & pituitary hormones</div>
                 <div class="card-desc">هورمون‌های هیپوتالاموس و هیپوفیز</div>
             </div>
             <div class="card-arrow">‹</div>
         </a>
 
-        <!-- تیروئید -->
+        <!-- Thyroid & Anti-Thyroid -->
         <a href="thyroid-pharmacology-tree-1.html" class="card">
             <div class="card-icon">🦋</div>
             <div class="card-content">
-                <div class="card-title-fa">تیروئید</div>
+                <div class="card-title-en">Thyroid & Anti-Thyroid</div>
+                <div class="card-desc">داروهای تیروئید و ضد تیروئید</div>
             </div>
             <div class="card-arrow">‹</div>
         </a>
 
-        <!-- دیابت -->
-        <a href="diabetes-pharmacology-tree.html" class="card">
-            <div class="card-icon">🩸</div>
-            <div class="card-content">
-                <div class="card-title-fa">دیابت</div>
-            </div>
-            <div class="card-arrow">‹</div>
-        </a>
-
-        <!-- کورتیکواستروئید -->
+        <!-- Adrenal Cortex -->
         <a href="corticosteroids-pharmacology-tree.html" class="card">
-            <div class="card-icon">💊</div>
+            <div class="card-icon">💪🏻</div>
             <div class="card-content">
-                <div class="card-title-fa">کورتیکواستروئید</div>
+                <div class="card-title-en">Adrenal Cortex</div>
+                <div class="card-desc">داروهای قشر آدرنال و کورتیکواستروئیدها</div>
             </div>
             <div class="card-arrow">‹</div>
         </a>
 
-        <!-- هورمون جنسی -->
+        <!-- Gonadal hormones -->
         <a href="gonadal-hormones-tree-20.html" class="card">
             <div class="card-icon">💜</div>
             <div class="card-content">
-                <div class="card-title-fa">هورمون جنسی</div>
+                <div class="card-title-en">Gonadal hormones</div>
+                <div class="card-desc">هورمون‌های جنسی</div>
+            </div>
+            <div class="card-arrow">‹</div>
+        </a>
+
+        <!-- Diabetes Mellitus -->
+        <a href="diabetes-pharmacology-tree.html" class="card">
+            <div class="card-icon">🍯</div>
+            <div class="card-content">
+                <div class="card-title-en">Diabetes Mellitus</div>
+                <div class="card-desc">داروهای دیابت</div>
             </div>
             <div class="card-arrow">‹</div>
         </a>
@@ -260,6 +266,7 @@
             <div class="card-icon">📚</div>
             <div class="card-content">
                 <div class="card-title-fa">مرور کل فارماکولوژی غدد</div>
+                <div class="card-desc">مرور جامع تمام مباحث فارماکولوژی غدد</div>
             </div>
             <div class="card-arrow">‹</div>
         </a>
@@ -269,6 +276,7 @@
             <div class="card-icon">📝</div>
             <div class="card-content">
                 <div class="card-title-fa">نمونه سوالات همراه با پاسخ</div>
+                <div class="card-desc">بانک سوالات فارماکولوژی غدد با پاسخ تشریحی</div>
             </div>
             <div class="card-arrow">‹</div>
         </a>
