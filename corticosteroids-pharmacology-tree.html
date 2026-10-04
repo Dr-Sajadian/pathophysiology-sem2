@@ -1,740 +1,209 @@
 <!DOCTYPE html>
 <html lang="fa" dir="rtl">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>نقشهٔ درختی فارماکولوژی قشر آدرنال — دکتر م. مشهدی</title>
-<link rel="preconnect" href="https://cdn.jsdelivr.net">
-<link href="https://cdn.jsdelivr.net/gh/rastikerdar/vazirmatn@v33.003/Vazirmatn-font-face.css" rel="stylesheet" type="text/css" />
-<style>
-  :root{
-    --bg:#0e1b1f; --panel:#132a30; --panel2:#183339; --ink:#eaf6f3; --sub:#9fc6c0;
-    --accent:#38b6a6; --accent2:#7fd8c8; --line:#234b50; --star:#ffcc66;
-    --shadow: 0 6px 22px rgba(0,0,0,.35);
-    --radius: 14px;
-  }
-  html[data-theme="night"]{
-    --bg:#0b1220; --panel:#121b2e; --panel2:#182642; --ink:#eef2ff; --sub:#93a3c7;
-    --accent:#6d8cff; --accent2:#9fb3ff; --line:#25335a; --star:#ffd166;
-  }
-  html[data-theme="emerald"]{
-    --bg:#0d1f18; --panel:#123527; --panel2:#164531; --ink:#eafff3; --sub:#9fd8bb;
-    --accent:#2fbf71; --accent2:#7fe3ad; --line:#1f5b3f; --star:#ffd76a;
-  }
-  html[data-theme="sunset"]{
-    --bg:#231216; --panel:#341a1c; --panel2:#432224; --ink:#fff1e8; --sub:#e0ab97;
-    --accent:#ff7a52; --accent2:#ffb28a; --line:#5c2c26; --star:#ffd166;
-  }
-  html[data-theme="ice"]{
-    --bg:#f2f8fb; --panel:#ffffff; --panel2:#eaf4fa; --ink:#12333f; --sub:#4c7f92;
-    --accent:#1f9fce; --accent2:#57c2e6; --line:#cfe6ee; --star:#e8a13a;
-    --shadow: 0 6px 18px rgba(20,80,110,.12);
-  }
-
-  *{box-sizing:border-box;}
-  body{
-    margin:0; background:var(--bg); color:var(--ink);
-    font-family:'Vazirmatn', Tahoma, sans-serif;
-    transition: background .3s, color .3s;
-    padding-bottom:60px;
-  }
-  a{color:inherit;}
-
-  header{
-    position:sticky; top:0; z-index:50;
-    background:linear-gradient(180deg, var(--panel), var(--panel2));
-    border-bottom:1px solid var(--line);
-    padding:14px 18px;
-    box-shadow: var(--shadow);
-  }
-  .header-top{
-    display:flex; align-items:center; gap:14px; flex-wrap:wrap; justify-content:space-between;
-  }
-  .brand{ display:flex; align-items:center; gap:10px; }
-  .brand .icon{
-    width:42px; height:42px; border-radius:12px;
-    background: radial-gradient(circle at 30% 30%, var(--accent2), var(--accent));
-    display:flex; align-items:center; justify-content:center; font-size:22px;
-    box-shadow: var(--shadow);
-  }
-  .brand h1{ font-size:17px; margin:0; font-weight:800; }
-  .brand p{ margin:2px 0 0; font-size:12px; color:var(--sub); }
-
-  .stats{ display:flex; gap:10px; flex-wrap:wrap; }
-  .stat{
-    background:var(--panel2); border:1px solid var(--line); border-radius:10px;
-    padding:6px 12px; font-size:12px; text-align:center; min-width:78px;
-  }
-  .stat b{ display:block; font-size:16px; color:var(--accent2); }
-
-  .controls{
-    display:flex; gap:8px; flex-wrap:wrap; margin-top:12px; align-items:center;
-  }
-  button, select{
-    font-family:inherit; border:1px solid var(--line); background:var(--panel2);
-    color:var(--ink); padding:7px 12px; border-radius:10px; cursor:pointer; font-size:12.5px;
-    transition:.2s;
-  }
-  button:hover{ background:var(--accent); color:#04201c; border-color:var(--accent);}
-  button.active{ background:var(--accent); color:#04201c; border-color:var(--accent); font-weight:700;}
-  .theme-dot{
-    width:22px; height:22px; border-radius:50%; border:2px solid var(--line); cursor:pointer; padding:0;
-  }
-  .th-night{background:linear-gradient(135deg,#182642,#6d8cff);}
-  .th-emerald{background:linear-gradient(135deg,#164531,#2fbf71);}
-  .th-sunset{background:linear-gradient(135deg,#432224,#ff7a52);}
-  .th-ice{background:linear-gradient(135deg,#eaf4fa,#1f9fce);}
-
-  .progress-wrap{
-    margin-top:10px; background:var(--panel2); border-radius:10px; height:8px; overflow:hidden; border:1px solid var(--line);
-  }
-  .progress-bar{ height:100%; width:0%; background:linear-gradient(90deg,var(--accent),var(--accent2)); transition:width .4s; }
-
-  .searchbox{ flex:1; min-width:180px; position:relative; }
-  .searchbox input{
-    width:100%; padding:7px 12px; border-radius:10px; border:1px solid var(--line);
-    background:var(--panel2); color:var(--ink); font-family:inherit; font-size:12.5px;
-  }
-
-  main{ max-width:980px; margin:20px auto; padding:0 16px; }
-
-  .node{ margin-bottom:6px; }
-  .node-row{
-    display:flex; align-items:flex-start; gap:8px; cursor:pointer;
-    background:var(--panel); border:1px solid var(--line); border-radius:var(--radius);
-    padding:10px 12px; transition:.2s; position:relative;
-  }
-  .node-row:hover{ border-color:var(--accent); }
-  .toggle{
-    flex-shrink:0; width:22px; height:22px; border-radius:6px; background:var(--panel2);
-    display:flex; align-items:center; justify-content:center; font-size:12px; color:var(--accent2);
-    transition:transform .2s; user-select:none;
-  }
-  .node.open > .node-row > .toggle{ transform:rotate(90deg); }
-  .leaf-dot{
-    flex-shrink:0; width:22px; height:22px; display:flex; align-items:center; justify-content:center;
-    color:var(--accent); font-size:10px;
-  }
-  .title-line{ display:flex; align-items:center; gap:6px; flex-wrap:wrap; flex:1; }
-  .t-text{ font-weight:700; font-size:14.5px; }
-  .star{ color:var(--star); font-size:13px; cursor:default; }
-  .highlight-btn{
-    margin-inline-start:auto; background:none; border:none; color:var(--sub); font-size:14px; padding:2px 6px; cursor:pointer;
-  }
-  .highlight-btn.on{ color:var(--star); }
-  .desc{
-    font-size:13px; color:var(--sub); line-height:1.9; margin-top:6px; white-space:pre-line;
-  }
-  .children{
-    margin-inline-start:26px; border-inline-start:2px dashed var(--line); padding-inline-start:14px;
-    display:none; margin-top:6px;
-  }
-  .node.open > .children{ display:block; }
-  .node.highlighted > .node-row{ background: color-mix(in srgb, var(--star) 18%, var(--panel)); border-color:var(--star); }
-
-  .lvl-0 > .node-row .t-text{ font-size:18px; }
-  .lvl-1 > .node-row .t-text{ font-size:16px; color:var(--accent2); }
-
-  .search-hidden{ display:none !important; }
-  .search-match .node-row{ outline:2px solid var(--accent); }
-
-  body.exam-mode .node:not(.has-star-desc) { display:none; }
-  body.exam-mode .node.has-star-desc .children > .node:not(.has-star-desc){ display:none; }
-
-  footer{
-    max-width:980px; margin:30px auto 0; padding:16px; text-align:center;
-    color:var(--sub); font-size:12px; border-top:1px solid var(--line);
-  }
-
-  @media print{
-    header .controls, header .stats, .searchbox, .highlight-btn{ display:none !important; }
-    body{ background:#fff; color:#000; }
-    .node-row{ border:1px solid #ccc; background:#fff; }
-    .children{ display:block !important; border-inline-start:1px solid #ccc; }
-    .toggle{ display:none; }
-  }
-
-  @media (max-width:600px){
-    .brand h1{ font-size:15px; }
-    .t-text{ font-size:13.5px; }
-    .stats{ display:none; }
-  }
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Adrenal Cortex</title>
+    <link href="https://cdn.jsdelivr.net/gh/rastikerdar/vazirmatn@v33.003/Vazirmatn-font-face.css" rel="stylesheet" type="text/css" />
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            background: linear-gradient(135deg, #e0f2fe 0%, #bae6fd 50%, #7dd3fc 100%);
+            background-attachment: fixed;
+            font-family: Vazirmatn, Tahoma, sans-serif;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 30px 20px;
+            overflow-x: hidden;
+        }
+        body::before, body::after {
+            content: '';
+            position: fixed;
+            border-radius: 50%;
+            filter: blur(80px);
+            z-index: 0;
+        }
+        body::before {
+            width: 300px; height: 300px;
+            background: rgba(255, 255, 255, 0.6);
+            top: -50px; right: -50px;
+        }
+        body::after {
+            width: 400px; height: 400px;
+            background: rgba(56, 189, 248, 0.4);
+            bottom: -100px; left: -100px;
+        }
+        .header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 8px;
+            z-index: 1;
+        }
+        .header-icon {
+            width: 60px; height: 60px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #a7c957, #588157);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 30px;
+            box-shadow: 0 6px 15px rgba(88, 129, 87, 0.3);
+            flex-shrink: 0;
+        }
+        .header-title {
+            font-size: 20px;
+            font-weight: 900;
+            color: #0c4a6e;
+            text-shadow: 0 2px 5px rgba(255,255,255,0.8);
+            line-height: 1.4;
+        }
+        .subtitle {
+            font-size: 14px;
+            color: #0369a1;
+            margin-bottom: 30px;
+            text-align: center;
+            z-index: 1;
+        }
+        .container {
+            width: 100%;
+            max-width: 500px;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            z-index: 1;
+        }
+        .card {
+            background: rgba(255, 255, 255, 0.5);
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+            border: 1.5px solid rgba(255, 255, 255, 0.85);
+            border-radius: 20px;
+            padding: 18px 20px;
+            text-decoration: none;
+            color: inherit;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            transition: all 0.35s ease;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
+        }
+        .card:hover {
+            background: rgba(255, 255, 255, 0.75);
+            transform: translateY(-4px);
+            box-shadow: 0 15px 35px rgba(14, 165, 233, 0.25);
+            border-color: #ffffff;
+        }
+        .card-icon {
+            width: 50px; height: 50px;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 24px;
+            flex-shrink: 0;
+            box-shadow: 0 5px 12px rgba(0, 0, 0, 0.12);
+        }
+        .icon-jozve { background: linear-gradient(135deg, #38bdf8, #0284c7); }
+        .icon-mindmap { background: linear-gradient(135deg, #a78bfa, #7c3aed); }
+        .card-content { flex: 1; text-align: right; }
+        .card-title {
+            font-size: 16px;
+            font-weight: 900;
+            color: #0c4a6e;
+            margin-bottom: 4px;
+            line-height: 1.5;
+        }
+        .card-desc {
+            font-size: 12px;
+            color: #475569;
+            line-height: 1.6;
+        }
+        .card-arrow {
+            color: #588157;
+            font-size: 20px;
+            font-weight: bold;
+            transition: transform 0.3s;
+        }
+        .card:hover .card-arrow { transform: translateX(-5px); }
+        .nav-buttons {
+            display: flex;
+            gap: 12px;
+            margin-top: 35px;
+            z-index: 1;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+        .back-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 12px 22px;
+            background: rgba(255, 255, 255, 0.6);
+            backdrop-filter: blur(10px);
+            color: #0c4a6e;
+            text-decoration: none;
+            border-radius: 25px;
+            font-weight: bold;
+            font-size: 13px;
+            border: 1.5px solid rgba(255, 255, 255, 0.9);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+            transition: all 0.3s;
+        }
+        .back-btn:hover {
+            background: rgba(255, 255, 255, 0.85);
+            transform: translateY(-2px);
+        }
+        .back-btn.primary {
+            background: linear-gradient(135deg, #a7c957, #588157);
+            color: white;
+            border-color: rgba(255, 255, 255, 0.5);
+        }
+        .back-btn.primary:hover {
+            box-shadow: 0 8px 20px rgba(88, 129, 87, 0.4);
+        }
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: rgba(14, 165, 233, 0.4); border-radius: 4px; }
+    </style>
 </head>
 <body>
 
-<header>
-  <div class="header-top">
-    <div class="brand">
-      <div class="icon">💊</div>
-      <div>
-        <h1>نقشهٔ درختی فارماکولوژی قشر آدرنال</h1>
-        <p>Pharmacology of the Adrenal Cortex — دکتر م. مشهدی (Pharm D, PhD)</p>
-      </div>
+    <div class="header">
+        <div class="header-icon">💪🏻</div>
+        <h1 class="header-title">Adrenal Cortex</h1>
     </div>
-    <div class="stats">
-      <div class="stat"><b id="statBranches">0</b>شاخه</div>
-      <div class="stat"><b id="statStars">0</b>نکتهٔ ⭐</div>
-      <div class="stat"><b id="statProgress">۰٪</b>پیشرفت</div>
+
+    <p class="subtitle">منابع مورد نظر را انتخاب کنید</p>
+
+    <div class="container">
+
+        <a href="adrenal-cortex-jozve.html" class="card">
+            <div class="card-icon icon-jozve">📘</div>
+            <div class="card-content">
+                <div class="card-title">جزوه کامل</div>
+                <div class="card-desc">جزوه جامع داروهای قشر آدرنال</div>
+            </div>
+            <div class="card-arrow">‹</div>
+        </a>
+
+        <a href="adrenal-cortex-mindmap.html" class="card">
+            <div class="card-icon icon-mindmap">🗺️</div>
+            <div class="card-content">
+                <div class="card-title">مایند مپ</div>
+                <div class="card-desc">نقشه ذهنی داروهای قشر آدرنال</div>
+            </div>
+            <div class="card-arrow">‹</div>
+        </a>
+
     </div>
-  </div>
 
-  <div class="controls">
-    <button id="btnOpenAll">باز کردن همه</button>
-    <button id="btnCloseAll">بستن همه</button>
-    <button id="btnPrint">🖨️ ذخیرهٔ PDF</button>
-    <button id="btnExam">🌙 حالت شب امتحان (فقط ⭐)</button>
-    <div class="searchbox"><input id="searchInput" type="text" placeholder="جستجو در جزوه..."></div>
-    <select id="fontSizeSelect">
-      <option value="14">فونت متوسط</option>
-      <option value="12">فونت کوچک</option>
-      <option value="16">فونت بزرگ</option>
-      <option value="18">فونت خیلی بزرگ</option>
-    </select>
-    <button class="theme-dot th-night" data-theme="night" title="تم شب"></button>
-    <button class="theme-dot th-emerald" data-theme="emerald" title="تم زمردی"></button>
-    <button class="theme-dot th-sunset" data-theme="sunset" title="تم غروب"></button>
-    <button class="theme-dot th-ice" data-theme="ice" title="تم یخی"></button>
-  </div>
-  <div class="progress-wrap"><div class="progress-bar" id="progressBar"></div></div>
-</header>
+    <div class="nav-buttons">
+        <a href="pharmacology.html" class="back-btn primary">↩ بازگشت به فارماکولوژی غدد</a>
+        <a href="index.html" class="back-btn">🏠 خانه</a>
+    </div>
 
-<main id="treeRoot"></main>
-
-<footer>
-  <p><b>منبع:</b> Pharmacology of the Adrenal Cortex — تهیه‌شده توسط دکتر م. مشهدی (Pharm D, PhD) — دانشکدهٔ داروسازی</p>
-  <p>این نقشهٔ درختی برای مرور و مطالعهٔ جزوه تهیه شده است. پیشرفت مطالعه، هایلایت‌ها، تم و اندازهٔ فونت به‌صورت خودکار روی همین مرورگر ذخیره می‌شود.</p>
-</footer>
-
-<script>
-// ============= DATA =============
-const treeData = {
-  t: "فارماکولوژی قشر آدرنال (Adrenal Cortex)",
-  d: "Pharmacology of the Adrenal Cortex — By Dr M. Mashhadi (Pharm D, PhD)",
-  c: [
-    {
-      t: "۱. آناتومی و فیزیولوژی غدد آدرنال",
-      c: [
-        { t: "غدد آدرنال (Suprarenal Glands)", d: "غدد آدرنال (فوق کلیه) از دو بخش مجزا تشکیل شده‌اند: مدولا و قشر (کورتکس). لایه‌های بافت‌شناسی از بیرون به داخل: کپسول، زونا گلومرولوزا، زونا فاسیکولاتا، زونا رتیکولاریس، و در مرکز مدولای آدرنال." },
-        { t: "الف) مدولای آدرنال", d: "با تحریک سمپاتیک، اپی‌نفرین و نوراپی‌نفرین ترشح می‌کند. ← افزایش فشارخون و آمادگی برای پاسخ به استرس حاد.", s:true },
-        { t: "ب) قشر آدرنال (کورتکس)", c:[
-          { t: "زونا گلومرولوزا", d: "ترشح مینرالوکورتیکوئیدها (مانند آلدوسترون)." },
-          { t: "زونا فاسیکولاتا", d: "ترشح گلوکوکورتیکوئیدها (مانند کورتیزول)." },
-          { t: "زونا رتیکولاریس", d: "ترشح برخی هورمون‌های جنسی (آندروژن‌های ضعیف مانند DHEA)." }
-        ]},
-        { t: "دسته‌بندی کورتیکواستروئیدها", d: "کورتیکواستروئیدها شامل: مینرالوکورتیکوئیدها و گلوکوکورتیکوئیدها می‌شوند." }
-      ]
-    },
-    {
-      t: "۲. محور هیپوتالاموس-هیپوفیز-آدرنال (HPA Axis)",
-      d: "هیپوتالاموس هورمون CRH (Corticotropin Releasing Hormone) ترشح می‌کند ← هیپوفیز قدامی را تحریک کرده و باعث ترشح ACTH (Adrenocorticotropic Hormone) می‌شود ← ACTH قشر آدرنال را تحریک کرده و باعث ترشح کورتیزول (CORT) می‌شود. کورتیزول از طریق فیدبک منفی (Negative Feedback) روی هیپوتالاموس و هیپوفیز، ترشح CRH و ACTH را مهار می‌کند.", s:true
-    },
-    {
-      t: "۳. آگونیست‌ها و آنتاگونیست‌های کورتیکواستروئیدی",
-      d: "طبقه‌بندی کلی داروهای این گروه:",
-      c: [
-        { t: "آگونیست‌ها (Agonists)", c:[
-          { t: "گلوکوکورتیکوئیدها", d: "مثال: پردنیزون (Prednisone)" },
-          { t: "مینرالوکورتیکوئیدها", d: "مثال: فلودروکورتیزون (Fludrocortisone)" }
-        ]},
-        { t: "آنتاگونیست‌ها (Antagonists)", c:[
-          { t: "آنتاگونیست‌های گیرنده (Receptor Antagonists)", c:[
-            { t: "آنتاگونیست گلوکوکورتیکوئیدی", d: "مثال: میفپریستون (Mifepristone)" },
-            { t: "آنتاگونیست مینرالوکورتیکوئیدی", d: "مثال: اسپیرونولاکتون (Spironolactone)" }
-          ]},
-          { t: "مهارکننده‌های سنتز (Synthesis Inhibitors)", d: "مثال: کتوکونازول (Ketoconazole)" }
-        ]}
-      ]
-    },
-    {
-      t: "۴. مسیرهای بیوسنتز کورتیکواستروئید (Corticosteroid Biosynthesis)",
-      d: "منبع مشترک همهٔ کورتیکواستروئیدها کلسترول (Cholesterol) است. آنزیم P450scc کلسترول را به پرگننولون تبدیل می‌کند و سپس مسیر بسته به منطقهٔ آدرنال متفاوت می‌شود.",
-      c: [
-        { t: "مسیر زونا فاسیکولاتا (گلوکوکورتیکوئیدها)", d: "کلسترول → (P450ssc) پرگننولون → (P450c17) 17-OH پرگننولون / یا (3β-DH، Δ4-5-ایزومراز) پروژسترون → 17-OH پروژسترون → (P450c21) 11-دئوکسی‌کورتیزول یا 11-دئوکسی‌کورتیکوسترون → (P450c11) کورتیزول یا کورتیکوسترون." },
-        { t: "مسیر زونا گلومرولوزا (مینرالوکورتیکوئیدها)", d: "کلسترول → پرگننولون → (3β-DH، Δ4-5-ایزومراز) پروژسترون → (P450c21) 11-دئوکسی‌کورتیکوسترون → (P450c11) کورتیکوسترون → (آلدوسترون‌سنتاز) آلدوسترون." },
-        { t: "مسیر زونا رتیکولاریس (آندروژن‌ها)", d: "کلسترول → پرگننولون → (P450c17، 17α-هیدروکسیلاز) 17-OH پرگننولون → (P450c17، 17,20-لیاز) دهیدرواپی‌آندروسترون (DHEA) → (3β-DH، Δ4-5-ایزومراز) آندروستندیون؛ یا DHEA → (سولفوترانسفراز) DHEA-S." },
-        { t: "آنزیم‌های کلیدی مسیر", d: "17α-Hydroxylase (P450c17)، 17,20-Lyase، 21β-Hydroxylase (P450c21)، 11β-Hydroxylase (P450c11)، 3β-Dehydrogenase/Δ5,Δ4-Isomerase. این مسیرها به سه شاخهٔ نهایی می‌رسند: مسیر مینرالوکورتیکوئید (آلدوسترون)، مسیر گلوکوکورتیکوئید (کورتیزول)، و مسیر آندروژن و استروژن (تستوسترون، استرادیول)." }
-      ]
-    },
-    {
-      t: "۵. مکانیسم اثر استروئیدها (تعامل استروئید و گیرنده)",
-      d: "تمام استروئیدها مکانیسم عمل واحدی دارند:",
-      s:true,
-      c: [
-        { t: "مراحل مکانیسم اثر", d: "۱) هورمون استروئیدی (S) از CBG جدا شده و وارد سلول می‌شود.\n۲) به گیرندهٔ خود (R) در سیتوپلاسم که به Hsp90 متصل است می‌چسبد.\n۳) کمپلکس استروئید-گیرنده تغییر شکل داده و فعال (Activated) و به‌صورت دایمر درمی‌آید.\n۴) کمپلکس فعال‌شده به هسته وارد می‌شود.\n۵) به عناصر پاسخ‌دهنده به گلوکوکورتیکوئید (GRE) روی DNA متصل می‌شود.\n۶) دستگاه رونویسی (RNA Polymerase) فعال شده و تنظیم رونویسی (Transcription) رخ می‌دهد.\n۷) پیش-mRNA ساخته و ادیت (Editing) شده و به mRNA بالغ تبدیل می‌شود.\n۸) پروتئین‌های اختصاصی (آنزیم‌ها) در سیتوپلاسم سلولی ساخته می‌شوند.\n۹) پاسخ (Response) دارویی آغاز می‌شود." }
-      ]
-    },
-    {
-      t: "۶. گلوکوکورتیکوئیدها",
-      c: [
-        { t: "معرفی و مشخصات کلی", s:true, d: "مهم‌ترین گلوکوکورتیکوئید طبیعی: کورتیزول (هیدروکورتیزون).\nمقدار ترشح روزانه: ۱۰ تا ۲۰ میلی‌گرم در شبانه‌روز.\nریتم ترشح: بیشترین میزان در ساعت ۶ تا ۸ صبح، کمترین میزان در نیمهٔ شب (ریتم شبانه‌روزی/Circadian).\nاتصال به پروتئین پلاسما: ۹۰٪ متصل به CBG (Cortisol Binding Globulin)، ۵٪ متصل به آلبومین، مابقی آزاد.\nمحرک‌های ترشح: استرس، فشارهای روانی/جسمی، ضربات، شوک، عفونت، هیپوگلیسمی." },
-        { t: "اثرات فیزیولوژیک مهم روی بافت‌ها و سیستم‌ها", c:[
-          { t: "متابولیسم", d: "اثر مهم روی متابولیسم کربوهیدرات، چربی، پروتئین و هومئوستاز کلسیم." },
-          { t: "آب و الکترولیت", d: "تنظیم آب و الکترولیت بدن." },
-          { t: "سیستم اندوکرین و ایمنی", d: "اثر روی سیستم اندوکرین و سیستم ایمنی بدن." },
-          { t: "پوست و بافت همبند", d: "تأثیر روی ساختار پوست و بافت همبند." },
-          { t: "قلب و عروق، ریه، مغز", d: "عمل قلب و عروق، ریه، و اعمال مغزی." },
-          { t: "کلیه‌ها و پستان", d: "اثر روی عملکرد کلیه‌ها و بافت پستان." }
-        ]},
-        { t: "اثرات فیزیولوژیک تفصیلی گلوکوکورتیکوئیدها", d: "کورتیزول (هیدروکورتیزون) مسئول اصلی اثرات گلوکوکورتیکوئیدی و آمادگی بدن برای پاسخ به استرس است.", c:[
-          { t: "اثر بر متابولیسم قند", s:true, d: "افزایش گلوکونئوژنز ← افزایش قند خون ← می‌تواند منجر به دیابت شود. همچنین کاهش مصرف گلوکز توسط سلول‌ها و افزایش سطح سرمی گلوکز." },
-          { t: "اثر بر پروتئین و استخوان", s:true, d: "کاهش سنتز پروتئین و کاهش جذب کلسیم ← پوکی استخوان (استئوپروز). اثر کاتابولیک بر استخوان و آنتاگونیزه‌کردن عمل ویتامین D." },
-          { t: "اثر بر چربی", d: "افزایش آزادسازی اسیدهای چرب از بافت چربی (فعال‌کردن آنزیم لیپاز) ← افزایش پروفایل چربی خون و افزایش اسید چرب پلاسما برای تولید ATP. همچنین با افزایش ترشح کورتیزول، بافت چربی از برخی نقاط تجزیه و در نواحی سر، سینه و پشت رسوب می‌کند (تغییر توزیع چربی)." },
-          { t: "اثر بر دستگاه گوارش", s:true, d: "کاهش سنتز پروستاگلاندین‌های محافظت‌کنندهٔ معده ← زخم معده." },
-          { t: "اثرات شبه‌مینرالوکورتیکوئیدی", d: "احتباس آب و نمک ← افزایش وزن و افزایش فشارخون." },
-          { t: "اثر بر رشد و ترمیم زخم", d: "کاهش رشد و ترمیم زخم‌ها، خصوصاً در اطفال." },
-          { t: "اثر بر عضلات", d: "کاهش تودهٔ عضلانی و ضعف عضلانی (کاتابولیسم عضله)." },
-          { t: "اثرات CNS و رفتاری", s:true, d: "سرخوشی (Euphoria)، بی‌خوابی و اختلالات رفتاری. قطع ناگهانی مصرف ← افسردگی." },
-          { t: "اثر بر فشار داخل جمجمه", d: "افزایش فشار داخل جمجمه." },
-          { t: "اثر بر ریهٔ جنین", s:true, d: "تغییرات ساختاری در ریهٔ جنین در اواخر بارداری ← افزایش تولید سورفاکتانت (کاربرد در تسریع تکامل ریهٔ جنین)." },
-          { t: "اثر بر سلول‌های خونی", d: "افزایش تعداد پلاکت‌ها و RBC (گلبول قرمز)." }
-        ]},
-        { t: "اثرات ایمونولوژیک گلوکوکورتیکوئیدها", s:true, d: "اثرات ضدالتهابی و سرکوبگر ایمنی از طریق مهار آنزیم فسفولیپاز A2 و کاهش بیان COX2، که موجب جلوگیری از سنتز پروستاگلاندین‌های میانجی‌گر التهاب، تب و درد می‌شود.", c:[
-          { t: "اثر روی سلول‌های ایمنی", d: "غیرفعال‌کردن CD8، NK و ماکروفاژها.\nخاموشی تکثیر CD4 و کاهش حساسیت تأخیری (Delayed Hypersensitivity).\nکاهش تعداد B-Cell و تولید آنتی‌بادی.\nمهار فعالیت ماکروفاژها و APCs (سلول‌های ارائه‌دهندهٔ آنتی‌ژن)." },
-          { t: "نتیجهٔ سرکوب ایمنی", d: "کاهش سنتز آنتی‌بادی‌ها؛ مهار سیتوکین‌ها و کموکاین‌های التهابی؛ مهار فاگوسیتوز؛ کاهش نفوذپذیری عروق؛ مهار ماست‌سل‌ها ← سرکوب سیستم ایمنی." },
-          { t: "پیامدهای بالینی سرکوب ایمنی", s:true, d: "↓ واکنش‌های آلرژیک (کهیر، آسم و ...)\n↑ ریسک ابتلا به عفونت‌های مختلف." },
-          { t: "نکتهٔ مهم دربارهٔ PMN", s:true, d: "یادآوری: گلوکوکورتیکوئیدها باعث افزایش تعداد PMN‌ها (نوتروفیل‌ها) می‌شوند — با وجود اینکه سایر گلبول‌های سفید ایمنی سرکوب می‌شوند." }
-        ]}
-      ]
-    },
-    {
-      t: "۷. ساختار شیمیایی و مقایسهٔ کورتیکواستروئیدها",
-      c: [
-        { t: "ساختار پایه (هستهٔ استروئیدی)", d: "هیدروکورتیزون (Hydrocortisone) به‌عنوان ساختار پایه دارای چهار حلقهٔ A, B, C, D است. سایر مشتقات (فلودروکورتیزون، تریامسینولون، دگزامتازون، پردنیزولون، کورتیزون، آلدوسترون، بتامتازون) با تغییراتی مانند افزودن اتم فلوئور (F)، گروه متیل (CH3) یا هیدروکسیل (OH) در موقعیت‌های مختلف حلقه، از این ساختار پایه مشتق می‌شوند. منبع تصویر: Goodman & Gilman's Pharmacological Basis of Therapeutics, 12th Edition." },
-        { t: "جدول ۳۹-۱: کورتیکواستروئیدهای طبیعی و مصنوعی رایج", d:"جدول فعالیت ضدالتهابی، موضعی، نمک‌نگه‌دارنده و دوز خوراکی معادل:", c:[
-          { t: "گلوکوکورتیکوئیدهای کوتاه تا متوسط‌اثر", d: "هیدروکورتیزون (کورتیزول): ضدالتهاب=۱، موضعی=۱، نمک‌نگه‌دارنده=۱، دوز معادل خوراکی=۲۰mg (خوراکی، تزریقی، موضعی).\nکورتیزون: ضدالتهاب=۰.۸، موضعی=۰، نمک‌نگه‌دارنده=۰.۸، دوز معادل=۲۵mg (خوراکی).\nپردنیزولون: ضدالتهاب=۵، موضعی=۴، نمک‌نگه‌دارنده=۰.۳، دوز معادل=۵mg (خوراکی، تزریقی).\nمتیل‌پردنیزولون: ضدالتهاب=۵، موضعی=۵، نمک‌نگه‌دارنده=۰.۲۵، دوز معادل=۴mg (خوراکی، تزریقی)." },
-          { t: "گلوکوکورتیکوئیدهای بینابینی‌اثر", d: "تریامسینولون: ضدالتهاب=۵، موضعی=۵، نمک‌نگه‌دارنده=۰، دوز معادل=۴mg (خوراکی، تزریقی، موضعی)." },
-          { t: "گلوکوکورتیکوئیدهای طولانی‌اثر", d: "بتامتازون: ضدالتهاب=۲۵-۴۰، موضعی=۱۰، نمک‌نگه‌دارنده=۰، دوز معادل=۰.۶mg (خوراکی، تزریقی، موضعی).\nدگزامتازون: ضدالتهاب=۳۰، موضعی=۱۰، نمک‌نگه‌دارنده=۰، دوز معادل=۰.۷۵mg (خوراکی، تزریقی، موضعی)." },
-          { t: "مینرالوکورتیکوئیدها (جدول)", d: "فلودروکورتیزون: ضدالتهاب=۱۰، موضعی=۰، نمک‌نگه‌دارنده=۲۵۰، دوز معادل=۲mg (خوراکی).\nدزوکسی‌کورتیکوسترون استات: ضدالتهاب=۰، موضعی=۰، نمک‌نگه‌دارنده=۲۰ (تزریقی، پلت)." }
-        ]},
-        { t: "مقایسهٔ قدرت اثر گلوکوکورتیکوئیدی و مینرالوکورتیکوئیدی", s:true, d: "هیدروکورتیزون (کورتیزول): قدرت گلوکوکورتیکوئیدی=۱، قدرت مینرالوکورتیکوئیدی=۲.\nپردنیزولون: قدرت گلوکوکورتیکوئیدی=۴، قدرت مینرالوکورتیکوئیدی=۱.\nتریامسینولون: قدرت گلوکوکورتیکوئیدی=۵، قدرت مینرالوکورتیکوئیدی=۰.\nبتامتازون: قدرت گلوکوکورتیکوئیدی=۲۵، قدرت مینرالوکورتیکوئیدی=۰.\nدگزامتازون: قدرت گلوکوکورتیکوئیدی=۲۵، قدرت مینرالوکورتیکوئیدی=۰.\nکلوبتازول: قدرت گلوکوکورتیکوئیدی=خیلی زیاد، قدرت مینرالوکورتیکوئیدی=۰.\nفلوتیکازون: قدرت گلوکوکورتیکوئیدی=خیلی زیاد، قدرت مینرالوکورتیکوئیدی=۰.\nفلودروکورتیزون: قدرت گلوکوکورتیکوئیدی=۱، قدرت مینرالوکورتیکوئیدی=خیلی زیاد.\nDOCA (دزوکسی‌کورتیکوسترون استات): قدرت گلوکوکورتیکوئیدی=۰، قدرت مینرالوکورتیکوئیدی=خیلی زیاد." },
-        { t: "نمودار میله‌ای مدت‌اثر و اثر گلوکوکورتیکوئیدی/نمک‌نگه‌دارنده", d: "کوتاه‌اثر (۱ تا ۱۲ ساعت): هیدروکورتیزون (ضدالتهاب=۱، نمک‌نگه‌دارنده=۱)، کورتیزون (۰.۸/۰.۸).\nبینابینی‌اثر (۱۲ تا ۳۶ ساعت): پردنیزون (۴/۰.۸)، پردنیزولون (۴/۰.۸)، متیل‌پردنیزولون (۵/۰.۵)، تریامسینولون (۵/۰).\nطولانی‌اثر (۳۶ تا ۵۵ ساعت): بتامتازون (۲۵/۰)، دگزامتازون (۳۰/۰).\nمینرالوکورتیکوئید: فلودروکورتیزون (۱۰/۱۲۵)." }
-      ]
-    },
-    {
-      t: "۸. اصول و معیارهای شروع درمان با کورتیکواستروئیدها",
-      c: [
-        { t: "معیارهای شروع درمان", s:true, d: "وجود شواهد به نفع اثرات دارو.\nمؤثر نبودن سایر درمان‌ها.\nمشخص بودن اهداف درمانی.\nتجویز دوز و دورهٔ مناسب.\nعدم تجویز دوز بالا یا دورهٔ مصرف طولانی.\n\nتجویز در بسیاری از موارد غیرمنطقی بوده و مصرف طولانی، مهار محور، سندرم کوشینگ و استعداد ابتلا به عفونت‌ها را در پی دارد." }
-      ]
-    },
-    {
-      t: "۹. کاربردهای درمانی گلوکوکورتیکوئیدها",
-      c: [
-        { t: "الف) اختلالات آدرنال", c:[
-          { t: "بیماری آدیسون (Addison's Disease)", s:true, d: "تخریب تمام نواحی قشر، نارسایی مزمن قشر ← عدم توانایی ساخت گلوکوکورتیکوئیدها." },
-          { t: "هایپرپلازی مادرزادی آدرنال", d: "نقص در آنزیم‌های سنتزکنندهٔ استروئیدهای آدرنال (مانند ۲۱-آلفا هیدروکسیلاز)." },
-          { t: "سندرم کوشینگ", d: "درمان در زمان جراحی و خارج‌سازی آدرنال (پس از برداشتن آدرنال، نیاز به جایگزینی گلوکوکورتیکوئیدی)." },
-          { t: "سندرم مقاومت جنرالیزه به گلوکوکورتیکوئیدها", d: "یکی از اختلالات نادر آدرنال." }
-        ]},
-        { t: "ب) اختلالات غیرآدرنال", c:[
-          { t: "بیماری‌های التهابی پوستی", d: "اگزما و درماتیت ← بتامتازون." },
-          { t: "بیماری‌های خودایمنی", s:true, d: "آرتریت روماتوئید، MS، SLE و ... ← متیل‌پردنیزولون." },
-          { t: "جلوگیری از رد پیوند", d: "پردنیزولون." },
-          { t: "واکنش‌های آلرژیک", d: "درماتیت تماسی، آتوپی، کهیر و ... ← تریامسینولون و فلوسینولون." },
-          { t: "رینیت و آسم", d: "کورتیکواستروئیدهای استنشاقی ← بکلومتازون، فلوتیکازون و ...." },
-          { t: "تسریع تکامل ریهٔ جنین (Acceleration of Lung Maturation)", s:true, d: "استفاده در بارداری‌های در معرض زایمان زودرس." },
-          { t: "بیماری‌های گوارشی", d: "بیماری‌های التهابی روده (IBD)." },
-          { t: "بیماری‌های چشمی", d: "نوریت عصب بینایی." },
-          { t: "اختلالات خونی", d: "لوکمی، لنفوم، آنمی همولیتیک." },
-          { t: "بیماری‌های مرتبط با عفونت", d: "سپسیس." },
-          { t: "مشکلات التهابی مفصل و استخوان", d: "آرتریت." },
-          { t: "اختلالات نورولوژیک", s:true, d: "ادم مغزی (فقط دگزامتازون استفاده می‌شود) و مولتیپل اسکلروزیس (MS)." },
-          { t: "بیماری‌های ریوی", d: "پیشگیری از سندرم زجر تنفسی نوزاد (Infant Respiratory Distress Syndrome)." },
-          { t: "بیماری‌های پوستی", d: "درماتیت." },
-          { t: "بیماری‌های تیروئید", d: "پرکاری تیروئید (اگزوفتالموس بدخیم)، تیروئیدیت تحت حاد." },
-          { t: "کاهش تهوع و استفراغ", d: "در شیمی‌درمانی." },
-          { t: "جدول ۳۹-۲: کاربرد گلوکوکورتیکوئیدها در اختلالات غیرآدرنال", d: "واکنش‌های آلرژیک: ادم آنژیونروتیک، آسم، نیش زنبور، درماتیت تماسی، واکنش‌های دارویی، رینیت آلرژیک، بیماری سرم، کهیر.\nاختلالات کلاژن-عروقی: آرتریت سلول ژانت، لوپوس اریتماتوز، سندرم‌های بافت همبند مختلط، پلی‌میوزیت، پلی‌میالژیا روماتیکا، آرتریت روماتوئید، آرتریت تمپورال.\nبیماری‌های چشمی: اووئیت حاد، کونژنکتیویت آلرژیک، کوروئیدیت، نوریت عصب بینایی.\nبیماری‌های گوارشی: بیماری التهابی روده، اسپروی غیراستوایی، نکروز حاد کبدی.\nاختلالات خونی: آنمی همولیتیک اکتسابی، پورپورای آلرژیک حاد، لوکمی، لنفوم، آنمی همولیتیک خودایمنی، پورپورای ترومبوسیتوپنیک ایدیوپاتیک، مولتیپل میلوما.\nالتهاب سیستمیک: سندرم زجر تنفسی حاد (ARDS) — درمان مداوم با دوز متوسط بهبودی را تسریع و مرگ‌ومیر را کاهش می‌دهد.\nعفونت‌ها: ARDS، سپسیس.\nشرایط التهابی استخوان و مفصل: آرتریت، بورسیت، تنوسینوویت.\nاختلالات نورولوژیک: ادم مغزی (دوزهای بالای دگزامتازون پس از جراحی مغز)، مولتیپل اسکلروزیس.\nپیوند عضو: پیشگیری و درمان رد پیوند (سرکوب ایمنی).\nبیماری‌های ریوی: پنومونی آسپیراسیون، آسم برونشیال، پیشگیری از سندرم زجر تنفسی نوزاد، سارکوئیدوز.\nاختلالات کلیوی: سندرم نفروتیک.\nبیماری‌های پوستی: درماتیت آتوپیک، درماتوزها، لیکن سیمپلکس کرونیکوس، مایکوزیس فانگوئیدس، پمفیگوس، درماتیت سبورئیک، خشکی پوست (زروزیس).\nبیماری‌های تیروئید: اگزوفتالموس بدخیم، تیروئیدیت تحت حاد.\nمتفرقه: هیپرکلسمی، بیماری کوهستان (Mountain Sickness)." }
-        ]}
-      ]
-    },
-    {
-      t: "۱۰. کم‌کاری غدهٔ آدرنال (نارسایی آدرنال)",
-      c: [
-        { t: "نارسایی اولیهٔ آدرنال — بیماری آدیسون", s:true, d: "تخریب نواحی قشر آدرنال ← کمبود کورتیزول، آلدوسترون و آندروژن‌ها." },
-        { t: "نارسایی ثانویه", d: "به دنبال مصرف استروئیدها (مهار محور و کاهش آزادسازی ACTH) یا اختلالات هیپوتالاموس و هیپوفیز ایجاد می‌شود." },
-        { t: "علائم بالینی", d: "ضعف، کاهش وزن، سردرد، افسردگی، افت فشار خون و تب." },
-        { t: "درمان", s:true, d: "هیدروکورتیزون، فلودروکورتیزون." },
-        { t: "تصویر بالینی بیماری آدیسون (Addison's Disease)", d: "پیگمانتاسیون برنزی پوست (Bronze Pigmentation of Skin)، هیپوگلیسمی، تغییر توزیع موی بدن، افت فشار وضعیتی (Postural Hypotension)، اختلالات گوارشی (GI Disturbances)، کاهش وزن، ضعف عمومی." },
-        { t: "بحران آدرنال (Adrenal Crisis)", s:true, d: "خستگی شدید (Profound Fatigue)، کم‌آبی بدن (Dehydration)، فروپاشی عروقی (Vascular Collapse — افت شدید فشارخون)، از کارافتادن کلیه (Renal Shut Down)، کاهش سدیم سرم، افزایش پتاسیم سرم." }
-      ]
-    },
-    {
-      t: "۱۱. اشکال دارویی و نام‌های تجاری گلوکوکورتیکوئیدها",
-      d: "تصاویر بسته‌بندی و اشکال دارویی موجود در بازار ایران:",
-      c: [
-        { t: "قرص و آمپول بتامتازون", d: "قرص بتامتازون (Tab betamethasone): ۰.۵ میلی‌گرم.\nآمپول بتامتازون (سدیم فسفات): ۴ میلی‌گرم — تزریق وریدی آهسته، تزریق داخل مفصلی، داخل عضلانی، بافت نرم.\nآمپول بتامتازون LA (طولانی‌اثر، Betamethasone LA-EXIR): سدیم فسفات ۳ میلی‌گرم + استات ۳ میلی‌گرم — فقط برای تزریق داخل عضلانی، داخل مفصلی یا بافت نرم، Not for I.V. Injection." },
-        { t: "آمپول هیدروکورتیزون", d: "آمپول هیدروکورتیزون سدیم ساکسینات (Hydrocortisone Injection): ۱۰۰ میلی‌گرم، برای تزریق داخل وریدی/عضلانی." },
-        { t: "آمپول تریامسینولون", d: "آمپول تریامسینولون (Amp Triamcinolone): ۴۰ میلی‌گرم — برای تزریق داخل مفصلی (Intra-articular) و داخل ضایعه‌ای (Intralesional) و عضلانی عمقی." },
-        { t: "قرص و آمپول دگزامتازون", d: "قرص دگزامتازون (Tab Dexamethasone): ۰.۵ میلی‌گرم.\nآمپول دگزامتازون (Amp Dexamethasone): ۸ میلی‌گرم — تزریق عضلانی، آهستهٔ وریدی، یا داخل مفصلی/بافت نرم." },
-        { t: "قرص پردنیزولون", d: "قرص پردنیزولون (Tab Prednisolone): در دو دوز ۵ و ۵۰ میلی‌گرم موجود است." },
-        { t: "آمپول متیل‌پردنیزولون", d: "آمپول متیل‌پردنیزولون استات (Methylprednisolone Acetate): ۴۰ میلی‌گرم، برای تزریق داخل عضلانی/داخل مفصلی/داخل ضایعه‌ای — استفادهٔ داخل نخاعی یا وریدی ممنوع است.\nآمپول متیل‌پردنیزولون سدیم سوکسینات (Solu-Medrol): ۵۰۰ میلی‌گرم، برای تزریق داخل وریدی یا عضلانی." }
-      ]
-    },
-    {
-      t: "۱۲. عوارض جانبی گلوکوکورتیکوئیدها",
-      c: [
-        { t: "خلاصهٔ عوارض جانبی اصلی", s:true, d: "سرکوب محور هیپوتالاموس ← هیپوفیز ← فوق‌کلیه (فیدبک منفی).\nمهار رشد.\nدیابت.\nتحلیل عضلانی.\nاستئوپروز (پوکی استخوان).\nاحتباس آب و نمک (افزایش فشار خون).\nپرمویی، آکنه، اختلالات قاعدگی.\nمشکلات چشمی، گوارشی.\nسایکوز.\n\nقطع ناگهانی مصرف گلوکوکورتیکوئیدها ← افسردگی." },
-        { t: "عوارض جانبی به‌تفکیک سیستم بدن", c:[
-          { t: "پوستی", d: "نازک‌شدن پوست و خون‌ریزی زیرجلدی، آکنه، ریزش مو." },
-          { t: "چشمی", d: "گلوکوم، بیرون‌زدگی چشم از حدقه (اگزوفتالموس)." },
-          { t: "قلبی‌عروقی", d: "افزایش فشار خون و آریتمی." },
-          { t: "گوارشی", s:true, d: "زخم گوارشی و سوراخ‌شدن احشا." },
-          { t: "کلیوی", d: "هیپوکالمی." },
-          { t: "ادراری‌تناسلی", d: "ناباروری و تأخیر رشد جنین." },
-          { t: "اسکلتی", s:true, d: "پوکی استخوان." },
-          { t: "عضلانی", d: "کاشکسی (تحلیل) عضله." },
-          { t: "عصبی‌روانی", s:true, d: "سرخوشی، افسردگی و سایکوز." },
-          { t: "اندوکرین", s:true, d: "دیابت و سندرم کوشینگ." },
-          { t: "عفونت", d: "افزایش استعداد ابتلا به عفونت." }
-        ]},
-        { t: "تصویر بالینی عوارض جانبی گلوکوکورتیکوئیدی", d: "نازک‌شدن مو، هیرسوتیسم (پرمویی)، سایکوز، آکنه و پلتورا (سرخی پوست)، کاتاراکت و اگزوفتالموس خفیف، صورت ماه‌گونه (Moon Face)، زخم پپتیک، کوتاه‌شدن قد و کمردرد ناشی از شکستگی فشاری، هیپرگلیسمی، فشارخون بالا، چاقی مرکزی (Centripetal Obesity)، اختلال قاعدگی، استریا (ترک پوستی)، کاهش ضخامت پوست، تحلیل و ضعف عضلات پروکسیمال ران، استئوپروز (احتمال شکستگی با کالوس فراوان)، تمایل به عفونت با بهبود ضعیف زخم، کبودی." },
-        { t: "ملاحظات وابسته به دوز و مدت مصرف", c:[
-          { t: "وابستگی مهار محور به دوز و طول درمان", s:true, d: "مهار محور HPA وابسته به دوز و دورهٔ مصرف استروئیدها می‌باشد. در بیماران تحت درمان طولانی‌مدت، دوز داروها باید به‌تدریج قطع شود (Tapering)." },
-          { t: "عوارض قلبی‌عروقی و مغزی", d: "این داروها حوادث قلبی-عروقی و مغزی را افزایش می‌دهند." },
-          { t: "تداخل با NSAIDs", s:true, d: "مصرف هم‌زمان با داروهای ضدالتهاب غیراستروئیدی (NSAIDs)، عوارض گوارشی را تا ۴ برابر افزایش می‌دهد." },
-          { t: "مصرف در بارداری", d: "مصرف در بارداری نواقص جنینی را در پی خواهد داشت." },
-          { t: "مصرف در کودکان", d: "در کودکان می‌تواند کوتاهی قد تا ۴ سانتی‌متر ایجاد کند." },
-          { t: "میوپاتی", d: "به‌صورت ضعف عضلات حرکتی پروکسیمال در انتهاهای فوقانی و تحتانی بروز می‌کند." },
-          { t: "عوارض حتی در دوز پایین", d: "بی‌قراری حرکتی، بی‌خوابی و افسردگی حتی با دوزهای پایین هم دیده می‌شود." },
-          { t: "عوارض در مصرف کوتاه‌مدت", d: "در مصرف کوتاه‌مدت معمولاً عوارض جانبی جدی بروز پیدا نمی‌کنند، مگر تغییرات رفتاری و زخم‌های معده." }
-        ]},
-        { t: "خلاصهٔ تصویری عوارض جانبی", d: "کاهش رشد در کودکان، گلوکوم، توزیع مرکزگرای چربی بدن (Centripetal Fat)، بالانس منفی کلسیم و پوکی استخوان، اختلال در بهبود زخم و افزایش ریسک عفونت، افزایش ریسک دیابت (افزایش گلوکز)، افزایش اشتها، اختلالات هیجانی (سرخوشی/افسردگی)، هیپوکالمی، فشارخون بالا، ادم محیطی." }
-      ]
-    },
-    {
-      t: "۱۳. راهکارهای کاهش عوارض و تداخلات دارویی",
-      c: [
-        { t: "راهکارهای کلی", s:true, d: "استفاده از حداقل دوز و حداقل مدت مصرف.\nورزش (کاهش خطر میوپاتی و پوکی استخوان).\nمصرف کلسیم و ویتامین D3." },
-        { t: "تداخل با آنزیم‌های کبدی", d: "القاکننده‌ها و مهارکننده‌های آنزیم‌های کبدی می‌توانند باعث تداخل شده و کلیرانس گلوکوکورتیکوئیدها را تغییر دهند.", c:[
-          { t: "القاکننده‌های آنزیمی", d: "فنوباربیتال، فنی‌توئین، ریفامپین." },
-          { t: "مهارکننده‌های آنزیمی", d: "اریترومایسین، کتوکونازول." }
-        ]}
-      ]
-    },
-    {
-      t: "۱۴. موارد منع مصرف کورتیکواستروئیدها",
-      s:true,
-      d: "زخم پپتیک.\nبیماری‌های قلبی.\nفشارخون بالا.\nعفونت‌ها.\nسایکوز.\nدیابت.\nاستئوپروز.\nگلوکوم."
-    },
-    {
-      t: "۱۵. راه‌های صحیح مصرف کورتیکواستروئیدها",
-      c: [
-        { t: "موضعی (Topical)", d: "برای بیماری‌های پوستی." },
-        { t: "اشکال چشمی", d: "قطره و پماد چشمی." },
-        { t: "استنشاقی", d: "بکلومتازون، مومتازون، بودزونید، سیکلزونید." },
-        { t: "اسپری بینی", d: "مومتازون، بکلومتازون." },
-        { t: "تزریق داخل مفصلی", d: "متیل‌پردنیزولون." },
-        { t: "تزریق داخل عضله و وریدی", d: "برای موارد سیستمیک و اورژانسی." }
-      ]
-    },
-    {
-      t: "۱۶. آنتاگونیست‌های گلوکوکورتیکوئیدها",
-      c: [
-        { t: "دسته‌بندی آنتاگونیست‌ها", s:true, d: "مهارکنندهٔ رقابتی گیرنده: میفپریستون (Mifepristone).\nمهارکنندهٔ سنتز: آمینوگلوتتیماید، کتوکونازول، متی‌راپون.\nتخریب‌کنندهٔ قشر: میتوتان (Mitotane)." },
-        { t: "کاربرد درمانی کلی", d: "هایپراکتیویتی فوق‌کلیه ← سندرم کوشینگ (افزایش بیش از حد سطح پلاسمایی کورتیزول و افزایش دفع ادراری استروئیدها). علائم: تجمع چربی در ناحیهٔ پشت گردن، گرد شدن صورت، ضعف عضلانی." },
-        { t: "شرح داروهای آنتاگونیست", c:[
-          { t: "آمینوگلوتتیماید", d: "کاربرد: کارسینوم پستان (با تاموکسیفن یا مهارکننده‌های آروماتاز جایگزین شده است)، سندرم کوشینگ. مکانیسم: مهار تبدیل کلسترول به پرگننولون." },
-          { t: "کتوکونازول", d: "ضدقارچ؛ مهار سنتز استروئیدهای گنادی و آدرنال." },
-          { t: "متی‌راپون", s:true, d: "مهار ۱۱-هیدروکسیلاسیون؛ در سندرم کوشینگ و به‌عنوان تست تشخیصی برای توانایی هیپوفیز در تولید ACTH استفاده می‌شود. در زنان باردار هم می‌تواند به کار برود." },
-          { t: "تریلوستان", d: "مهارکنندهٔ ۳بتا-۱۷هیدروکسی استروئید دهیدروژناز." },
-          { t: "آبیراترون", s:true, d: "جدیدترین مهارکنندهٔ ساخت استروئید؛ در سرطان پروستات استفاده می‌شود." }
-        ]},
-        { t: "تصاویر داروهای آنتاگونیست", d: "Vetoryl (Trilostane) — کپسول‌های ۱۰، ۳۰ و ۶۰ میلی‌گرمی.\nZytiga (Abiraterone Acetate) — قرص‌های ۲۵۰ و ۵۰۰ میلی‌گرمی.\nOrimeten (Aminoglutethimide) — قرص ۲۵۰ میلی‌گرمی.\nMetopirone (Metyrapone) — کپسول ۲۵۰ میلی‌گرمی." }
-      ]
-    },
-    {
-      t: "۱۷. پرکاری غدهٔ آدرنال (سندرم کوشینگ)",
-      c: [
-        { t: "تعریف و علت", s:true, d: "با افزایش بیش از حد سطح پلاسمایی کورتیزول و افزایش دفع ادراری استروئیدها مشخص می‌گردد. منشأ آن می‌تواند خارجی (داروها) یا داخلی (قشر آدرنال) باشد. ۷۰ درصد موارد به علت ترشح بیش از حد ACTH از غدهٔ هیپوفیز است." },
-        { t: "علائم بالینی", d: "چاقی مرکزی، گردی صورت (Moon Face)، تجمع چربی در ناحیهٔ پشت گردن." },
-        { t: "درمان", d: "مهارکننده‌های سنتز، تخریب‌کننده‌های قشر، مهارکننده‌های گیرنده." },
-        { t: "تصویر بالینی سندرم کوشینگ (Cushing's Syndrome)", d: "تغییرات شخصیتی، هیپرگلیسمی، صورت ماه‌گونه، تحریک‌پذیری CNS، افزایش حساسیت به عفونت، احتباس سدیم و مایعات (ادم)، در مردان: ژنیکوماستی، اندام‌های نازک، رسوب چربی روی صورت و پشت شانه‌ها، ناراحتی گوارشی/افزایش اسید، در زنان: آمنوره و هیرسوتیسم، پوست نازک، استریای بنفش، کبودی و پتشی، پوکی استخوان." }
-      ]
-    },
-    {
-      t: "۱۸. مینرالوکورتیکوئیدها",
-      c: [
-        { t: "معرفی کلی", s:true, d: "آلدوسترون مسئول اصلی اثرات مینرالوکورتیکوئیدی (تنظیم یون‌های مهم بدن) است. ۵۰ درصد آن به پروتئین‌های پلاسما باند و بقیه به فرم آزاد در پلاسما گردش می‌کند." },
-        { t: "اثرات مینرالوکورتیکوئیدی", s:true, d: "افزایش بازجذب سدیم و ترشح +K و +H در ادرار.\nافزایش جذب آب از توبول‌های کلیوی ← افزایش حجم خون.\n↑ آلدوسترون = ↑ احتباس آب و نمک = ↑ فشارخون." },
-        { t: "عوامل تنظیم‌کنندهٔ ترشح آلدوسترون", c:[
-          { t: "افزایش پتاسیم", d: "افزایش غلظت پتاسیم ← افزایش ترشح آلدوسترون." },
-          { t: "سیستم رنین-آنژیوتانسین-آلدوسترون", s:true, d: "در پاسخ به کاهش حجم خون یا فشارخون در کلیه‌ها تحریک می‌شود و ترشح آلدوسترون را تحریک می‌کند." },
-          { t: "کاهش سدیم", d: "کاهش غلظت سدیم ← افزایش ترشح آلدوسترون." },
-          { t: "ACTH", d: "افزایش ترشح آلدوسترون." },
-          { t: "مکانیسم اثر در سلول هدف", d: "آلدوسترون به‌وسیلهٔ اتصال به گیرندهٔ مینرالوکورتیکوئیدی موجود در سلول هدف (توبول پیچیدهٔ دیستال و مجاری جمع‌کننده) عمل می‌کند." }
-        ]},
-        { t: "اشکال دارویی مینرالوکورتیکوئیدها", d: "هیدروکورتیزون (قرص).\nفلودروکورتیزون (Fludrocortisone Acetate 0.1mg) — قرص.\nدزوکسی‌کورتیکوسترون استات — آمپول، فقط برای تزریق عضلانی عمیق." }
-      ]
-    },
-    {
-      t: "۱۹. داروهای مهارکنندهٔ سیستم رنین-آنژیوتانسین",
-      d: "کلیه از طریق تنظیم حجم خون، مسئول تنظیم دراز‌مدت فشار خون می‌باشد.",
-      c: [
-        { t: "زنجیرهٔ رنین-آنژیوتانسین و نقاط مهار", s:true, d: "آنژیوتانسینوژن → (رنین — مهار توسط آلیسکایرن) → آنژیوتانسین I (دکاپپتید غیرفعال) → (آنزیم مبدل آنژیوتانسین/ACE — مهار توسط مهارکننده‌های ACE) → آنژیوتانسین II (منقبض‌کنندهٔ فعال عروق) → گیرندهٔ AT1 (مسدود توسط مسدودکننده‌های گیرندهٔ AT1). برادی‌کینین (گشادکنندهٔ فعال عروق) نیز توسط ACE به متابولیت‌های غیرفعال تبدیل می‌شود." },
-        { t: "مکانیسم افزایش فشار خون توسط آنژیوتانسین II", d: "آنژیوتانسین ۲ باعث افزایش فشار خون می‌شود، از طریق:\n— انقباض عروق محیطی\n— افزایش ترشح آلدوسترون ← افزایش بازجذب سدیم و افزایش حجم خون." }
-      ]
-    },
-    {
-      t: "۲۰. گلوکوکورتیکوئیدهای واجد اثر مینرالوکورتیکوئیدی و آنتاگونیست‌های مینرالوکورتیکوئیدی",
-      c: [
-        { t: "فلودروکورتیزون", s:true, d: "کاربرد درمانی: درمان نارسایی قشر همراه با کمبود مینرالوکورتیکوئیدها." },
-        { t: "اسپیرونولاکتون (Spironolactone)", s:true, d: "کاربرد درمانی: درمان آلدوسترونیسم، نارسایی قلبی.\nکاهش ادم (به‌علت داشتن اثر دیورتیک).\nدرمان پرمویی در زنان (به‌عنوان آنتاگونیست آندروژن) و موجب کاهش تعداد، قطر و سرعت رشد مو می‌شود." },
-        { t: "اپلرنون (Eplerenone)", d: "کاربرد درمانی: درمان فشارخون، نارسایی قلب." },
-        { t: "دروسپیرنون (Drospirenone)", d: "از دیگر آنتاگونیست‌های گیرندهٔ مینرالوکورتیکوئید." }
-      ]
-    },
-    {
-      t: "۲۱. سؤال بالینی: آلدوسترون در نارسایی احتقانی قلب (CHF)",
-      d: "کارآزمایی‌های بالینی نشان داده‌اند آنتاگونیست‌های گیرندهٔ آلدوسترون (اسپیرونولاکتون و اپلرنون) باعث کاهش عوارض و مرگ‌ومیر در بیمارانی می‌شوند که از سایر درمان‌های استاندارد استفاده می‌کنند.",
-      c: [
-        { t: "چرا آلدوسترون در نارسایی قلبی افزایش می‌یابد؟", s:true, d: "کاهش برون‌دهٔ قلبی مرتبط با نارسایی قلبی، حجم مؤثر خون شریانی و جریان خون کلیوی را کاهش می‌دهد. کاهش فشار در شریان‌های کلیوی و افزایش فعالیت عصبی سمپاتیک، هر دو باعث تحریک ترشح رنین می‌شوند که تولید آنژیوتانسین II را افزایش می‌دهد. آنژیوتانسین II یک محرک قوی برای ترشح آلدوسترون است." },
-        { t: "چگونه افزایش آلدوسترون به علائم نارسایی قلبی کمک می‌کند؟", s:true, d: "آلدوسترون از طریق گیرنده‌های هسته‌ای در سلول‌های اپیتلیال پوشانندهٔ لوله‌های جمع‌کنندهٔ کلیوی، جذب نمک و آب از طریق کلیه را افزایش می‌دهد. این احتباس نمک و آب، ادم محیطی و ریوی مرتبط با نارسایی احتقانی قلب را تشدید می‌کند و قلب ضعیف را بیش از حد بار می‌آورد. علاوه بر این اثرات کلیوی، آلدوسترون همچنین در فیبروز میوکارد و عروق و اختلال عملکرد گیرندهٔ فشار (بارورسپتور) نقش دارد." }
-      ]
-    },
-    {
-      t: "۲۲. هورمون آدرنوکورتیکوتروپیک (ACTH، کورتیکوتروپین)",
-      c: [
-        { t: "ساختار و مشخصات", s:true, d: "۳۹ اسیدآمینه دارد که اسیدآمینهٔ ۱ تا ۲۴ برای بروز فعالیت آن جنبهٔ حیاتی دارد.\nتحریک ترشح قسمت قشری کورتیزول و کورتیکوسترون را انجام می‌دهد.\nدارای ریتم شبانه‌روزی است." },
-        { t: "عملکرد ACTH", d: "ACTH همان‌طور که از نامش پیداست، قشر آدرنال را تحریک می‌کند: ترشح گلوکوکورتیکوئیدهایی مانند کورتیزول را تحریک می‌کند و کنترل کمی بر ترشح آلدوسترون (هورمون استروئیدی اصلی دیگر از قشر آدرنال) دارد." },
-        { t: "تنظیم ترشح ACTH", d: "ACTH در پاسخ به هورمون آزادکنندهٔ کورتیکوتروپین (CRH) از هیپوتالاموس، از هیپوفیز قدامی ترشح می‌شود. CRH در پاسخ به بسیاری از انواع استرس ترشح و توسط گلوکوکورتیکوئیدها مهار می‌شود." },
-        { t: "پیش‌سازهٔ ACTH: POMC (Big Mama)", s:true, d: "در غدهٔ هیپوفیز، ACTH طی فرآیندی از پیش‌سازِ بزرگی به‌نام POMC (پروئوپیومالانوکورتین) یا «Big Mama» ساخته می‌شود و به‌صورت پروتئولیتیکی به چندین قطعه خرد می‌شود:", c:[
-          { t: "لیپوتروپین", d: "به‌عنوان فاکتور واجد اثرات لیپولیتیک ضعیف توصیف شده است؛ اهمیت اصلی آن به‌عنوان پیش‌سازِ بتا-اندورفین است." },
-          { t: "بتا-اندورفین و مت-انکفالین", s:true, d: "پپتیدهای مخدر با اثرات تسکین‌دهندهٔ درد و سرخوشی هستند." },
-          { t: "MSH (هورمون محرک ملانوسیت)", d: "برای کنترل رنگدانهٔ ملانین در پوست اکثر مهره‌داران شناخته شده است." },
-          { t: "سایر قطعات POMC", d: "قطعهٔ آمینو-ترمینال، γ-MSH، α-MSH، CLIP، β-Lipotropin، γ-Lipotropin، β-MSH." }
-        ]}
-      ]
-    },
-    {
-      t: "۲۳. کاربردهای درمانی آنالوگ‌های ACTH",
-      d: "نام‌های تجاری/ژنریک: Synacthen® یا Tetracosactide یا Cosyntropin. در تزریق وریدی یا عضلانی تتراکوزکتاید، در افراد سالم طی ۵ دقیقه افزایش غلظت پلاسمایی کورتیزول ایجاد می‌شود و پس از حدود ۴۵ تا ۶۰ دقیقه حداکثر تأثیر آن (به‌صورت افزایش غلظت کورتیزول خون) ایجاد خواهد شد.",
-      c: [
-        { t: "الف) کاربرد تشخیصی", s:true, d: "کاربرد جهت غربالگری نارسایی آدرنال (Adrenal Insufficiency)." },
-        { t: "ب) کاربرد درمانی", s:true, d: "بیماری‌های روماتیسمی: درمان کوتاه‌مدت در شرایطی که بیمار تحمل پایینی به گلوکوکورتیکوئیدهای خوراکی دارد یا پاسخ بالینی کمی به آن‌ها داده است.\n\nیک دوز تتراکوزوکتاید با تحریک آدرنال، بیست میلی‌گرم هیدروکورتیزون (کورتیزول) ترشح می‌کند — پس فقط به‌اندازهٔ یک کورتون ضعیف اثر دارد! تازه واکنش‌های حساسیتی شدید هم ممکن است ایجاد شود.\n\nمزیت: آدرنال سالم می‌ماند و دچار آتروفی نمی‌شود!" },
-        { t: "اشکال دارویی موجود", d: "Amp ACTH یا Tetracosactide یا Cosyntropin یا Synacthen — در دوزهای ۱ و ۰.۲۵ میلی‌گرم (نام تجاری ایرانی: سیناکران / تتراکزاکتاید آل A)." }
-      ]
-    }
-  ]
-};
-
-// ============= STATE / STORAGE =============
-const LS_KEYS = {
-  theme: 'adrenal_tree_theme',
-  font: 'adrenal_tree_font',
-  progress: 'adrenal_tree_progress',
-  highlights: 'adrenal_tree_highlights'
-};
-
-let openIds = new Set();
-let highlightIds = new Set(JSON.parse(localStorage.getItem(LS_KEYS.highlights) || '[]'));
-let readIds = new Set(JSON.parse(localStorage.getItem(LS_KEYS.progress) || '[]'));
-
-let totalBranches = 0;
-let totalStars = 0;
-let idCounter = 0;
-
-function countNodes(node){
-  node._id = 'n' + (idCounter++);
-  totalBranches++;
-  if(node.s) totalStars++;
-  if(node.c) node.c.forEach(countNodes);
-}
-countNodes(treeData);
-
-function hasStarDeep(node){
-  if(node.s) return true;
-  if(node.c) return node.c.some(hasStarDeep);
-  return false;
-}
-
-function renderNode(node, level){
-  const hasChildren = node.c && node.c.length > 0;
-  const isOpen = openIds.has(node._id);
-  const isHighlighted = highlightIds.has(node._id);
-  const starDeep = hasStarDeep(node);
-
-  const wrap = document.createElement('div');
-  wrap.className = 'node lvl-' + level + (isOpen ? ' open' : '') + (isHighlighted ? ' highlighted' : '') + (starDeep ? ' has-star-desc' : '');
-  wrap.dataset.id = node._id;
-  wrap.dataset.search = (node.t + ' ' + (node.d||'')).toLowerCase();
-
-  const row = document.createElement('div');
-  row.className = 'node-row';
-
-  const toggle = document.createElement('div');
-  if(hasChildren){
-    toggle.className = 'toggle';
-    toggle.textContent = '◀';
-  } else {
-    toggle.className = 'leaf-dot';
-    toggle.textContent = '●';
-  }
-  row.appendChild(toggle);
-
-  const titleWrap = document.createElement('div');
-  titleWrap.style.flex = '1';
-
-  const titleLine = document.createElement('div');
-  titleLine.className = 'title-line';
-
-  const tText = document.createElement('span');
-  tText.className = 't-text';
-  tText.textContent = node.t;
-  titleLine.appendChild(tText);
-
-  if(node.s){
-    const star = document.createElement('span');
-    star.className = 'star';
-    star.textContent = '⭐';
-    star.title = 'نکتهٔ پرتکرار';
-    titleLine.appendChild(star);
-  }
-
-  const hBtn = document.createElement('button');
-  hBtn.className = 'highlight-btn' + (isHighlighted ? ' on' : '');
-  hBtn.textContent = isHighlighted ? '★' : '☆';
-  hBtn.title = 'هایلایت کردن این نکته';
-  hBtn.onclick = (e) => {
-    e.stopPropagation();
-    if(highlightIds.has(node._id)){ highlightIds.delete(node._id); }
-    else { highlightIds.add(node._id); }
-    localStorage.setItem(LS_KEYS.highlights, JSON.stringify([...highlightIds]));
-    wrap.classList.toggle('highlighted');
-    hBtn.classList.toggle('on');
-    hBtn.textContent = highlightIds.has(node._id) ? '★' : '☆';
-  };
-  titleLine.appendChild(hBtn);
-
-  titleWrap.appendChild(titleLine);
-
-  if(node.d){
-    const dText = document.createElement('div');
-    dText.className = 'desc';
-    dText.textContent = node.d;
-    titleWrap.appendChild(dText);
-  }
-
-  row.appendChild(titleWrap);
-
-  row.onclick = () => {
-    readIds.add(node._id);
-    localStorage.setItem(LS_KEYS.progress, JSON.stringify([...readIds]));
-    updateProgress();
-    if(hasChildren){
-      if(openIds.has(node._id)){ openIds.delete(node._id); }
-      else { openIds.add(node._id); }
-      wrap.classList.toggle('open');
-    }
-  };
-
-  wrap.appendChild(row);
-
-  if(hasChildren){
-    const childrenWrap = document.createElement('div');
-    childrenWrap.className = 'children';
-    node.c.forEach(child => childrenWrap.appendChild(renderNode(child, level+1)));
-    wrap.appendChild(childrenWrap);
-  }
-
-  return wrap;
-}
-
-function updateProgress(){
-  const pct = Math.round((readIds.size / totalBranches) * 100);
-  document.getElementById('progressBar').style.width = pct + '%';
-  document.getElementById('statProgress').textContent = toFaDigits(pct) + '٪';
-}
-
-function toFaDigits(n){
-  const fa = ['۰','۱','۲','۳','۴','۵','۶','۷','۸','۹'];
-  return String(n).replace(/[0-9]/g, d => fa[d]);
-}
-
-function renderAll(){
-  const root = document.getElementById('treeRoot');
-  root.innerHTML = '';
-  root.appendChild(renderNode(treeData, 0));
-  document.getElementById('statBranches').textContent = toFaDigits(totalBranches);
-  document.getElementById('statStars').textContent = toFaDigits(totalStars);
-  updateProgress();
-}
-
-function setAllOpen(state){
-  function walk(node){
-    if(node.c && node.c.length){
-      if(state) openIds.add(node._id); else openIds.delete(node._id);
-      node.c.forEach(walk);
-    }
-  }
-  walk(treeData);
-  renderAll();
-}
-
-// ============= CONTROLS =============
-document.getElementById('btnOpenAll').onclick = () => setAllOpen(true);
-document.getElementById('btnCloseAll').onclick = () => setAllOpen(false);
-document.getElementById('btnPrint').onclick = () => {
-  setAllOpen(true);
-  setTimeout(() => window.print(), 200);
-};
-
-let examMode = false;
-document.getElementById('btnExam').onclick = (e) => {
-  examMode = !examMode;
-  document.body.classList.toggle('exam-mode', examMode);
-  e.target.classList.toggle('active', examMode);
-  if(examMode) setAllOpen(true);
-};
-
-document.querySelectorAll('.theme-dot').forEach(btn => {
-  btn.onclick = () => {
-    const theme = btn.dataset.theme;
-    document.documentElement.setAttribute('data-theme', theme);
-    localStorage.setItem(LS_KEYS.theme, theme);
-  };
-});
-
-const savedTheme = localStorage.getItem(LS_KEYS.theme) || 'night';
-document.documentElement.setAttribute('data-theme', savedTheme);
-
-const fontSelect = document.getElementById('fontSizeSelect');
-const savedFont = localStorage.getItem(LS_KEYS.font) || '14';
-fontSelect.value = savedFont;
-document.body.style.fontSize = savedFont + 'px';
-fontSelect.onchange = () => {
-  document.body.style.fontSize = fontSelect.value + 'px';
-  localStorage.setItem(LS_KEYS.font, fontSelect.value);
-};
-
-document.getElementById('searchInput').addEventListener('input', (e) => {
-  const q = e.target.value.trim().toLowerCase();
-  const nodes = document.querySelectorAll('.node');
-  if(!q){
-    nodes.forEach(n => { n.classList.remove('search-hidden','search-match'); });
-    return;
-  }
-  nodes.forEach(n => {
-    const match = n.dataset.search.includes(q);
-    n.classList.toggle('search-match', match);
-    if(match){
-      n.classList.remove('search-hidden');
-      let p = n.parentElement;
-      while(p && p.id !== 'treeRoot'){
-        if(p.classList.contains('node')){
-          p.classList.add('open');
-          p.classList.remove('search-hidden');
-        }
-        p = p.parentElement;
-      }
-    } else {
-      n.classList.add('search-hidden');
-    }
-  });
-});
-
-// ============= INIT =============
-renderAll();
-</script>
-<script src="highlight.js"></script>
 </body>
 </html>
