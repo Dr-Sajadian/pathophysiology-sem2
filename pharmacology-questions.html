@@ -158,6 +158,47 @@ footer.site-footer{
   .hero{padding:36px 16px 54px;}
   .hero h1{font-size:1.45rem;}
 }
+
+/* ===== افزوده‌ها: ذخیره‌سازی، آمار زنده، رنگ‌بندی شماره‌ها، دکمه‌های شناور ===== */
+.hero-stat b.good{color:#b9f0c8;}
+.hero-stat b.bad{color:#ffc4b8;}
+.controls-bar{
+  position:sticky; top:0; z-index:20; margin:22px -8px 8px; padding:10px 8px;
+  background:rgba(243,242,234,.92); backdrop-filter:blur(8px); -webkit-backdrop-filter:blur(8px);
+  border-bottom:1px solid var(--line);
+}
+.live-stats{display:flex; gap:8px; flex-wrap:wrap; width:100%; align-items:center;}
+.chip{font-size:.8rem; padding:4px 11px; border-radius:999px; background:var(--bg-alt); color:var(--ink); white-space:nowrap;}
+.chip b{font-weight:700;}
+.chip.good{background:var(--good-bg); color:#2c6b43;}
+.chip.bad{background:var(--bad-bg); color:#9b3622;}
+.chip.pct{background:var(--teal-deep); color:#fff;}
+.controls-row{display:flex; gap:12px; align-items:center; width:100%;}
+.retry-btn{display:inline-flex !important; align-items:center; gap:6px;}
+.retry-btn svg{width:15px; height:15px;}
+
+.toc-link.correct{background:var(--good); color:#fff; font-weight:700;}
+.toc-link.wrong{background:var(--bad); color:#fff; font-weight:700;}
+.toc-count .mini-good{color:var(--good); font-weight:700;}
+.toc-count .mini-bad{color:var(--bad); font-weight:700;}
+.card.is-correct .qnum{color:var(--good);}
+.card.is-wrong .qnum{color:var(--bad);}
+.card.is-correct{border-color:var(--good);}
+.card.is-wrong{border-color:var(--bad);}
+
+.fab-group{position:fixed; left:16px; bottom:18px; display:flex; flex-direction:column; gap:10px; z-index:50;}
+.fab{
+  width:46px; height:46px; border-radius:50%; border:none; cursor:pointer;
+  display:flex; align-items:center; justify-content:center;
+  background:var(--teal-deep); color:#fff; box-shadow:0 6px 16px rgba(35,50,44,.28);
+  transition:transform .15s, background .15s;
+}
+.fab:hover{background:var(--teal); transform:translateY(-2px);}
+.fab svg{width:21px; height:21px;}
+.fab.retry{background:var(--amber);}
+.fab.retry:hover{background:#a8642c;}
+.fab.top{opacity:0; pointer-events:none; transition:opacity .25s, transform .15s, background .15s;}
+.fab.top.show{opacity:1; pointer-events:auto;}
 </style>
 </head>
 <body>
@@ -171,7 +212,9 @@ footer.site-footer{
       <div class="hero-stat"><b>162</b><span>سؤال</span></div>
       <div class="hero-stat"><b>7</b><span>بخش/آزمون</span></div>
       <div class="hero-stat"><b id="stat-answered">۰</b><span>پاسخ داده‌شده</span></div>
-      <div class="hero-stat"><b id="stat-score">۰</b><span>پاسخ صحیح</span></div>
+      <div class="hero-stat"><b id="stat-score" class="good">۰</b><span>پاسخ صحیح</span></div>
+      <div class="hero-stat"><b id="stat-wrong" class="bad">۰</b><span>پاسخ غلط</span></div>
+      <div class="hero-stat"><b id="stat-pct">۰٪</b><span>درصد درستی</span></div>
     </div>
   </div>
 </div>
@@ -180,45 +223,53 @@ footer.site-footer{
   <nav class="toc">
     
     <details class="toc-section">
-      <summary>آزمون رسمی فارماکولوژی غدد <span class="toc-count">29 سؤال</span></summary>
+      <summary>آزمون رسمی فارماکولوژی غدد <span class="toc-count" data-ids="q0,q1,q2,q3,q4,q5,q6,q7,q8,q9,q10,q11,q12,q13,q14,q15,q16,q17,q18,q19,q20,q21,q22,q23,q24,q25,q26,q27,q28">29 سؤال</span></summary>
       <div class="toc-links"><a href="#q0" class="toc-link">1</a><a href="#q1" class="toc-link">2</a><a href="#q2" class="toc-link">3</a><a href="#q3" class="toc-link">4</a><a href="#q4" class="toc-link">5</a><a href="#q5" class="toc-link">6</a><a href="#q6" class="toc-link">7</a><a href="#q7" class="toc-link">8</a><a href="#q8" class="toc-link">9</a><a href="#q9" class="toc-link">10</a><a href="#q10" class="toc-link">11</a><a href="#q11" class="toc-link">12</a><a href="#q12" class="toc-link">13</a><a href="#q13" class="toc-link">14</a><a href="#q14" class="toc-link">15</a><a href="#q15" class="toc-link">16</a><a href="#q16" class="toc-link">17</a><a href="#q17" class="toc-link">18</a><a href="#q18" class="toc-link">19</a><a href="#q19" class="toc-link">20</a><a href="#q20" class="toc-link">21</a><a href="#q21" class="toc-link">22</a><a href="#q22" class="toc-link">23</a><a href="#q23" class="toc-link">24</a><a href="#q24" class="toc-link">25</a><a href="#q25" class="toc-link">26</a><a href="#q26" class="toc-link">27</a><a href="#q27" class="toc-link">28</a><a href="#q28" class="toc-link">29</a></div>
     </details>
 
     <details class="toc-section">
-      <summary>آزمون فارماکولوژی آندوکرین <span class="toc-count">23 سؤال</span></summary>
+      <summary>آزمون فارماکولوژی آندوکرین <span class="toc-count" data-ids="q29,q30,q31,q32,q33,q34,q35,q36,q37,q38,q39,q40,q41,q42,q43,q44,q45,q46,q47,q48,q49,q50,q51">23 سؤال</span></summary>
       <div class="toc-links"><a href="#q29" class="toc-link">30</a><a href="#q30" class="toc-link">31</a><a href="#q31" class="toc-link">32</a><a href="#q32" class="toc-link">33</a><a href="#q33" class="toc-link">34</a><a href="#q34" class="toc-link">35</a><a href="#q35" class="toc-link">36</a><a href="#q36" class="toc-link">37</a><a href="#q37" class="toc-link">38</a><a href="#q38" class="toc-link">39</a><a href="#q39" class="toc-link">40</a><a href="#q40" class="toc-link">41</a><a href="#q41" class="toc-link">42</a><a href="#q42" class="toc-link">43</a><a href="#q43" class="toc-link">44</a><a href="#q44" class="toc-link">45</a><a href="#q45" class="toc-link">46</a><a href="#q46" class="toc-link">47</a><a href="#q47" class="toc-link">48</a><a href="#q48" class="toc-link">49</a><a href="#q49" class="toc-link">50</a><a href="#q50" class="toc-link">51</a><a href="#q51" class="toc-link">52</a></div>
     </details>
 
     <details class="toc-section">
-      <summary>آزمون فارما غدد – دکتر صابری <span class="toc-count">25 سؤال</span></summary>
+      <summary>آزمون فارما غدد – دکتر صابری <span class="toc-count" data-ids="q52,q53,q54,q55,q56,q57,q58,q59,q60,q61,q62,q63,q64,q65,q66,q67,q68,q69,q70,q71,q72,q73,q74,q75,q76">25 سؤال</span></summary>
       <div class="toc-links"><a href="#q52" class="toc-link">53</a><a href="#q53" class="toc-link">54</a><a href="#q54" class="toc-link">55</a><a href="#q55" class="toc-link">56</a><a href="#q56" class="toc-link">57</a><a href="#q57" class="toc-link">58</a><a href="#q58" class="toc-link">59</a><a href="#q59" class="toc-link">60</a><a href="#q60" class="toc-link">61</a><a href="#q61" class="toc-link">62</a><a href="#q62" class="toc-link">63</a><a href="#q63" class="toc-link">64</a><a href="#q64" class="toc-link">65</a><a href="#q65" class="toc-link">66</a><a href="#q66" class="toc-link">67</a><a href="#q67" class="toc-link">68</a><a href="#q68" class="toc-link">69</a><a href="#q69" class="toc-link">70</a><a href="#q70" class="toc-link">71</a><a href="#q71" class="toc-link">72</a><a href="#q72" class="toc-link">73</a><a href="#q73" class="toc-link">74</a><a href="#q74" class="toc-link">75</a><a href="#q75" class="toc-link">76</a><a href="#q76" class="toc-link">77</a></div>
     </details>
 
     <details class="toc-section">
-      <summary>مجموعهٔ سؤالات دست‌نویس <span class="toc-count">15 سؤال</span></summary>
+      <summary>مجموعهٔ سؤالات دست‌نویس <span class="toc-count" data-ids="q77,q78,q79,q80,q81,q82,q83,q84,q85,q86,q87,q88,q89,q90,q91">15 سؤال</span></summary>
       <div class="toc-links"><a href="#q77" class="toc-link">78</a><a href="#q78" class="toc-link">79</a><a href="#q79" class="toc-link">80</a><a href="#q80" class="toc-link">81</a><a href="#q81" class="toc-link">82</a><a href="#q82" class="toc-link">83</a><a href="#q83" class="toc-link">84</a><a href="#q84" class="toc-link">85</a><a href="#q85" class="toc-link">86</a><a href="#q86" class="toc-link">87</a><a href="#q87" class="toc-link">88</a><a href="#q88" class="toc-link">89</a><a href="#q89" class="toc-link">90</a><a href="#q90" class="toc-link">91</a><a href="#q91" class="toc-link">92</a></div>
     </details>
 
     <details class="toc-section">
-      <summary>آزمون فارما غدد ۱۴۰۲ <span class="toc-count">10 سؤال</span></summary>
+      <summary>آزمون فارما غدد ۱۴۰۲ <span class="toc-count" data-ids="q92,q93,q94,q95,q96,q97,q98,q99,q100,q101">10 سؤال</span></summary>
       <div class="toc-links"><a href="#q92" class="toc-link">93</a><a href="#q93" class="toc-link">94</a><a href="#q94" class="toc-link">95</a><a href="#q95" class="toc-link">96</a><a href="#q96" class="toc-link">97</a><a href="#q97" class="toc-link">98</a><a href="#q98" class="toc-link">99</a><a href="#q99" class="toc-link">100</a><a href="#q100" class="toc-link">101</a><a href="#q101" class="toc-link">102</a></div>
     </details>
 
     <details class="toc-section">
-      <summary>مجموعهٔ سؤالات پراکنده <span class="toc-count">44 سؤال</span></summary>
+      <summary>مجموعهٔ سؤالات پراکنده <span class="toc-count" data-ids="q102,q103,q104,q105,q106,q107,q108,q109,q110,q111,q112,q113,q114,q115,q116,q117,q118,q119,q120,q121,q122,q123,q124,q125,q126,q127,q128,q129,q130,q131,q132,q133,q134,q135,q136,q137,q138,q139,q140,q141,q142,q143,q144,q145">44 سؤال</span></summary>
       <div class="toc-links"><a href="#q102" class="toc-link">103</a><a href="#q103" class="toc-link">104</a><a href="#q104" class="toc-link">105</a><a href="#q105" class="toc-link">106</a><a href="#q106" class="toc-link">107</a><a href="#q107" class="toc-link">108</a><a href="#q108" class="toc-link">109</a><a href="#q109" class="toc-link">110</a><a href="#q110" class="toc-link">111</a><a href="#q111" class="toc-link">112</a><a href="#q112" class="toc-link">113</a><a href="#q113" class="toc-link">114</a><a href="#q114" class="toc-link">115</a><a href="#q115" class="toc-link">116</a><a href="#q116" class="toc-link">117</a><a href="#q117" class="toc-link">118</a><a href="#q118" class="toc-link">119</a><a href="#q119" class="toc-link">120</a><a href="#q120" class="toc-link">121</a><a href="#q121" class="toc-link">122</a><a href="#q122" class="toc-link">123</a><a href="#q123" class="toc-link">124</a><a href="#q124" class="toc-link">125</a><a href="#q125" class="toc-link">126</a><a href="#q126" class="toc-link">127</a><a href="#q127" class="toc-link">128</a><a href="#q128" class="toc-link">129</a><a href="#q129" class="toc-link">130</a><a href="#q130" class="toc-link">131</a><a href="#q131" class="toc-link">132</a><a href="#q132" class="toc-link">133</a><a href="#q133" class="toc-link">134</a><a href="#q134" class="toc-link">135</a><a href="#q135" class="toc-link">136</a><a href="#q136" class="toc-link">137</a><a href="#q137" class="toc-link">138</a><a href="#q138" class="toc-link">139</a><a href="#q139" class="toc-link">140</a><a href="#q140" class="toc-link">141</a><a href="#q141" class="toc-link">142</a><a href="#q142" class="toc-link">143</a><a href="#q143" class="toc-link">144</a><a href="#q144" class="toc-link">145</a><a href="#q145" class="toc-link">146</a></div>
     </details>
 
     <details class="toc-section">
-      <summary>آزمون فارما غدد – مهر ۱۴۰۳ <span class="toc-count">16 سؤال</span></summary>
+      <summary>آزمون فارما غدد – مهر ۱۴۰۳ <span class="toc-count" data-ids="q146,q147,q148,q149,q150,q151,q152,q153,q154,q155,q156,q157,q158,q159,q160,q161">16 سؤال</span></summary>
       <div class="toc-links"><a href="#q146" class="toc-link">147</a><a href="#q147" class="toc-link">148</a><a href="#q148" class="toc-link">149</a><a href="#q149" class="toc-link">150</a><a href="#q150" class="toc-link">151</a><a href="#q151" class="toc-link">152</a><a href="#q152" class="toc-link">153</a><a href="#q153" class="toc-link">154</a><a href="#q154" class="toc-link">155</a><a href="#q155" class="toc-link">156</a><a href="#q156" class="toc-link">157</a><a href="#q157" class="toc-link">158</a><a href="#q158" class="toc-link">159</a><a href="#q159" class="toc-link">160</a><a href="#q160" class="toc-link">161</a><a href="#q161" class="toc-link">162</a></div>
     </details>
   </nav>
 
-  <div class="controls-bar">
-    <div class="progress-track"><div class="progress-fill" id="progress-fill"></div></div>
-    <span class="score-chip" id="score-chip">۰ از 162 پاسخ داده شد</span>
-    <button class="retry-btn" id="retry-btn">تلاش مجدد آزمون</button>
+  <div class="controls-bar" id="controls-bar">
+    <div class="live-stats">
+      <span class="chip">پاسخ‌داده‌شده: <b id="chip-answered">۰</b> از <b>162</b></span>
+      <span class="chip good">✔ درست: <b id="chip-correct">۰</b></span>
+      <span class="chip bad">✘ نادرست: <b id="chip-wrong">۰</b></span>
+      <span class="chip pct">درصد درستی: <b id="chip-pct">۰٪</b></span>
+    </div>
+    <div class="controls-row">
+      <div class="progress-track"><div class="progress-fill" id="progress-fill"></div></div>
+      <span class="score-chip" id="score-chip">۰٪ پیشرفت</span>
+      <button class="retry-btn" id="retry-btn" title="آزمون مجدد"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 3-6.7"/><path d="M3 4v5h5"/></svg>آزمون مجدد</button>
+    </div>
   </div>
 
   <div class="group-divider" id="grp0"><h2>آزمون رسمی فارماکولوژی غدد</h2><p class="group-note">آزمون رسمی فارماکولوژی غدد (۲۹ سؤال، دانشگاه علوم پزشکی بقیهالله، با پاسخنامه)</p></div>
@@ -6710,6 +6761,11 @@ footer.site-footer{
     </article>
 </div>
 
+<div class="fab-group">
+  <button class="fab retry" id="fab-retry" title="آزمون مجدد" aria-label="آزمون مجدد"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 3-6.7"/><path d="M3 4v5h5"/></svg></button>
+  <button class="fab top" id="fab-top" title="بازگشت به بالای صفحه" aria-label="بازگشت به بالای صفحه"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M12 19V5"/><path d="M5 12l7-7 7 7"/></svg></button>
+</div>
+
 <footer class="site-footer">
   منبع سؤالات: بانک سؤالات دانشجویی درس فارماکولوژی غدد درون‌ریز (چند دورهٔ آزمون) — پاسخ‌ها و تحلیل‌ها بر اساس جزوهٔ درسی و Katzung, Basic &amp; Clinical Pharmacology تنظیم شده است.
 </footer>
@@ -6717,61 +6773,127 @@ footer.site-footer{
 <script>
 const RIGHT_INDEX = {"q0": 0, "q1": 2, "q2": 2, "q3": 0, "q4": 1, "q5": 1, "q6": 0, "q7": 0, "q8": 3, "q9": 2, "q10": 0, "q11": 1, "q12": 1, "q13": 3, "q14": 1, "q15": 0, "q16": 1, "q17": 3, "q18": 3, "q19": 2, "q20": 0, "q21": 0, "q22": 0, "q23": 0, "q24": 3, "q25": 0, "q26": 3, "q27": 3, "q28": 1, "q29": 2, "q30": 3, "q31": 0, "q32": 0, "q33": 3, "q34": 3, "q35": 2, "q36": 2, "q37": 3, "q38": 2, "q39": 1, "q40": 0, "q41": 2, "q42": 2, "q43": 0, "q44": 2, "q45": 1, "q46": 2, "q47": 3, "q48": 2, "q49": 1, "q50": 3, "q51": 1, "q52": 2, "q53": 3, "q54": 1, "q55": 2, "q56": 3, "q57": 2, "q58": 1, "q59": 2, "q60": 3, "q61": 2, "q62": 1, "q63": 1, "q64": 3, "q65": 1, "q66": 1, "q67": 1, "q68": 0, "q69": 2, "q70": 1, "q71": 0, "q72": 1, "q73": 3, "q74": 1, "q75": 3, "q76": 0, "q77": 0, "q78": 0, "q79": 0, "q80": 1, "q81": 0, "q82": 0, "q83": 0, "q84": 0, "q85": 0, "q86": 0, "q87": 0, "q88": 0, "q89": 0, "q90": 0, "q91": 1, "q92": 3, "q93": 0, "q94": 0, "q95": 0, "q96": 0, "q97": 1, "q98": 0, "q99": 3, "q100": 2, "q101": 0, "q102": 2, "q103": 1, "q104": 2, "q105": 3, "q106": 2, "q107": 0, "q108": 1, "q109": 0, "q110": 3, "q111": 1, "q112": 1, "q113": 2, "q114": 0, "q115": 3, "q116": 0, "q117": 2, "q118": 0, "q119": 1, "q120": 3, "q121": 0, "q122": 2, "q123": 2, "q124": 3, "q125": 2, "q126": 2, "q127": 3, "q128": 1, "q129": 1, "q130": 2, "q131": 2, "q132": 0, "q133": 2, "q134": 0, "q135": 3, "q136": 2, "q137": 3, "q138": 3, "q139": 1, "q140": 1, "q141": 1, "q142": 2, "q143": 2, "q144": 1, "q145": 2, "q146": 1, "q147": 2, "q148": 2, "q149": 0, "q150": 3, "q151": 1, "q152": 0, "q153": 0, "q154": 0, "q155": 1, "q156": 0, "q157": 1, "q158": 1, "q159": 0, "q160": 3, "q161": 0};
 const TOTAL = 162;
-let answered = 0;
-let correctCount = 0;
+const STORE_KEY = 'pharma-endocrine-quiz-v1';
+let answers = {};   // { q0: chosenIndex, ... }
 
 function toFa(n){
   const d = ['۰','۱','۲','۳','۴','۵','۶','۷','۸','۹'];
   return String(n).split('').map(c => /[0-9]/.test(c) ? d[c] : c).join('');
 }
 
-function updateStats(){
-  document.getElementById('stat-answered').textContent = toFa(answered);
-  document.getElementById('stat-score').textContent = toFa(correctCount);
-  document.getElementById('score-chip').textContent = toFa(answered) + ' از ' + toFa(TOTAL) + ' پاسخ داده شد' + (answered>0 ? ' — ' + toFa(correctCount) + ' درست' : '');
-  document.getElementById('progress-fill').style.width = (answered/TOTAL*100) + '%';
-  document.getElementById('retry-btn').classList.toggle('show', answered === TOTAL);
+function loadAnswers(){
+  try{
+    const raw = localStorage.getItem(STORE_KEY);
+    if(raw){ const o = JSON.parse(raw); if(o && typeof o === 'object') answers = o; }
+  }catch(e){ answers = {}; }
+}
+function saveAnswers(){
+  try{ localStorage.setItem(STORE_KEY, JSON.stringify(answers)); }catch(e){}
 }
 
-document.querySelectorAll('.card').forEach(function(card){
+function isCorrect(qid){ return answers[qid] === RIGHT_INDEX[qid]; }
+
+function updateStats(){
+  const ids = Object.keys(answers).filter(k => k in RIGHT_INDEX);
+  const answered = ids.length;
+  const correct = ids.filter(isCorrect).length;
+  const wrong = answered - correct;
+  const pct = answered ? Math.round(correct/answered*100) : 0;
+  const prog = Math.round(answered/TOTAL*100);
+
+  const set = (id, v) => { const el = document.getElementById(id); if(el) el.textContent = v; };
+  set('stat-answered', toFa(answered));
+  set('stat-score', toFa(correct));
+  set('stat-wrong', toFa(wrong));
+  set('stat-pct', toFa(pct) + '٪');
+  set('chip-answered', toFa(answered));
+  set('chip-correct', toFa(correct));
+  set('chip-wrong', toFa(wrong));
+  set('chip-pct', toFa(pct) + '٪');
+  set('score-chip', toFa(prog) + '٪ پیشرفت');
+  document.getElementById('progress-fill').style.width = prog + '%';
+
+  // per-section mini counters
+  document.querySelectorAll('.toc-count[data-ids]').forEach(function(span){
+    const sIds = span.dataset.ids.split(',');
+    if(!span.dataset.base) span.dataset.base = span.textContent;
+    const a = sIds.filter(id => id in answers);
+    const c = a.filter(isCorrect).length;
+    const w = a.length - c;
+    span.innerHTML = span.dataset.base + (a.length ? ' — <span class="mini-good">' + toFa(c) + ' ✔</span> <span class="mini-bad">' + toFa(w) + ' ✘</span>' : '');
+  });
+}
+
+function markCard(card, chosen){
+  const qid = card.id;
   const opts = card.querySelectorAll('.opt');
   const exps = card.querySelectorAll('.opt-exp');
   const summaryBox = card.querySelector('.summary-box');
-  opts.forEach(function(btn, idx){
+  const right = RIGHT_INDEX[qid];
+  card.dataset.answered = '1';
+  opts.forEach(function(b, i){
+    b.disabled = true;
+    if(i === right){ b.classList.add('correct'); }
+    else if(i === chosen){ b.classList.add('wrong'); }
+    else { b.classList.add('dim'); }
+    exps[i].classList.add('show');
+  });
+  summaryBox.hidden = false;
+  const ok = chosen === right;
+  card.classList.add(ok ? 'is-correct' : 'is-wrong');
+  const link = document.querySelector('.toc-link[href="#' + qid + '"]');
+  if(link){ link.classList.remove('correct','wrong'); link.classList.add(ok ? 'correct' : 'wrong'); }
+}
+
+function resetCard(card){
+  delete card.dataset.answered;
+  card.classList.remove('is-correct','is-wrong');
+  card.querySelectorAll('.opt').forEach(function(b){
+    b.disabled = false;
+    b.classList.remove('correct','wrong','dim');
+  });
+  card.querySelectorAll('.opt-exp').forEach(function(e){ e.classList.remove('show'); });
+  card.querySelector('.summary-box').hidden = true;
+}
+
+document.querySelectorAll('.card').forEach(function(card){
+  card.querySelectorAll('.opt').forEach(function(btn, idx){
     btn.addEventListener('click', function(){
       if(card.dataset.answered) return;
-      card.dataset.answered = '1';
-      answered++;
-      const isRight = btn.dataset.right === '1';
-      if(isRight) correctCount++;
-      opts.forEach(function(b, i){
-        b.disabled = true;
-        if(b.dataset.right === '1'){ b.classList.add('correct'); }
-        else if(b === btn){ b.classList.add('wrong'); }
-        else { b.classList.add('dim'); }
-        exps[i].classList.add('show');
-      });
-      summaryBox.hidden = false;
+      answers[card.id] = idx;
+      saveAnswers();
+      markCard(card, idx);
       updateStats();
     });
   });
 });
 
-document.getElementById('retry-btn').addEventListener('click', function(){
-  document.querySelectorAll('.card').forEach(function(card){
-    delete card.dataset.answered;
-    card.querySelectorAll('.opt').forEach(function(b){
-      b.disabled = false;
-      b.classList.remove('correct','wrong','dim');
-    });
-    card.querySelectorAll('.opt-exp').forEach(function(e){ e.classList.remove('show'); });
-    card.querySelector('.summary-box').hidden = true;
-  });
-  answered = 0; correctCount = 0;
+function restartQuiz(){
+  if(Object.keys(answers).length && !confirm('همهٔ پاسخ‌های ذخیره‌شده پاک شود و آزمون از ابتدا شروع شود؟')) return;
+  answers = {};
+  try{ localStorage.removeItem(STORE_KEY); }catch(e){}
+  document.querySelectorAll('.card').forEach(resetCard);
+  document.querySelectorAll('.toc-link').forEach(function(l){ l.classList.remove('correct','wrong'); });
   updateStats();
   window.scrollTo({top:0, behavior:'smooth'});
-});
+}
+document.getElementById('retry-btn').addEventListener('click', restartQuiz);
+document.getElementById('fab-retry').addEventListener('click', restartQuiz);
 
+const topBtn = document.getElementById('fab-top');
+topBtn.addEventListener('click', function(){ window.scrollTo({top:0, behavior:'smooth'}); });
+window.addEventListener('scroll', function(){
+  topBtn.classList.toggle('show', window.scrollY > 400);
+}, {passive:true});
+
+// بازیابی پاسخ‌های ذخیره‌شده
+loadAnswers();
+document.querySelectorAll('.card').forEach(function(card){
+  const chosen = answers[card.id];
+  if(typeof chosen === 'number' && card.querySelectorAll('.opt')[chosen]) markCard(card, chosen);
+  else delete answers[card.id];
+});
+saveAnswers();
 updateStats();
 </script>
 </body>
