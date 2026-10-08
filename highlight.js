@@ -1,8 +1,10 @@
-// کد قابلیت هایلایت - نسخه نهایی
-// فقط تکه انتخاب شده رو هایلایت میکنه (نه همه تکرارها)
+// کد قابلیت هایلایت - نسخه نهایی با دکمه مخفی‌سازی
 
 document.addEventListener('DOMContentLoaded', function() {
-    // ۱. ساخت نوار ابزار بالای صفحه
+    // بررسی وضعیت ذخیره شده (نمایش یا مخفی)
+    let toolbarHidden = localStorage.getItem('highlightToolbarHidden') === 'true';
+
+    // ۱. ساخت نوار ابزار
     const toolbar = document.createElement('div');
     toolbar.id = 'highlight-toolbar';
     toolbar.innerHTML = `
@@ -13,13 +15,48 @@ document.addEventListener('DOMContentLoaded', function() {
         <button class="color-btn" data-color="#90e0ef" style="background-color: #90e0ef;" title="آبی آسمانی"></button>
         <button class="color-btn" data-color="#ffb74d" style="background-color: #ffb74d;" title="نارنجی روشن"></button>
         <button id="clear-highlights" style="margin-right: auto; background: #ef4444; color: white; border: none; border-radius: 4px; padding: 4px 8px; font-size: 11px; cursor: pointer;">پاک کردن همه</button>
+        <button id="toggle-toolbar" title="مخفی کردن نوار ابزار" style="background: #64748b; color: white; border: none; border-radius: 4px; padding: 4px 10px; font-size: 13px; cursor: pointer; font-weight: bold;">✕</button>
     `;
     document.body.appendChild(toolbar);
+
+    // ۲. ساخت دکمه کوچیک شناور برای نمایش دوباره (وقتی نوار مخفیه)
+    const showBtn = document.createElement('button');
+    showBtn.id = 'show-toolbar-btn';
+    showBtn.innerHTML = '🖍️';
+    showBtn.title = 'نمایش نوار ابزار هایلایت';
+    document.body.appendChild(showBtn);
+
+    // اعمال وضعیت اولیه
+    function applyToolbarState() {
+        if (toolbarHidden) {
+            toolbar.classList.add('hidden');
+            showBtn.classList.add('visible');
+        } else {
+            toolbar.classList.remove('hidden');
+            showBtn.classList.remove('visible');
+        }
+    }
+    applyToolbarState();
+
+    // ۳. دکمه مخفی کردن
+    document.getElementById('toggle-toolbar').addEventListener('click', function(e) {
+        e.stopPropagation();
+        toolbarHidden = true;
+        localStorage.setItem('highlightToolbarHidden', 'true');
+        applyToolbarState();
+    });
+
+    // ۴. دکمه نمایش دوباره
+    showBtn.addEventListener('click', function() {
+        toolbarHidden = false;
+        localStorage.setItem('highlightToolbarHidden', 'false');
+        applyToolbarState();
+    });
 
     let activeColor = '#fde047';
     let savedHighlights = JSON.parse(localStorage.getItem('myHighlights_v3')) || [];
 
-    // ۲. دکمه‌های رنگ
+    // ۵. دکمه‌های رنگ
     document.querySelectorAll('.color-btn').forEach(btn => {
         btn.addEventListener('click', function() {
             activeColor = this.getAttribute('data-color');
@@ -28,12 +65,12 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 
-    // ۳. بازیابی هایلایت‌های قبلی
+    // ۶. بازیابی هایلایت‌های قبلی
     savedHighlights.forEach(item => {
         restoreHighlight(item.text, item.color, item.occurrence);
     });
 
-    // ۴. هایلایت کردن متن با انتخاب کاربر
+    // ۷. هایلایت کردن متن با انتخاب کاربر
     document.addEventListener('mouseup', handleSelection);
     document.addEventListener('touchend', handleSelection);
 
@@ -42,12 +79,12 @@ document.addEventListener('DOMContentLoaded', function() {
         const selectedText = selection.toString().trim();
 
         if (selectedText.length > 0) {
-            // اگه داخل نوار ابزار بود، رد کن
             if (selection.anchorNode && selection.anchorNode.parentNode.closest('#highlight-toolbar')) {
                 return;
             }
-            
-            // اگه داخل یک هایلایت قبلی بود، رد کن
+            if (selection.anchorNode && selection.anchorNode.parentNode.closest('#show-toolbar-btn')) {
+                return;
+            }
             if (selection.anchorNode && selection.anchorNode.parentNode.classList.contains('my-highlight')) {
                 selection.removeAllRanges();
                 return;
@@ -56,21 +93,18 @@ document.addEventListener('DOMContentLoaded', function() {
             const range = selection.getRangeAt(0);
             const occurrence = getOccurrenceNumber(selectedText, range);
 
-            // ذخیره در حافظه
             savedHighlights = savedHighlights.filter(h => 
                 !(h.text === selectedText && h.occurrence === occurrence)
             );
             savedHighlights.push({ text: selectedText, color: activeColor, occurrence: occurrence });
             localStorage.setItem('myHighlights_v3', JSON.stringify(savedHighlights));
 
-            // اعمال هایلایت
             wrapSelection(selection, activeColor);
-            
             selection.removeAllRanges();
         }
     }
 
-    // ۵. تابع هایلایت کردن انتخاب فعلی
+    // ۸. تابع هایلایت کردن انتخاب فعلی
     function wrapSelection(selection, color) {
         try {
             const range = selection.getRangeAt(0);
@@ -91,7 +125,7 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
 
-    // ۶. محاسبه شماره تکرار انتخاب فعلی
+    // ۹. محاسبه شماره تکرار انتخاب فعلی
     function getOccurrenceNumber(searchText, range) {
         const walker = document.createTreeWalker(
             document.body,
@@ -99,6 +133,7 @@ document.addEventListener('DOMContentLoaded', function() {
             {
                 acceptNode: function(node) {
                     if (node.parentNode.closest('#highlight-toolbar') || 
+                        node.parentNode.closest('#show-toolbar-btn') ||
                         node.parentNode.tagName === 'SCRIPT' || 
                         node.parentNode.tagName === 'STYLE' ||
                         node.parentNode.closest('.my-highlight')) {
@@ -133,7 +168,7 @@ document.addEventListener('DOMContentLoaded', function() {
         return count + 1;
     }
 
-    // ۷. بازیابی هایلایت قبلی با شماره تکرار مشخص
+    // ۱۰. بازیابی هایلایت قبلی
     function restoreHighlight(searchText, color, occurrence) {
         const walker = document.createTreeWalker(
             document.body,
@@ -141,6 +176,7 @@ document.addEventListener('DOMContentLoaded', function() {
             {
                 acceptNode: function(node) {
                     if (node.parentNode.closest('#highlight-toolbar') || 
+                        node.parentNode.closest('#show-toolbar-btn') ||
                         node.parentNode.tagName === 'SCRIPT' || 
                         node.parentNode.tagName === 'STYLE') {
                         return NodeFilter.FILTER_REJECT;
@@ -188,7 +224,7 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
 
-    // ۸. اضافه کردن قابلیت حذف تکی (نگه داشتن / کلیک راست)
+    // ۱۱. حذف تکی
     function attachRemoveHandler(element) {
         let pressTimer = null;
 
@@ -212,7 +248,6 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 
-    // ۹. حذف یک هایلایت خاص
     function removeSingleHighlight(element) {
         const textToRemove = element.textContent;
         const currentColor = element.style.backgroundColor;
@@ -227,7 +262,6 @@ document.addEventListener('DOMContentLoaded', function() {
         const colorName = colorNames[currentColor] || 'این رنگ';
 
         if (confirm(`آیا می‌خواهید هایلایت ${colorName} متن «${textToRemove}» را پاک کنید؟`)) {
-            // حذف از حافظه - اولین موردی که با این متن و رنگ مطابقت داره
             let removed = false;
             savedHighlights = savedHighlights.filter(item => {
                 if (!removed && item.text === textToRemove && hexToRgb(item.color) === currentColor) {
@@ -238,7 +272,6 @@ document.addEventListener('DOMContentLoaded', function() {
             });
             localStorage.setItem('myHighlights_v3', JSON.stringify(savedHighlights));
 
-            // حذف از DOM
             const parent = element.parentNode;
             const textNode = document.createTextNode(textToRemove);
             parent.replaceChild(textNode, element);
@@ -246,7 +279,6 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
 
-    // ۱۰. تبدیل رنگ HEX به RGB برای مقایسه
     function hexToRgb(hex) {
         const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
         return result ? 
@@ -254,7 +286,7 @@ document.addEventListener('DOMContentLoaded', function() {
             null;
     }
 
-    // ۱۱. دکمه پاک کردن همه
+    // ۱۲. پاک کردن همه
     document.getElementById('clear-highlights').addEventListener('click', function() {
         if (confirm('آیا مطمئن هستید که می‌خواهید همه هایلایت‌ها را پاک کنید؟')) {
             localStorage.removeItem('myHighlights_v3');
@@ -263,7 +295,7 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 });
 
-// ۱۲. استایل‌های نوار ابزار + قوانین پرینت
+// ۱۳. استایل‌های نوار ابزار + دکمه نمایش
 const style = document.createElement('style');
 style.innerHTML = `
     #highlight-toolbar {
@@ -282,6 +314,12 @@ style.innerHTML = `
         box-shadow: 0 2px 10px rgba(0,0,0,0.1);
         font-family: Vazirmatn, Tahoma, sans-serif;
         box-sizing: border-box;
+        transition: transform 0.3s ease, opacity 0.3s ease;
+    }
+    #highlight-toolbar.hidden {
+        transform: translateY(-100%);
+        opacity: 0;
+        pointer-events: none;
     }
     .color-btn {
         width: 24px;
@@ -306,9 +344,37 @@ style.innerHTML = `
         padding-top: 50px !important;
     }
 
-    /* ✅ قوانین مخصوص پرینت */
+    /* دکمه شناور برای نمایش دوباره نوار ابزار */
+    #show-toolbar-btn {
+        position: fixed;
+        top: 15px;
+        left: 15px;
+        width: 42px;
+        height: 42px;
+        border-radius: 50%;
+        background: linear-gradient(135deg, #38bdf8, #0284c7);
+        color: white;
+        border: 2px solid white;
+        box-shadow: 0 4px 15px rgba(2, 132, 199, 0.4);
+        font-size: 20px;
+        cursor: pointer;
+        z-index: 99998;
+        display: none;
+        align-items: center;
+        justify-content: center;
+        transition: transform 0.2s, box-shadow 0.2s;
+    }
+    #show-toolbar-btn.visible {
+        display: flex;
+    }
+    #show-toolbar-btn:hover {
+        transform: scale(1.1);
+        box-shadow: 0 6px 20px rgba(2, 132, 199, 0.6);
+    }
+
+    /* قوانین مخصوص پرینت */
     @media print {
-        #highlight-toolbar {
+        #highlight-toolbar, #show-toolbar-btn {
             display: none !important;
         }
         .my-highlight {
@@ -325,133 +391,3 @@ style.innerHTML = `
     }
 `;
 document.head.appendChild(style);
-
-// ========================================
-// 📌 قابلیت نمایش لودینگ هنگام کلیک روی لینک‌ها
-// ========================================
-(function() {
-    // ساخت المان لودینگ
-    const loader = document.createElement('div');
-    loader.id = 'page-loader';
-    loader.innerHTML = `
-        <div class="loader-content">
-            <div class="loader-dots">
-                <span></span>
-                <span></span>
-                <span></span>
-            </div>
-            <p class="loader-text">در حال بارگذاری...</p>
-        </div>
-    `;
-    document.body.appendChild(loader);
-
-    // استایل لودینگ
-    const loaderStyle = document.createElement('style');
-    loaderStyle.innerHTML = `
-        #page-loader {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(224, 242, 254, 0.85);
-            backdrop-filter: blur(8px);
-            -webkit-backdrop-filter: blur(8px);
-            display: none;
-            justify-content: center;
-            align-items: center;
-            z-index: 999999;
-            opacity: 0;
-            transition: opacity 0.3s;
-        }
-        #page-loader.active {
-            display: flex;
-            opacity: 1;
-        }
-        .loader-content {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 20px;
-        }
-        .loader-dots {
-            display: flex;
-            gap: 12px;
-        }
-        .loader-dots span {
-            width: 18px;
-            height: 18px;
-            border-radius: 50%;
-            background: linear-gradient(135deg, #38bdf8, #0284c7);
-            box-shadow: 0 4px 10px rgba(2, 132, 199, 0.4);
-            animation: loader-bounce 1.2s infinite ease-in-out;
-        }
-        .loader-dots span:nth-child(1) {
-            animation-delay: -0.24s;
-        }
-        .loader-dots span:nth-child(2) {
-            animation-delay: -0.12s;
-        }
-        .loader-dots span:nth-child(3) {
-            animation-delay: 0s;
-        }
-        @keyframes loader-bounce {
-            0%, 80%, 100% {
-                transform: scale(0.6);
-                opacity: 0.5;
-            }
-            40% {
-                transform: scale(1);
-                opacity: 1;
-            }
-        }
-        .loader-text {
-            font-family: Vazirmatn, Tahoma, sans-serif;
-            color: #0c4a6e;
-            font-size: 14px;
-            font-weight: bold;
-            margin: 0;
-        }
-
-        /* مخصوص پرینت */
-        @media print {
-            #page-loader {
-                display: none !important;
-            }
-        }
-    `;
-    document.head.appendChild(loaderStyle);
-
-    // شنونده رویداد کلیک روی لینک‌ها
-    document.addEventListener('click', function(e) {
-        // پیدا کردن نزدیک‌ترین لینک
-        const link = e.target.closest('a');
-        
-        if (!link) return;
-        
-        const href = link.getAttribute('href');
-        
-        // نادیده گرفتن لینک‌های خاص
-        if (!href || 
-            href.startsWith('#') || 
-            href.startsWith('javascript:') || 
-            href.startsWith('mailto:') ||
-            href.startsWith('tel:') ||
-            link.target === '_blank') {
-            return;
-        }
-
-        // نمایش لودینگ
-        loader.classList.add('active');
-        
-        // اگه بعد از ۱۰ ثانیه صفحه لود نشد، لودینگ رو مخفی کن (برای جلوگیری از گیر کردن)
-        setTimeout(() => {
-            loader.classList.remove('active');
-        }, 10000);
-    });
-
-    // اگه کاربر با دکمه برگشت مرورگر برگشت، لودینگ رو مخفی کن
-    window.addEventListener('pageshow', function() {
-        loader.classList.remove('active');
-    });
-})();
