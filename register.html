@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ثبت‌نام</title>
+    <link href="https://cdn.jsdelivr.net/gh/rastikerdar/vazirmatn@v33.003/Vazirmatn-font-face.css" rel="stylesheet" type="text/css" />
+    <style>
+        body {
+            background: linear-gradient(135deg, #e0f2fe 0%, #bae6fd 50%, #7dd3fc 100%);
+            font-family: Vazirmatn, Tahoma, sans-serif;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            margin: 0;
+        }
+        .form-box {
+            background: rgba(255, 255, 255, 0.5);
+            backdrop-filter: blur(15px);
+            border: 1.5px solid rgba(255, 255, 255, 0.85);
+            border-radius: 24px;
+            padding: 40px 30px;
+            max-width: 400px;
+            width: 100%;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
+        }
+        h1 { color: #0c4a6e; text-align: center; margin-bottom: 25px; font-size: 22px; }
+        input {
+            width: 100%;
+            padding: 12px 15px;
+            margin-bottom: 15px;
+            border: 1.5px solid rgba(56, 189, 248, 0.4);
+            border-radius: 12px;
+            background: rgba(255, 255, 255, 0.7);
+            font-family: Vazirmatn, sans-serif;
+            font-size: 14px;
+            box-sizing: border-box;
+        }
+        button {
+            width: 100%;
+            padding: 12px;
+            background: linear-gradient(135deg, #38bdf8, #0284c7);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-family: Vazirmatn, sans-serif;
+            font-size: 15px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        .msg { text-align: center; margin-top: 15px; font-size: 13px; }
+        .msg.error { color: #dc2626; }
+        .msg.success { color: #047857; }
+        .link { text-align: center; margin-top: 20px; font-size: 13px; color: #0c4a6e; }
+        .link a { color: #0284c7; font-weight: bold; }
+    </style>
+</head>
+<body>
+
+    <div class="form-box">
+        <h1>📝 ثبت‌نام</h1>
+        <input type="text" id="fullName" placeholder="نام و نام خانوادگی" required>
+        <input type="email" id="email" placeholder="ایمیل" required>
+        <input type="password" id="password" placeholder="رمز عبور (حداقل ۶ کاراکتر)" required>
+        <button id="registerBtn">ثبت‌نام</button>
+        <p class="msg" id="message"></p>
+        <p class="link">قبلاً ثبت‌نام کردید؟ <a href="login.html">ورود</a></p>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script>
+        // ۱. اتصال به Supabase (کلیدها رو از پنل کپی کنید)
+        const db = window.supabase.createClient(
+            'YOUR_PROJECT_URL',
+            'YOUR_ANON_KEY'
+        );
+
+        // ۲. وقتی کاربر روی دکمه ثبت‌نام کلیک کرد
+        document.getElementById('registerBtn').addEventListener('click', async () => {
+            // ۳. گرفتن مقادیر ورودی از کاربر
+            const fullName = document.getElementById('fullName').value.trim();
+            const email = document.getElementById('email').value.trim();
+            const password = document.getElementById('password').value;
+            const messageEl = document.getElementById('message');
+
+            // ۴. اعتبارسنجی ساده
+            if (!fullName || !email || !password) {
+                messageEl.textContent = 'لطفاً همه فیلدها را پر کنید';
+                messageEl.className = 'msg error';
+                return;
+            }
+            if (password.length < 6) {
+                messageEl.textContent = 'رمز عبور باید حداقل ۶ کاراکتر باشد';
+                messageEl.className = 'msg error';
+                return;
+            }
+
+            messageEl.textContent = 'در حال ثبت‌نام...';
+            messageEl.className = 'msg';
+
+            // ۵. ارسال درخواست ثبت‌نام به Supabase
+            const { data, error } = await db.auth.signUp({
+                email: email,
+                password: password,
+                options: {
+                    data: { full_name: fullName }
+                }
+            });
+
+            // ۶. بررسی نتیجه
+            if (error) {
+                messageEl.textContent = 'خطا: ' + error.message;
+                messageEl.className = 'msg error';
+            } else {
+                messageEl.textContent = '✅ ثبت‌نام موفق! لطفاً ایمیل خود را تأیید کنید.';
+                messageEl.className = 'msg success';
+            }
+        });
+    </script>
+</body>
+</html>
