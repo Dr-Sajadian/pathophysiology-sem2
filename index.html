@@ -18,7 +18,7 @@
             align-items: center;
             padding: 30px 20px;
             overflow-x: hidden;
-            position: relative; /* 👈 برای اینکه absolute نسبت به body تنظیم بشه */
+            position: relative;
         }
 
         body::before, body::after {
@@ -39,9 +39,9 @@
             bottom: -100px; left: -100px;
         }
 
-        /* ============ منوی همبرگری ============ */
+        /* ============ منوی همبرگری (شناور) ============ */
         .menu-btn {
-            position: absolute; /* 👈 تغییر از fixed به absolute */
+            position: fixed; /* 👈 برگشت به حالت شناور */
             top: 20px;
             right: 20px;
             width: 40px;
@@ -83,9 +83,9 @@
             transform: rotate(-45deg) translate(6px, -6px);
         }
 
-        /* منوی کشویی */
+        /* منوی کشویی (شناور) */
         .side-menu {
-            position: absolute; /* 👈 تغییر از fixed به absolute */
+            position: fixed; /* 👈 برگشت به حالت شناور */
             top: 70px;
             right: 20px;
             width: 220px;
@@ -163,14 +163,6 @@
             z-index: 1;
         }
 
-        .subtitle {
-            text-align: center;
-            font-size: 14px;
-            color: #0369a1;
-            margin-bottom: 35px;
-            z-index: 1;
-        }
-
         .cards-container {
             display: flex;
             flex-direction: column;
@@ -178,6 +170,7 @@
             width: 100%;
             max-width: 420px;
             z-index: 1;
+            margin-top: 30px; /* 👈 فاصله از بالای صفحه (به جای زیرعنوان حذف‌شده) */
         }
 
         .main-card {
@@ -283,7 +276,7 @@
             gap: 15px;
             margin-bottom: 10px;
             z-index: 1;
-            padding-right: 60px; /* 👈 جلوگیری از تداخل با دکمه منو در موبایل */
+            padding-right: 60px;
         }
 
         .main-header-icon {
@@ -357,8 +350,6 @@
         </div>
         <h1 class="header-title">کتابخانه دروس پزشکی</h1>
     </div>
-    
-    <p class="subtitle">یک کورس را برای مطالعه انتخاب کنید</p>
 
     <div class="cards-container">
 
