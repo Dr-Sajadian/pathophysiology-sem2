@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ورود</title>
+    <link href="https://cdn.jsdelivr.net/gh/rastikerdar/vazirmatn@v33.003/Vazirmatn-font-face.css" rel="stylesheet" type="text/css" />
+    <style>
+        body {
+            background: linear-gradient(135deg, #e0f2fe 0%, #bae6fd 50%, #7dd3fc 100%);
+            font-family: Vazirmatn, Tahoma, sans-serif;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            margin: 0;
+        }
+        .form-box {
+            background: rgba(255, 255, 255, 0.5);
+            backdrop-filter: blur(15px);
+            border: 1.5px solid rgba(255, 255, 255, 0.85);
+            border-radius: 24px;
+            padding: 40px 30px;
+            max-width: 400px;
+            width: 100%;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
+        }
+        h1 { color: #0c4a6e; text-align: center; margin-bottom: 25px; font-size: 22px; }
+        input {
+            width: 100%;
+            padding: 12px 15px;
+            margin-bottom: 15px;
+            border: 1.5px solid rgba(56, 189, 248, 0.4);
+            border-radius: 12px;
+            background: rgba(255, 255, 255, 0.7);
+            font-family: Vazirmatn, sans-serif;
+            font-size: 14px;
+            box-sizing: border-box;
+        }
+        button {
+            width: 100%;
+            padding: 12px;
+            background: linear-gradient(135deg, #38bdf8, #0284c7);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-family: Vazirmatn, sans-serif;
+            font-size: 15px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        .msg { text-align: center; margin-top: 15px; font-size: 13px; }
+        .msg.error { color: #dc2626; }
+        .msg.success { color: #047857; }
+        .link { text-align: center; margin-top: 20px; font-size: 13px; color: #0c4a6e; }
+        .link a { color: #0284c7; font-weight: bold; }
+    </style>
+</head>
+<body>
+
+    <div class="form-box">
+        <h1>🔐 ورود</h1>
+        <input type="email" id="email" placeholder="ایمیل" required>
+        <input type="password" id="password" placeholder="رمز عبور" required>
+        <button id="loginBtn">ورود</button>
+        <p class="msg" id="message"></p>
+        <p class="link">حساب ندارید؟ <a href="register.html">ثبت‌نام</a></p>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script>
+        const db = window.supabase.createClient(
+            'https://ddbcwyuoghdyrfqyvnab.supabase.co/rest/v1/',
+            'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRkYmN3eXVvZ2hkeXJmcXl2bmFiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTE2NzUyOTMsImV4cCI6MjEwNzI1MTI5M30.QID2XFnkYFs-afjAbhZ_e7QSzaBrLbDWXFRWl0BHnbo'
+        );
+
+        document.getElementById('loginBtn').addEventListener('click', async () => {
+            const email = document.getElementById('email').value.trim();
+            const password = document.getElementById('password').value;
+            const messageEl = document.getElementById('message');
+
+            if (!email || !password) {
+                messageEl.textContent = 'لطفاً ایمیل و رمز عبور را وارد کنید';
+                messageEl.className = 'msg error';
+                return;
+            }
+
+            messageEl.textContent = 'در حال ورود...';
+            messageEl.className = 'msg';
+
+            // 🔽 همون کد ورود که پرسیدید
+            const { data, error } = await db.auth.signInWithPassword({
+                email: email,
+                password: password
+            });
+
+            if (error) {
+                messageEl.textContent = 'خطا: ایمیل یا رمز عبور اشتباه است';
+                messageEl.className = 'msg error';
+            } else {
+                messageEl.textContent = '✅ ورود موفق! در حال انتقال...';
+                messageEl.className = 'msg success';
+                // انتقال به صفحه اصلی بعد از ۱ ثانیه
+                setTimeout(() => {
+                    window.location.href = 'index.html';
+                }, 1000);
+            }
+        });
+    </script>
+</body>
+</html>
