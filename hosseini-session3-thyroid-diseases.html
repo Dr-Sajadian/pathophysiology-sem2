@@ -90,4 +90,8 @@ function resetQuiz(){state.quiz={};save();document.getElementById('result').clas
 const emojis=['😍','😊','😐','😕','😡'];function vote(i){if(state.survey.voted)return;state.survey.counts[i]++;state.survey.choice=i;state.survey.voted=true;save();renderSurvey()}
 function renderSurvey(){const c=state.survey.counts,total=c.reduce((a,b)=>a+b,0);document.querySelectorAll('.emoji').forEach((b,i)=>b.classList.toggle('voted',state.survey.choice===i));document.getElementById('surveyMsg').textContent=state.survey.voted?'رأی شما ثبت شد.':'یک گزینه را انتخاب کنید.';document.getElementById('surveyResults').innerHTML=c.map((n,i)=>{const p=total?Math.round(n/total*100):0;return '<div style="margin:9px 0">'+emojis[i]+' — '+p+'٪ ('+n+')<div class="bar"><span style="width:'+p+'%"></span></div></div>'}).join('')}
 setTheme(state.theme);document.documentElement.style.setProperty('--fs',state.fs);renderQuiz();restoreHighlights();renderSurvey();if(state.all!==undefined)toggleAll(state.all);
-</script><script src="highlight.js"></script></body></html>
+</script><script src="highlight.js"></script><script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+  const db = window.supabase.createClient('https://ddbcwyuoghdyrfqyvnab.supabase.co/rest/v1/', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRkYmN3eXVvZ2hkeXJmcXl2bmFiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTE2NzUyOTMsImV4cCI6MjEwNzI1MTI5M30.QID2XFnkYFs-afjAbhZ_e7QSzaBrLbDWXFRWl0BHnbo');
+</script>
+</body></html>
