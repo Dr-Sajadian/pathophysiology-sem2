@@ -18,6 +18,7 @@
             align-items: center;
             padding: 30px 20px;
             overflow-x: hidden;
+            position: relative; /* 👈 برای اینکه absolute نسبت به body تنظیم بشه */
         }
 
         body::before, body::after {
@@ -40,11 +41,11 @@
 
         /* ============ منوی همبرگری ============ */
         .menu-btn {
-            position: fixed;
-            top: 15px;      /* 👈 تغییر: از ۲۰ به ۱۵ */
-            right: 15px;    /* 👈 تغییر: از ۲۰ به ۱۵ */
-            width: 40px;    /* 👈 تغییر: از ۵۰ به ۴۰ */
-            height: 40px;   /* 👈 تغییر: از ۵۰ به ۴۰ */
+            position: absolute; /* 👈 تغییر از fixed به absolute */
+            top: 20px;
+            right: 20px;
+            width: 40px;
+            height: 40px;
             border-radius: 12px;
             background: rgba(255, 255, 255, 0.6);
             backdrop-filter: blur(12px);
@@ -57,7 +58,7 @@
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            gap: 4px;       /* 👈 تغییر: از ۵ به ۴ */
+            gap: 4px;
             transition: all 0.3s;
         }
         .menu-btn:hover {
@@ -66,8 +67,8 @@
         }
         .menu-btn span {
             display: block;
-            width: 20px;    /* 👈 تغییر: از ۲۴ به ۲۰ */
-            height: 2px;    /* 👈 تغییر: از ۳ به ۲ */
+            width: 20px;
+            height: 2px;
             background: linear-gradient(135deg, #38bdf8, #0284c7);
             border-radius: 3px;
             transition: all 0.3s;
@@ -84,9 +85,9 @@
 
         /* منوی کشویی */
         .side-menu {
-            position: fixed;
-            top: 70px;      /* 👈 تغییر: از ۸۰ به ۷۰ */
-            right: 15px;    /* 👈 تغییر: از ۲۰ به ۱۵ */
+            position: absolute; /* 👈 تغییر از fixed به absolute */
+            top: 70px;
+            right: 20px;
             width: 220px;
             background: rgba(255, 255, 255, 0.85);
             backdrop-filter: blur(20px);
@@ -282,6 +283,7 @@
             gap: 15px;
             margin-bottom: 10px;
             z-index: 1;
+            padding-right: 60px; /* 👈 جلوگیری از تداخل با دکمه منو در موبایل */
         }
 
         .main-header-icon {
@@ -312,13 +314,11 @@
     </button>
 
     <div class="side-menu" id="sideMenu">
-        <!-- بخش اطلاعات کاربر -->
         <div class="user-info" id="userInfo" style="display: none;">
             <strong id="userName">کاربر</strong>
             <span id="userEmail">ایمیل</span>
         </div>
 
-        <!-- گزینه‌های منو -->
         <a href="index.html">
             <span class="icon">🏠</span> خانه
         </a>
@@ -331,7 +331,6 @@
 
         <div class="divider"></div>
 
-        <!-- گزینه‌های مهمان -->
         <div id="guestOptions">
             <a href="login.html">
                 <span class="icon">🔐</span> ورود
@@ -341,7 +340,6 @@
             </a>
         </div>
 
-        <!-- گزینه‌های کاربر لاگین‌کرده -->
         <div id="userOptions" style="display: none;">
             <a href="profile.html">
                 <span class="icon">👤</span> پنل کاربری
@@ -411,13 +409,11 @@
     <!-- ============ اسکریپت‌ها ============ -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script>
-        // اتصال به Supabase
         const db = window.supabase.createClient(
             'https://ddbcwyuoghdyrfqyvnab.supabase.co',
             'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRkYmN3eXVvZ2hkeXJmcXl2bmFiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTE2NzUyOTMsImV4cCI6MjEwNzI1MTI5M30.QID2XFnkYFs-afjAbhZ_e7QSzaBrLbDWXFRWl0BHnbo'
         );
 
-        // باز و بسته کردن منو
         const menuBtn = document.getElementById('menuBtn');
         const sideMenu = document.getElementById('sideMenu');
 
@@ -427,7 +423,6 @@
             sideMenu.classList.toggle('open');
         });
 
-        // بستن منو با کلیک بیرون از آن
         document.addEventListener('click', function(e) {
             if (!sideMenu.contains(e.target) && !menuBtn.contains(e.target)) {
                 menuBtn.classList.remove('open');
@@ -435,12 +430,10 @@
             }
         });
 
-        // بررسی وضعیت لاگین کاربر
         (async function checkUser() {
             const { data: { session } } = await db.auth.getSession();
             
             if (session) {
-                // کاربر لاگین کرده
                 const userName = session.user.user_metadata?.full_name || 'کاربر';
                 const userEmail = session.user.email;
                 
@@ -450,14 +443,12 @@
                 document.getElementById('guestOptions').style.display = 'none';
                 document.getElementById('userOptions').style.display = 'block';
             } else {
-                // کاربر لاگین نکرده
                 document.getElementById('userInfo').style.display = 'none';
                 document.getElementById('guestOptions').style.display = 'block';
                 document.getElementById('userOptions').style.display = 'none';
             }
         })();
 
-        // دکمه خروج
         document.getElementById('logoutBtn')?.addEventListener('click', async function() {
             if (confirm('آیا می‌خواهید از حساب خود خارج شوید؟')) {
                 await db.auth.signOut();
