@@ -27,10 +27,15 @@
             box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
         }
         h1 { color: #0c4a6e; text-align: center; margin-bottom: 25px; font-size: 22px; }
+        
+        .input-group {
+            position: relative;
+            margin-bottom: 15px;
+        }
         input {
             width: 100%;
             padding: 12px 15px;
-            margin-bottom: 15px;
+            padding-left: 45px;
             border: 1.5px solid rgba(56, 189, 248, 0.4);
             border-radius: 12px;
             background: rgba(255, 255, 255, 0.7);
@@ -38,7 +43,22 @@
             font-size: 14px;
             box-sizing: border-box;
         }
-        button {
+        .toggle-password {
+            position: absolute;
+            left: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-size: 18px;
+            color: #475569;
+            padding: 0;
+            line-height: 1;
+            width: auto;
+            height: auto;
+        }
+        button[type="submit"] {
             width: 100%;
             padding: 12px;
             background: linear-gradient(135deg, #38bdf8, #0284c7);
@@ -49,6 +69,7 @@
             font-size: 15px;
             font-weight: bold;
             cursor: pointer;
+            margin-top: 5px;
         }
         .msg { text-align: center; margin-top: 15px; font-size: 13px; }
         .msg.error { color: #dc2626; }
@@ -62,7 +83,12 @@
     <div class="form-box">
         <h1>🔐 ورود</h1>
         <input type="email" id="email" placeholder="ایمیل" required>
-        <input type="password" id="password" placeholder="رمز عبور" required>
+        
+        <div class="input-group">
+            <input type="password" id="password" placeholder="رمز عبور" required>
+            <button type="button" class="toggle-password" id="togglePassword">👁️</button>
+        </div>
+
         <button id="loginBtn">ورود</button>
         <p class="msg" id="message"></p>
         <p class="link">حساب ندارید؟ <a href="register.html">ثبت‌نام</a></p>
@@ -74,6 +100,15 @@
             'https://ddbcwyuoghdyrfqyvnab.supabase.co',
             'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRkYmN3eXVvZ2hkeXJmcXl2bmFiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTE2NzUyOTMsImV4cCI6MjEwNzI1MTI5M30.QID2XFnkYFs-afjAbhZ_e7QSzaBrLbDWXFRWl0BHnbo'
         );
+
+        // نمایش/مخفی کردن رمز عبور
+        const togglePassword = document.getElementById('togglePassword');
+        const passwordInput = document.getElementById('password');
+        togglePassword.addEventListener('click', function() {
+            const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+            passwordInput.setAttribute('type', type);
+            this.textContent = type === 'password' ? '👁️' : '🙈';
+        });
 
         document.getElementById('loginBtn').addEventListener('click', async () => {
             const email = document.getElementById('email').value.trim();
@@ -89,7 +124,6 @@
             messageEl.textContent = 'در حال ورود...';
             messageEl.className = 'msg';
 
-            // 🔽 همون کد ورود که پرسیدید
             const { data, error } = await db.auth.signInWithPassword({
                 email: email,
                 password: password
@@ -101,7 +135,6 @@
             } else {
                 messageEl.textContent = '✅ ورود موفق! در حال انتقال...';
                 messageEl.className = 'msg success';
-                // انتقال به صفحه اصلی بعد از ۱ ثانیه
                 setTimeout(() => {
                     window.location.href = 'index.html';
                 }, 1000);
