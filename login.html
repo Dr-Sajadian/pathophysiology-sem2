@@ -35,7 +35,7 @@
         input {
             width: 100%;
             padding: 12px 15px;
-            padding-left: 45px;
+            padding-left: 45px; /* فاصله برای آیکون چشم */
             border: 1.5px solid rgba(56, 189, 248, 0.4);
             border-radius: 12px;
             background: rgba(255, 255, 255, 0.7);
@@ -58,7 +58,9 @@
             width: auto;
             height: auto;
         }
-        button[type="submit"] {
+        
+        /* ✅ اصلاح شد: استایل دکمه ورود با آی‌دی مشخص شده */
+        #loginBtn {
             width: 100%;
             padding: 12px;
             background: linear-gradient(135deg, #38bdf8, #0284c7);
@@ -97,7 +99,7 @@
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script>
         const db = window.supabase.createClient(
-            'https://ddbcwyuoghdyrfqyvnab.supabase.co',
+            'https://ddbcwyuoghdyrfqyvnab.supabase.co', // آدرس تمیز و درست
             'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRkYmN3eXVvZ2hkeXJmcXl2bmFiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTE2NzUyOTMsImV4cCI6MjEwNzI1MTI5M30.QID2XFnkYFs-afjAbhZ_e7QSzaBrLbDWXFRWl0BHnbo'
         );
 
