@@ -28,7 +28,6 @@
         }
         h1 { color: #0c4a6e; text-align: center; margin-bottom: 25px; font-size: 22px; }
         
-        /* استایل ورودی‌ها */
         .input-group {
             position: relative;
             margin-bottom: 15px;
@@ -36,7 +35,7 @@
         input {
             width: 100%;
             padding: 12px 15px;
-            padding-left: 45px; /* فاصله برای آیکون چشم */
+            padding-left: 45px;
             border: 1.5px solid rgba(56, 189, 248, 0.4);
             border-radius: 12px;
             background: rgba(255, 255, 255, 0.7);
@@ -44,7 +43,6 @@
             font-size: 14px;
             box-sizing: border-box;
         }
-        /* دکمه چشم */
         .toggle-password {
             position: absolute;
             left: 12px;
@@ -60,7 +58,9 @@
             width: auto;
             height: auto;
         }
-        button[type="submit"] {
+        
+        /* ✅ اصلاح شد: استایل دکمه ثبت‌نام با آی‌دی مشخص شده */
+        #registerBtn {
             width: 100%;
             padding: 12px;
             background: linear-gradient(135deg, #38bdf8, #0284c7);
@@ -99,22 +99,20 @@
 
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script>
-        // اتصال به Supabase (آدرس بدون /rest/v1/ وارد شود)
+        // ✅ اصلاح شد: آدرس تمیز و بدون /rest/v1/
         const db = window.supabase.createClient(
             'https://ddbcwyuoghdyrfqyvnab.supabase.co',
             'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRkYmN3eXVvZ2hkeXJmcXl2bmFiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTE2NzUyOTMsImV4cCI6MjEwNzI1MTI5M30.QID2XFnkYFs-afjAbhZ_e7QSzaBrLbDWXFRWl0BHnbo'
         );
 
-        // نمایش/مخفی کردن رمز عبور
         const togglePassword = document.getElementById('togglePassword');
         const passwordInput = document.getElementById('password');
         togglePassword.addEventListener('click', function() {
             const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
             passwordInput.setAttribute('type', type);
-            this.textContent = type === 'password' ? '👁️' : '🙈'; // تغییر آیکون
+            this.textContent = type === 'password' ? '👁️' : '🙈';
         });
 
-        // دکمه ثبت‌نام
         document.getElementById('registerBtn').addEventListener('click', async () => {
             const fullName = document.getElementById('fullName').value.trim();
             const email = document.getElementById('email').value.trim();
