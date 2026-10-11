@@ -491,7 +491,7 @@
         );
 
         // ⚠️ اینجا ایمیل خودتون رو بذارید (فقط این ایمیل دکمه ادمین رو می‌بینه)
-        const ADMIN_EMAIL = 'sjadymbyna680@gmail.com';
+        const ADMIN_EMAILS = ['sjadymbyna680@gmail.com', 'mimmohsen2003mim@gmail.com'];
 
         // باز و بسته کردن منو
         const menuBtn = document.getElementById('menuBtn');
@@ -522,8 +522,8 @@
                 document.getElementById('userOptions').style.display = 'block';
 
                 // 🔥 اگه کاربر ادمین بود، دکمه آپلود رو نشون بده
-                if (userEmail === ADMIN_EMAIL) {
-                    document.getElementById('adminBtn').classList.add('visible');
+                if (ADMIN_EMAILS.includes(userEmail)) {
+    document.getElementById('adminBtn').classList.add('visible');
                 }
             } else {
                 document.getElementById('userInfo').style.display = 'none';
