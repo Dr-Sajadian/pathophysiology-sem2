@@ -18,7 +18,6 @@
             align-items: center;
             padding: 30px 20px;
             overflow-x: hidden;
-            position: relative;
         }
 
         body::before, body::after {
@@ -39,9 +38,9 @@
             bottom: -100px; left: -100px;
         }
 
-        /* ============ منوی همبرگری (شناور) ============ */
+        /* ============ منوی همبرگری ============ */
         .menu-btn {
-            position: fixed; /* 👈 برگشت به حالت شناور */
+            position: fixed;
             top: 20px;
             right: 20px;
             width: 40px;
@@ -73,19 +72,12 @@
             border-radius: 3px;
             transition: all 0.3s;
         }
-        .menu-btn.open span:nth-child(1) {
-            transform: rotate(45deg) translate(6px, 6px);
-        }
-        .menu-btn.open span:nth-child(2) {
-            opacity: 0;
-        }
-        .menu-btn.open span:nth-child(3) {
-            transform: rotate(-45deg) translate(6px, -6px);
-        }
+        .menu-btn.open span:nth-child(1) { transform: rotate(45deg) translate(6px, 6px); }
+        .menu-btn.open span:nth-child(2) { opacity: 0; }
+        .menu-btn.open span:nth-child(3) { transform: rotate(-45deg) translate(6px, -6px); }
 
-        /* منوی کشویی (شناور) */
         .side-menu {
-            position: fixed; /* 👈 برگشت به حالت شناور */
+            position: fixed;
             top: 70px;
             right: 20px;
             width: 220px;
@@ -129,9 +121,7 @@
             background: rgba(56, 189, 248, 0.15);
             color: #0284c7;
         }
-        .side-menu .icon {
-            font-size: 18px;
-        }
+        .side-menu .icon { font-size: 18px; }
         .side-menu .divider {
             height: 1px;
             background: rgba(56, 189, 248, 0.25);
@@ -152,6 +142,152 @@
             font-size: 14px;
         }
 
+        /* ============ دکمه ادمین (فقط برای شما) ============ */
+        .admin-btn {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            width: 45px;
+            height: 45px;
+            border-radius: 12px;
+            background: linear-gradient(135deg, #f59e0b, #d97706);
+            border: 1.5px solid rgba(255, 255, 255, 0.9);
+            box-shadow: 0 4px 15px rgba(217, 119, 6, 0.35);
+            cursor: pointer;
+            z-index: 10000;
+            display: none; /* پیش‌فرض مخفی */
+            align-items: center;
+            justify-content: center;
+            font-size: 22px;
+            color: white;
+            transition: all 0.3s;
+        }
+        .admin-btn:hover {
+            transform: scale(1.08);
+            box-shadow: 0 6px 20px rgba(217, 119, 6, 0.5);
+        }
+        .admin-btn.visible { display: flex; }
+
+        /* ============ مودال آپلود ============ */
+        .modal-overlay {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(5px);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 99999;
+            padding: 20px;
+        }
+        .modal-overlay.open { display: flex; }
+
+        .modal-box {
+            background: white;
+            border-radius: 24px;
+            padding: 30px 25px;
+            max-width: 450px;
+            width: 100%;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+        .modal-title {
+            font-size: 20px;
+            font-weight: 900;
+            color: #0c4a6e;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        .modal-label {
+            display: block;
+            font-size: 13px;
+            color: #475569;
+            font-weight: bold;
+            margin-bottom: 6px;
+            text-align: right;
+        }
+        .modal-input, .modal-select {
+            width: 100%;
+            padding: 11px 14px;
+            border: 1.5px solid rgba(56, 189, 248, 0.4);
+            border-radius: 12px;
+            background: #f8fafc;
+            font-family: Vazirmatn, sans-serif;
+            font-size: 14px;
+            margin-bottom: 15px;
+            box-sizing: border-box;
+        }
+        .modal-input:focus, .modal-select:focus {
+            outline: none;
+            border-color: #0284c7;
+        }
+        .modal-file {
+            width: 100%;
+            padding: 20px;
+            border: 2px dashed rgba(56, 189, 248, 0.5);
+            border-radius: 12px;
+            background: #f0f9ff;
+            font-family: Vazirmatn, sans-serif;
+            font-size: 13px;
+            margin-bottom: 15px;
+            text-align: center;
+            cursor: pointer;
+        }
+        .modal-buttons {
+            display: flex;
+            gap: 10px;
+            margin-top: 10px;
+        }
+        .modal-btn {
+            flex: 1;
+            padding: 12px;
+            border-radius: 12px;
+            font-family: Vazirmatn, sans-serif;
+            font-size: 14px;
+            font-weight: bold;
+            cursor: pointer;
+            border: none;
+            transition: all 0.3s;
+        }
+        .modal-btn.upload {
+            background: linear-gradient(135deg, #38bdf8, #0284c7);
+            color: white;
+        }
+        .modal-btn.cancel {
+            background: #e2e8f0;
+            color: #475569;
+        }
+        .modal-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+        .upload-progress {
+            width: 100%;
+            height: 6px;
+            background: #e2e8f0;
+            border-radius: 3px;
+            margin: 10px 0;
+            overflow: hidden;
+            display: none;
+        }
+        .upload-progress.active { display: block; }
+        .upload-progress-bar {
+            height: 100%;
+            background: linear-gradient(135deg, #38bdf8, #0284c7);
+            width: 0%;
+            transition: width 0.3s;
+        }
+        .upload-status {
+            text-align: center;
+            font-size: 13px;
+            margin-top: 10px;
+            min-height: 20px;
+        }
+        .upload-status.success { color: #047857; }
+        .upload-status.error { color: #dc2626; }
+
         /* ============ بقیه استایل‌ها ============ */
         .header-title {
             text-align: center;
@@ -170,7 +306,7 @@
             width: 100%;
             max-width: 420px;
             z-index: 1;
-            margin-top: 30px; /* 👈 فاصله از بالای صفحه (به جای زیرعنوان حذف‌شده) */
+            margin-top: 30px;
         }
 
         .main-card {
@@ -188,23 +324,16 @@
             transition: all 0.35s ease;
             box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
         }
-
         .main-card:not(.disabled):hover {
             background: rgba(255, 255, 255, 0.75);
             transform: translateY(-4px);
             box-shadow: 0 15px 35px rgba(14, 165, 233, 0.25);
             border-color: #ffffff;
         }
-
-        .main-card.disabled {
-            opacity: 0.55;
-            pointer-events: none;
-            cursor: not-allowed;
-        }
+        .main-card.disabled { opacity: 0.55; pointer-events: none; cursor: not-allowed; }
 
         .icon-circle {
-            width: 60px;
-            height: 60px;
+            width: 60px; height: 60px;
             border-radius: 50%;
             display: flex;
             justify-content: center;
@@ -212,63 +341,21 @@
             font-size: 28px;
             flex-shrink: 0;
             box-shadow: 0 6px 15px rgba(0, 0, 0, 0.12);
+            overflow: hidden;
         }
-
-        .icon-circle img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            display: block;
-        }
-
+        .icon-circle img { width: 100%; height: 100%; object-fit: cover; display: block; }
         .icon-ghodad    { background: linear-gradient(135deg, #38bdf8, #0284c7); }
         .icon-gooaresh  { background: linear-gradient(135deg, #a7c957, #588157); }
         .icon-rheum     { background: linear-gradient(135deg, #f472b6, #be185d); }
         .icon-hema      { background: linear-gradient(135deg, #ff8a8a, #c1121f); }
-
         .card-content { flex: 1; text-align: right; }
-
-        .card-title {
-            font-size: 18px;
-            font-weight: 900;
-            color: #0c4a6e;
-            margin-bottom: 4px;
-        }
-
-        .card-desc {
-            font-size: 12px;
-            color: #475569;
-            line-height: 1.6;
-        }
-
-        .card-arrow {
-            color: #0284c7;
-            font-size: 22px;
-            font-weight: bold;
-            transition: transform 0.3s;
-        }
-
+        .card-title { font-size: 18px; font-weight: 900; color: #0c4a6e; margin-bottom: 4px; }
+        .card-desc { font-size: 12px; color: #475569; line-height: 1.6; }
+        .card-arrow { color: #0284c7; font-size: 22px; font-weight: bold; transition: transform 0.3s; }
         .main-card:hover .card-arrow { transform: translateX(-5px); }
+        .badge { font-size: 10px; font-weight: bold; padding: 3px 9px; border-radius: 12px; margin-right: 8px; vertical-align: middle; }
+        .badge-soon { color: #64748b; background: rgba(100, 116, 139, 0.15); border: 1px solid rgba(100, 116, 139, 0.3); }
 
-        .badge {
-            font-size: 10px;
-            font-weight: bold;
-            padding: 3px 9px;
-            border-radius: 12px;
-            margin-right: 8px;
-            vertical-align: middle;
-        }
-        .badge-soon {
-            color: #64748b;
-            background: rgba(100, 116, 139, 0.15);
-            border: 1px solid rgba(100, 116, 139, 0.3);
-        }
-
-        ::-webkit-scrollbar { width: 8px; }
-        ::-webkit-scrollbar-track { background: transparent; }
-        ::-webkit-scrollbar-thumb { background: rgba(14, 165, 233, 0.4); border-radius: 4px; }
-
-        /* هدر اصلی صفحه اول */
         .main-header {
             display: flex;
             align-items: center;
@@ -278,32 +365,26 @@
             z-index: 1;
             padding-right: 60px;
         }
-
         .main-header-icon {
-            width: 70px;
-            height: 70px;
+            width: 70px; height: 70px;
             border-radius: 50%;
             overflow: hidden;
             box-shadow: 0 6px 15px rgba(2, 132, 199, 0.3);
             background: #f0f0f0;
             flex-shrink: 0;
         }
+        .main-header-icon img { width: 100%; height: 100%; object-fit: cover; display: block; }
 
-        .main-header-icon img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            display: block;
-        }
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: rgba(14, 165, 233, 0.4); border-radius: 4px; }
     </style>
 </head>
 <body>
 
     <!-- ============ منوی همبرگری ============ -->
     <button class="menu-btn" id="menuBtn" aria-label="منو">
-        <span></span>
-        <span></span>
-        <span></span>
+        <span></span><span></span><span></span>
     </button>
 
     <div class="side-menu" id="sideMenu">
@@ -311,39 +392,24 @@
             <strong id="userName">کاربر</strong>
             <span id="userEmail">ایمیل</span>
         </div>
-
-        <a href="index.html">
-            <span class="icon">🏠</span> خانه
-        </a>
-        <a href="ghodad.html">
-            <span class="icon">🧬</span> کورس غدد
-        </a>
-        <a href="gooaresh.html">
-            <span class="icon">🫀</span> کورس گوارش
-        </a>
-
+        <a href="index.html"><span class="icon">🏠</span> خانه</a>
+        <a href="ghodad.html"><span class="icon">🧬</span> کورس غدد</a>
+        <a href="gooaresh.html"><span class="icon">🫀</span> کورس گوارش</a>
         <div class="divider"></div>
-
         <div id="guestOptions">
-            <a href="login.html">
-                <span class="icon">🔐</span> ورود
-            </a>
-            <a href="register.html">
-                <span class="icon">📝</span> ثبت‌نام
-            </a>
+            <a href="login.html"><span class="icon">🔐</span> ورود</a>
+            <a href="register.html"><span class="icon">📝</span> ثبت‌نام</a>
         </div>
-
         <div id="userOptions" style="display: none;">
-            <a href="profile.html">
-                <span class="icon">👤</span> پنل کاربری
-            </a>
-            <button id="logoutBtn">
-                <span class="icon">🚪</span> خروج
-            </button>
+            <a href="profile.html"><span class="icon">👤</span> پنل کاربری</a>
+            <button id="logoutBtn"><span class="icon">🚪</span> خروج</button>
         </div>
     </div>
 
-    <!-- ============ محتوای اصلی صفحه ============ -->
+    <!-- ============ دکمه ادمین (فقط برای شما) ============ -->
+    <button class="admin-btn" id="adminBtn" title="آپلود فایل">⬆️</button>
+
+    <!-- ============ محتوای اصلی ============ -->
     <div class="main-header">
         <div class="main-header-icon">
             <img src="images/logo.jpg" alt="لوگو">
@@ -352,32 +418,22 @@
     </div>
 
     <div class="cards-container">
-
-        <!-- کورس غدد -->
         <a href="ghodad.html" class="main-card">
-            <div class="icon-circle icon-ghodad">
-                <img src="images/ghodad.jpg" alt="کورس غدد">
-            </div>
+            <div class="icon-circle icon-ghodad"><img src="images/ghodad.jpg" alt="کورس غدد"></div>
             <div class="card-content">
                 <div class="card-title">کورس غدد</div>
                 <div class="card-desc">مقدمات، فارماکولوژی و پاتولوژی غدد</div>
             </div>
             <div class="card-arrow">‹</div>
         </a>
-
-        <!-- کورس گوارش -->
         <a href="gooaresh.html" class="main-card">
-            <div class="icon-circle icon-gooaresh">
-                <img src="images/gooaresh.jpg" alt="کورس گوارش">
-            </div>
+            <div class="icon-circle icon-gooaresh"><img src="images/gooaresh.jpg" alt="کورس گوارش"></div>
             <div class="card-content">
                 <div class="card-title">کورس گوارش</div>
                 <div class="card-desc">مقدمات، پاتولوژی، فارماکولوژی گوارش</div>
             </div>
             <div class="card-arrow">‹</div>
         </a>
-
-        <!-- کورس روماتولوژی -->
         <div class="main-card disabled">
             <div class="icon-circle icon-rheum">🦴</div>
             <div class="card-content">
@@ -385,8 +441,6 @@
                 <div class="card-desc">بیماری‌های روماتیسمی و خودایمنی</div>
             </div>
         </div>
-
-        <!-- کورس هماتولوژی -->
         <div class="main-card disabled">
             <div class="icon-circle icon-hema">🩸</div>
             <div class="card-content">
@@ -394,7 +448,38 @@
                 <div class="card-desc">بیماری‌های خونی و انعقاد</div>
             </div>
         </div>
+    </div>
 
+    <!-- ============ مودال آپلود ============ -->
+    <div class="modal-overlay" id="uploadModal">
+        <div class="modal-box">
+            <h2 class="modal-title">📤 آپلود فایل جدید</h2>
+
+            <label class="modal-label">نام فایل (انگلیسی و بدون فاصله):</label>
+            <input type="text" class="modal-input" id="fileName" placeholder="مثال: pathology-lecture-1">
+
+            <label class="modal-label">پسوند فایل:</label>
+            <select class="modal-select" id="fileExt">
+                <option value=".pdf">PDF</option>
+                <option value=".html">HTML</option>
+                <option value=".jpg">JPG</option>
+                <option value=".png">PNG</option>
+            </select>
+
+            <label class="modal-label">انتخاب فایل:</label>
+            <input type="file" class="modal-file" id="fileInput">
+
+            <div class="upload-progress" id="progressBar">
+                <div class="upload-progress-bar" id="progressBarFill"></div>
+            </div>
+
+            <div class="upload-status" id="uploadStatus"></div>
+
+            <div class="modal-buttons">
+                <button class="modal-btn cancel" id="cancelBtn">لغو</button>
+                <button class="modal-btn upload" id="uploadBtn">آپلود</button>
+            </div>
+        </div>
     </div>
 
     <!-- ============ اسکریپت‌ها ============ -->
@@ -405,15 +490,17 @@
             'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRkYmN3eXVvZ2hkeXJmcXl2bmFiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTE2NzUyOTMsImV4cCI6MjEwNzI1MTI5M30.QID2XFnkYFs-afjAbhZ_e7QSzaBrLbDWXFRWl0BHnbo'
         );
 
+        // ⚠️ اینجا ایمیل خودتون رو بذارید (فقط این ایمیل دکمه ادمین رو می‌بینه)
+        const ADMIN_EMAIL = 'sjadymbyna680@gmail.com';
+
+        // باز و بسته کردن منو
         const menuBtn = document.getElementById('menuBtn');
         const sideMenu = document.getElementById('sideMenu');
-
         menuBtn.addEventListener('click', function(e) {
             e.stopPropagation();
             menuBtn.classList.toggle('open');
             sideMenu.classList.toggle('open');
         });
-
         document.addEventListener('click', function(e) {
             if (!sideMenu.contains(e.target) && !menuBtn.contains(e.target)) {
                 menuBtn.classList.remove('open');
@@ -421,18 +508,23 @@
             }
         });
 
+        // بررسی وضعیت لاگین و نمایش دکمه ادمین
         (async function checkUser() {
             const { data: { session } } = await db.auth.getSession();
-            
             if (session) {
                 const userName = session.user.user_metadata?.full_name || 'کاربر';
                 const userEmail = session.user.email;
-                
+
                 document.getElementById('userName').textContent = '👋 ' + userName;
                 document.getElementById('userEmail').textContent = userEmail;
                 document.getElementById('userInfo').style.display = 'block';
                 document.getElementById('guestOptions').style.display = 'none';
                 document.getElementById('userOptions').style.display = 'block';
+
+                // 🔥 اگه کاربر ادمین بود، دکمه آپلود رو نشون بده
+                if (userEmail === ADMIN_EMAIL) {
+                    document.getElementById('adminBtn').classList.add('visible');
+                }
             } else {
                 document.getElementById('userInfo').style.display = 'none';
                 document.getElementById('guestOptions').style.display = 'block';
@@ -440,10 +532,109 @@
             }
         })();
 
+        // خروج
         document.getElementById('logoutBtn')?.addEventListener('click', async function() {
             if (confirm('آیا می‌خواهید از حساب خود خارج شوید؟')) {
                 await db.auth.signOut();
                 window.location.reload();
+            }
+        });
+
+        // ============ مودال آپلود ============
+        const adminBtn = document.getElementById('adminBtn');
+        const uploadModal = document.getElementById('uploadModal');
+        const cancelBtn = document.getElementById('cancelBtn');
+        const uploadBtn = document.getElementById('uploadBtn');
+        const fileInput = document.getElementById('fileInput');
+        const fileNameInput = document.getElementById('fileName');
+        const fileExtSelect = document.getElementById('fileExt');
+        const uploadStatus = document.getElementById('uploadStatus');
+        const progressBar = document.getElementById('progressBar');
+        const progressBarFill = document.getElementById('progressBarFill');
+
+        adminBtn.addEventListener('click', () => uploadModal.classList.add('open'));
+        cancelBtn.addEventListener('click', () => {
+            uploadModal.classList.remove('open');
+            resetModal();
+        });
+        uploadModal.addEventListener('click', (e) => {
+            if (e.target === uploadModal) {
+                uploadModal.classList.remove('open');
+                resetModal();
+            }
+        });
+
+        function resetModal() {
+            fileNameInput.value = '';
+            fileInput.value = '';
+            uploadStatus.textContent = '';
+            uploadStatus.className = 'upload-status';
+            progressBar.classList.remove('active');
+            progressBarFill.style.width = '0%';
+            uploadBtn.disabled = false;
+        }
+
+        uploadBtn.addEventListener('click', async function() {
+            const fileName = fileNameInput.value.trim();
+            const ext = fileExtSelect.value;
+            const file = fileInput.files[0];
+
+            if (!fileName) {
+                uploadStatus.textContent = 'لطفاً نام فایل را وارد کنید';
+                uploadStatus.className = 'upload-status error';
+                return;
+            }
+            if (!file) {
+                uploadStatus.textContent = 'لطفاً یک فایل انتخاب کنید';
+                uploadStatus.className = 'upload-status error';
+                return;
+            }
+
+            // ساخت مسیر کامل فایل
+            const fullPath = fileName + ext;
+
+            uploadBtn.disabled = true;
+            uploadStatus.textContent = 'در حال آپلود...';
+            uploadStatus.className = 'upload-status';
+            progressBar.classList.add('active');
+            progressBarFill.style.width = '30%';
+
+            try {
+                const { data, error } = await db.storage
+                    .from('course-files')
+                    .upload(fullPath, file, {
+                        cacheControl: '3600',
+                        upsert: true // اگه فایل با همین اسم وجود داشت، جایگزین کن
+                    });
+
+                progressBarFill.style.width = '80%';
+
+                if (error) throw error;
+
+                progressBarFill.style.width = '100%';
+
+                // گرفتن لینک عمومی فایل
+                const { data: urlData } = db.storage
+                    .from('course-files')
+                    .getPublicUrl(fullPath);
+
+                uploadStatus.innerHTML = `
+                    ✅ فایل با موفقیت آپلود شد!<br><br>
+                    <strong>لینک فایل:</strong><br>
+                    <input type="text" value="${urlData.publicUrl}" readonly 
+                        style="width:100%;padding:8px;border-radius:8px;border:1px solid #cbd5e1;font-size:11px;direction:ltr;margin-top:5px;background:#f1f5f9;"
+                        onclick="this.select()">
+                `;
+                uploadStatus.className = 'upload-status success';
+                uploadBtn.disabled = false;
+
+            } catch (err) {
+                console.error(err);
+                uploadStatus.textContent = '❌ خطا: ' + err.message;
+                uploadStatus.className = 'upload-status error';
+                progressBar.classList.remove('active');
+                progressBarFill.style.width = '0%';
+                uploadBtn.disabled = false;
             }
         });
     </script>
