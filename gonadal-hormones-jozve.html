@@ -1398,7 +1398,7 @@ mark.hl.cur{background:#ff9f1c}
     });
     cnt.textContent=hits.length?hits.length+' مورد':'یافت نشد';if(hits.length)go(0);
   }
-  function go(k){if(!hits.length)return;if(cur>=0)hits[cur].classList.remove('cur');cur=(k+hits.length)%hits.length;hits[cur].classList.add('cur');hits[cur].scrollIntoView({block:'center',behavior:'smooth'});cnt.textContent=(cur+1)+' / '+hits.length;}
+  function go(k){if(!hiscriptts.length)return;if(cur>=0)hits[cur].classList.remove('cur');cur=(k+hits.length)%hits.length;hits[cur].classList.add('cur');hits[cur].scrollIntoView({block:'center',behavior:'smooth'});cnt.textContent=(cur+1)+' / '+hits.length;}
   let tm;box.addEventListener('input',()=>{clearTimeout(tm);tm=setTimeout(run,250);});
   box.addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();go(cur+(e.shiftKey?-1:1));}});
   document.getElementById('nx').onclick=()=>go(cur+1);document.getElementById('pv').onclick=()=>go(cur-1);
@@ -1411,8 +1411,6 @@ mark.hl.cur{background:#ff9f1c}
 </script>
 <script src="highlight.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<script>
-  const db = window.supabase.createClient('https://ddbcwyuoghdyrfqyvnab.supabase.co/rest/v1/', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRkYmN3eXVvZ2hkeXJmcXl2bmFiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTE2NzUyOTMsImV4cCI6MjEwNzI1MTI5M30.QID2XFnkYFs-afjAbhZ_e7QSzaBrLbDWXFRWl0BHnbo');
-</script>
+<script src="auth.js"></script>
 </body>
 </html>
