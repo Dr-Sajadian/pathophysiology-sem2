@@ -108,6 +108,101 @@
             color: #b91c1c;
             border: 1.5px solid rgba(248, 113, 113, 0.5);
         }
+
+        /* آمار */
+        .stats-card {
+            background: rgba(255, 255, 255, 0.5);
+            backdrop-filter: blur(15px);
+            border: 1.5px solid rgba(255, 255, 255, 0.85);
+            border-radius: 20px;
+            padding: 20px;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
+        }
+        .section-title {
+            font-size: 15px;
+            font-weight: 900;
+            color: #0c4a6e;
+            margin-bottom: 15px;
+            text-align: right;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .stats-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+        }
+        .stat-box {
+            background: rgba(56, 189, 248, 0.15);
+            border: 1.5px solid rgba(56, 189, 248, 0.3);
+            border-radius: 15px;
+            padding: 15px;
+            text-align: center;
+        }
+        .stat-number {
+            font-size: 24px;
+            font-weight: 900;
+            color: #0284c7;
+            margin-bottom: 5px;
+        }
+        .stat-label {
+            font-size: 11px;
+            color: #475569;
+            font-weight: bold;
+        }
+
+        /* تاریخچه آزمون‌ها */
+        .quiz-list {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        .quiz-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 15px;
+            background: rgba(255, 255, 255, 0.6);
+            border-radius: 12px;
+            font-size: 13px;
+            gap: 10px;
+        }
+        .quiz-name {
+            color: #0c4a6e;
+            font-weight: bold;
+            flex: 1;
+            text-align: right;
+        }
+        .quiz-date {
+            font-size: 10px;
+            color: #94a3b8;
+            display: block;
+            margin-top: 3px;
+        }
+        .quiz-score {
+            background: linear-gradient(135deg, #34d399, #047857);
+            color: white;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: bold;
+            flex-shrink: 0;
+        }
+        .quiz-score.low {
+            background: linear-gradient(135deg, #f87171, #b91c1c);
+        }
+        .quiz-score.mid {
+            background: linear-gradient(135deg, #fbbf24, #d97706);
+        }
+        .empty-message {
+            text-align: center;
+            color: #64748b;
+            font-size: 13px;
+            padding: 20px;
+        }
+
+        /* دکمه‌ها */
         .actions { display: flex; flex-direction: column; gap: 10px; margin-top: 10px; }
         .action-btn {
             display: flex; align-items: center; justify-content: center;
@@ -167,6 +262,7 @@
 
             const user = session.user;
 
+            // دریافت پروفایل
             const { data: profile } = await db
                 .from('profiles')
                 .select('*')
@@ -194,12 +290,61 @@
 
             const isAdmin = role === 'admin' && status === 'approved';
 
+            // 🔥 دریافت نتایج آزمون‌ها
+            let quizResults = [];
+            try {
+                const { data, error } = await db
+                    .from('quiz_results')
+                    .select('*')
+                    .eq('user_id', user.id)
+                    .order('created_at', { ascending: false })
+                    .limit(20);
+                
+                if (!error && data) quizResults = data;
+            } catch (e) {
+                console.warn('Quiz results error:', e);
+            }
+
+            // محاسبه آمار
+            const totalQuizzes = quizResults.length;
+            const avgScore = totalQuizzes > 0 
+                ? Math.round(quizResults.reduce((sum, q) => sum + (q.score || 0), 0) / totalQuizzes)
+                : 0;
+            const bestScore = totalQuizzes > 0
+                ? Math.max(...quizResults.map(q => q.score || 0))
+                : 0;
+
+            // ساخت لیست آزمون‌ها
+            let quizHtml = '';
+            if (quizResults.length === 0) {
+                quizHtml = `<div class="empty-message">هنوز در هیچ آزمونی شرکت نکرده‌اید</div>`;
+            } else {
+                quizHtml = quizResults.map(q => {
+                    const score = q.score || 0;
+                    let scoreClass = '';
+                    if (score < 50) scoreClass = 'low';
+                    else if (score < 80) scoreClass = 'mid';
+                    
+                    const date = new Date(q.created_at).toLocaleDateString('fa-IR');
+                    
+                    return `
+                        <div class="quiz-item">
+                            <div class="quiz-name">
+                                ${q.quiz_name || 'آزمون'}
+                                <span class="quiz-date">${date}</span>
+                            </div>
+                            <span class="quiz-score ${scoreClass}">${score}%</span>
+                        </div>
+                    `;
+                }).join('');
+            }
+
             document.getElementById('container').innerHTML = `
+                <!-- کارت اطلاعات کاربر -->
                 <div class="info-card">
                     <div class="avatar">${firstLetter}</div>
                     <div class="user-name">${fullName}</div>
                     <div class="user-email">${email}</div>
-
                     <span class="status-badge ${status}">${statusLabel}</span>
 
                     <div class="info-row">
@@ -212,6 +357,32 @@
                     </div>
                 </div>
 
+                <!-- کارت آمار -->
+                ${totalQuizzes > 0 ? `
+                <div class="stats-card">
+                    <div class="section-title">📊 آمار شما</div>
+                    <div class="stats-grid">
+                        <div class="stat-box">
+                            <div class="stat-number">${totalQuizzes}</div>
+                            <div class="stat-label">آزمون شرکت‌کرده</div>
+                        </div>
+                        <div class="stat-box">
+                            <div class="stat-number">${avgScore}%</div>
+                            <div class="stat-label">میانگین نمرات</div>
+                        </div>
+                    </div>
+                </div>
+                ` : ''}
+
+                <!-- کارت تاریخچه آزمون‌ها -->
+                <div class="stats-card">
+                    <div class="section-title">📝 تاریخچه آزمون‌ها</div>
+                    <div class="quiz-list">
+                        ${quizHtml}
+                    </div>
+                </div>
+
+                <!-- دکمه‌ها -->
                 <div class="actions">
                     <a href="index.html" class="action-btn btn-primary">
                         🏠 بازگشت به خانه
