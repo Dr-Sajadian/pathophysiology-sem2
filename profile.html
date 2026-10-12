@@ -7,25 +7,17 @@
     <link href="https://cdn.jsdelivr.net/gh/rastikerdar/vazirmatn@v33.003/Vazirmatn-font-face.css" rel="stylesheet" type="text/css" />
     <style>
         * { box-sizing: border-box; margin: 0; padding: 0; }
-
         body {
             background: linear-gradient(135deg, #e0f2fe 0%, #bae6fd 50%, #7dd3fc 100%);
             background-attachment: fixed;
             font-family: Vazirmatn, Tahoma, sans-serif;
             min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            padding: 30px 20px;
-            overflow-x: hidden;
+            display: flex; flex-direction: column; align-items: center;
+            padding: 30px 20px; overflow-x: hidden;
         }
-
         body::before, body::after {
-            content: '';
-            position: fixed;
-            border-radius: 50%;
-            filter: blur(80px);
-            z-index: 0;
+            content: ''; position: fixed; border-radius: 50%;
+            filter: blur(80px); z-index: 0;
         }
         body::before {
             width: 300px; height: 300px;
@@ -37,252 +29,115 @@
             background: rgba(56, 189, 248, 0.4);
             bottom: -100px; left: -100px;
         }
-
         .header {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            margin-bottom: 30px;
-            z-index: 1;
+            display: flex; align-items: center; gap: 12px;
+            margin-bottom: 30px; z-index: 1;
         }
-
         .header-icon {
-            width: 60px; height: 60px;
-            border-radius: 50%;
+            width: 60px; height: 60px; border-radius: 50%;
             background: linear-gradient(135deg, #38bdf8, #0284c7);
-            display: flex;
-            justify-content: center;
-            align-items: center;
+            display: flex; justify-content: center; align-items: center;
             font-size: 30px;
             box-shadow: 0 6px 15px rgba(2, 132, 199, 0.3);
-            flex-shrink: 0;
         }
-
         .header-title {
-            font-size: 24px;
-            font-weight: 900;
+            font-size: 24px; font-weight: 900;
             color: #0c4a6e;
             text-shadow: 0 2px 5px rgba(255,255,255,0.8);
         }
-
         .container {
-            width: 100%;
-            max-width: 500px;
-            display: flex;
-            flex-direction: column;
-            gap: 18px;
+            width: 100%; max-width: 500px;
+            display: flex; flex-direction: column; gap: 18px;
             z-index: 1;
         }
-
-        /* کارت اطلاعات کاربر */
         .info-card {
             background: rgba(255, 255, 255, 0.5);
             backdrop-filter: blur(15px);
-            -webkit-backdrop-filter: blur(15px);
             border: 1.5px solid rgba(255, 255, 255, 0.85);
             border-radius: 24px;
             padding: 30px 25px;
             box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
             text-align: center;
         }
-
         .avatar {
-            width: 90px; height: 90px;
-            border-radius: 50%;
+            width: 90px; height: 90px; border-radius: 50%;
             background: linear-gradient(135deg, #38bdf8, #0284c7);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            font-size: 40px;
-            color: white;
+            display: flex; justify-content: center; align-items: center;
+            font-size: 40px; color: white;
             margin: 0 auto 15px;
             box-shadow: 0 8px 20px rgba(2, 132, 199, 0.35);
             font-weight: bold;
         }
-
         .user-name {
-            font-size: 20px;
-            font-weight: 900;
-            color: #0c4a6e;
-            margin-bottom: 5px;
+            font-size: 20px; font-weight: 900;
+            color: #0c4a6e; margin-bottom: 5px;
         }
-
         .user-email {
-            font-size: 13px;
-            color: #64748b;
-            margin-bottom: 20px;
-            direction: ltr;
+            font-size: 13px; color: #64748b;
+            margin-bottom: 20px; direction: ltr;
         }
-
         .info-row {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
+            display: flex; justify-content: space-between; align-items: center;
             padding: 12px 15px;
             background: rgba(255, 255, 255, 0.5);
-            border-radius: 12px;
-            margin-bottom: 10px;
+            border-radius: 12px; margin-bottom: 10px;
             font-size: 13px;
         }
-
-        .info-label {
-            color: #475569;
-            font-weight: bold;
-        }
-
-        .info-value {
-            color: #0c4a6e;
-            font-weight: bold;
-        }
-
-        /* کارت آمار */
-        .stats-card {
-            background: rgba(255, 255, 255, 0.5);
-            backdrop-filter: blur(15px);
-            -webkit-backdrop-filter: blur(15px);
-            border: 1.5px solid rgba(255, 255, 255, 0.85);
-            border-radius: 20px;
-            padding: 20px;
-            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
-        }
-
-        .section-title {
-            font-size: 16px;
-            font-weight: 900;
-            color: #0c4a6e;
-            margin-bottom: 15px;
-            text-align: right;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .stats-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 12px;
-        }
-
-        .stat-box {
-            background: rgba(56, 189, 248, 0.15);
-            border: 1.5px solid rgba(56, 189, 248, 0.3);
-            border-radius: 15px;
-            padding: 15px;
-            text-align: center;
-        }
-
-        .stat-number {
-            font-size: 24px;
-            font-weight: 900;
-            color: #0284c7;
-            margin-bottom: 5px;
-        }
-
-        .stat-label {
-            font-size: 11px;
-            color: #475569;
-            font-weight: bold;
-        }
-
-        /* لیست آزمون‌ها */
-        .quiz-list {
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-        }
-
-        .quiz-item {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 12px 15px;
-            background: rgba(255, 255, 255, 0.5);
-            border-radius: 12px;
-            font-size: 13px;
-        }
-
-        .quiz-name {
-            color: #0c4a6e;
-            font-weight: bold;
-        }
-
-        .quiz-score {
-            background: linear-gradient(135deg, #34d399, #047857);
-            color: white;
-            padding: 4px 12px;
+        .info-label { color: #475569; font-weight: bold; }
+        .info-value { color: #0c4a6e; font-weight: bold; }
+        .status-badge {
+            display: inline-block;
+            padding: 6px 14px;
             border-radius: 20px;
             font-size: 12px;
             font-weight: bold;
+            margin-bottom: 15px;
         }
-
-        .quiz-score.low {
-            background: linear-gradient(135deg, #f87171, #b91c1c);
+        .status-badge.pending {
+            background: rgba(251, 191, 36, 0.2);
+            color: #b45309;
+            border: 1.5px solid rgba(251, 191, 36, 0.5);
         }
-
-        .empty-message {
-            text-align: center;
-            color: #64748b;
-            font-size: 13px;
-            padding: 20px;
+        .status-badge.approved {
+            background: rgba(52, 211, 153, 0.2);
+            color: #047857;
+            border: 1.5px solid rgba(52, 211, 153, 0.5);
         }
-
-        /* دکمه‌ها */
-        .actions {
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-            margin-top: 10px;
+        .status-badge.rejected {
+            background: rgba(248, 113, 113, 0.2);
+            color: #b91c1c;
+            border: 1.5px solid rgba(248, 113, 113, 0.5);
         }
-
+        .actions { display: flex; flex-direction: column; gap: 10px; margin-top: 10px; }
         .action-btn {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 10px;
-            padding: 14px 20px;
-            border-radius: 15px;
-            text-decoration: none;
+            display: flex; align-items: center; justify-content: center;
+            gap: 10px; padding: 14px 20px;
+            border-radius: 15px; text-decoration: none;
             font-family: Vazirmatn, sans-serif;
-            font-size: 14px;
-            font-weight: bold;
-            border: none;
-            cursor: pointer;
-            transition: all 0.3s;
-            width: 100%;
+            font-size: 14px; font-weight: bold;
+            border: none; cursor: pointer;
+            transition: all 0.3s; width: 100%;
         }
-
         .btn-primary {
             background: linear-gradient(135deg, #38bdf8, #0284c7);
             color: white;
             box-shadow: 0 6px 15px rgba(2, 132, 199, 0.35);
         }
-
-        .btn-primary:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 20px rgba(2, 132, 199, 0.5);
+        .btn-admin {
+            background: linear-gradient(135deg, #f59e0b, #d97706);
+            color: white;
+            box-shadow: 0 6px 15px rgba(217, 119, 6, 0.35);
         }
-
         .btn-danger {
             background: rgba(255, 255, 255, 0.7);
             color: #dc2626;
             border: 1.5px solid rgba(220, 38, 38, 0.3);
         }
-
-        .btn-danger:hover {
-            background: rgba(220, 38, 38, 0.1);
-            transform: translateY(-2px);
-        }
-
+        .action-btn:hover { transform: translateY(-2px); }
         .loading {
-            text-align: center;
-            color: #0369a1;
-            padding: 40px;
-            font-size: 14px;
+            text-align: center; color: #0369a1;
+            padding: 40px; font-size: 14px;
         }
-
-        ::-webkit-scrollbar { width: 8px; }
-        ::-webkit-scrollbar-track { background: transparent; }
-        ::-webkit-scrollbar-thumb { background: rgba(14, 165, 233, 0.4); border-radius: 4px; }
     </style>
 </head>
 <body>
@@ -304,108 +159,74 @@
         );
 
         (async function loadProfile() {
-            // بررسی لاگین بودن کاربر
             const { data: { session } } = await db.auth.getSession();
-
             if (!session) {
                 window.location.href = 'login.html';
                 return;
             }
 
             const user = session.user;
-            const fullName = user.user_metadata?.full_name || 'کاربر';
+
+            const { data: profile } = await db
+                .from('profiles')
+                .select('*')
+                .eq('id', user.id)
+                .single();
+
+            const fullName = profile?.full_name || user.user_metadata?.full_name || 'کاربر';
             const email = user.email;
             const createdAt = new Date(user.created_at).toLocaleDateString('fa-IR');
             const firstLetter = fullName.charAt(0).toUpperCase();
+            const role = profile?.role || 'student';
+            const status = profile?.status || 'pending';
 
-            // دریافت آمار آزمون‌ها (اگه جدول quiz_results وجود داشته باشه)
-            let quizResults = [];
-            try {
-                const { data, error } = await db
-                    .from('quiz_results')
-                    .select('*')
-                    .eq('user_id', user.id)
-                    .order('created_at', { ascending: false })
-                    .limit(10);
-                
-                if (!error && data) {
-                    quizResults = data;
-                }
-            } catch (e) {
-                // جدول هنوز ساخته نشده، رد می‌کنیم
-            }
+            const roleLabel = {
+                student: '👨‍🎓 دانشجو',
+                teacher: '👨‍🏫 مربی',
+                admin: '👨‍💼 مدیر'
+            }[role] || role;
 
-            // محاسبه آمار
-            const totalQuizzes = quizResults.length;
-            const avgScore = totalQuizzes > 0 
-                ? Math.round(quizResults.reduce((sum, q) => sum + (q.score || 0), 0) / totalQuizzes)
-                : 0;
+            const statusLabel = {
+                pending: '⏳ در انتظار تأیید',
+                approved: '✅ تأییدشده',
+                rejected: '❌ ردشده'
+            }[status] || status;
 
-            // ساخت HTML
-            let quizHtml = '';
-            if (quizResults.length === 0) {
-                quizHtml = `<div class="empty-message">هنوز در هیچ آزمونی شرکت نکرده‌اید</div>`;
-            } else {
-                quizHtml = quizResults.map(q => `
-                    <div class="quiz-item">
-                        <span class="quiz-name">${q.quiz_name || 'آزمون'}</span>
-                        <span class="quiz-score ${q.score < 50 ? 'low' : ''}">${q.score || 0}%</span>
-                    </div>
-                `).join('');
-            }
+            const isAdmin = role === 'admin' && status === 'approved';
 
             document.getElementById('container').innerHTML = `
-                <!-- کارت اطلاعات کاربر -->
                 <div class="info-card">
                     <div class="avatar">${firstLetter}</div>
                     <div class="user-name">${fullName}</div>
                     <div class="user-email">${email}</div>
-                    
+
+                    <span class="status-badge ${status}">${statusLabel}</span>
+
+                    <div class="info-row">
+                        <span class="info-label">🎭 نقش</span>
+                        <span class="info-value">${roleLabel}</span>
+                    </div>
                     <div class="info-row">
                         <span class="info-label">📅 تاریخ عضویت</span>
                         <span class="info-value">${createdAt}</span>
                     </div>
-                    <div class="info-row">
-                        <span class="info-label">🆔 شناسه کاربر</span>
-                        <span class="info-value">${user.id.substring(0, 8)}...</span>
-                    </div>
                 </div>
 
-                <!-- کارت آمار -->
-                <div class="stats-card">
-                    <div class="section-title">📊 آمار شما</div>
-                    <div class="stats-grid">
-                        <div class="stat-box">
-                            <div class="stat-number">${totalQuizzes}</div>
-                            <div class="stat-label">آزمون شرکت‌کرده</div>
-                        </div>
-                        <div class="stat-box">
-                            <div class="stat-number">${avgScore}%</div>
-                            <div class="stat-label">میانگین نمرات</div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- کارت تاریخچه آزمون‌ها -->
-                <div class="stats-card">
-                    <div class="section-title">📝 تاریخچه آزمون‌ها</div>
-                    <div class="quiz-list">
-                        ${quizHtml}
-                    </div>
-                </div>
-
-                <!-- دکمه‌ها -->
                 <div class="actions">
                     <a href="index.html" class="action-btn btn-primary">
                         🏠 بازگشت به خانه
                     </a>
+                    ${isAdmin ? `
+                        <a href="admin.html" class="action-btn btn-admin">
+                            👨‍💼 پنل مدیریت کاربران
+                        </a>
+                    ` : ''}
                     <button id="logoutBtn" class="action-btn btn-danger">
                         🚪 خروج از حساب
                     </button>
                 </div>
             `;
 
-            // دکمه خروج
             document.getElementById('logoutBtn').addEventListener('click', async function() {
                 if (confirm('آیا می‌خواهید از حساب خود خارج شوید؟')) {
                     await db.auth.signOut();
