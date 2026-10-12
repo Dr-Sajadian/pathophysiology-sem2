@@ -457,6 +457,14 @@
             // ===== منطق آپلود =====
             setupUpload(db);
         })();
+
+        // ===== دکمه خروج =====
+document.getElementById('logoutBtn')?.addEventListener('click', async function() {
+    if (confirm('آیا می‌خواهید از حساب خود خارج شوید؟')) {
+        await db.auth.signOut();
+        window.location.href = 'login.html';
+    }
+});
     }
 
     // ========================================
