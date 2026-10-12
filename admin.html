@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>پنل مدیریت</title>
+    <link href="https://cdn.jsdelivr.net/gh/rastikerdar/vazirmatn@v33.003/Vazirmatn-font-face.css" rel="stylesheet" type="text/css" />
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            background: linear-gradient(135deg, #e0f2fe 0%, #bae6fd 50%, #7dd3fc 100%);
+            background-attachment: fixed;
+            font-family: Vazirmatn, sans-serif;
+            min-height: 100vh;
+            padding: 30px 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        body::before, body::after {
+            content: ''; position: fixed; border-radius: 50%;
+            filter: blur(80px); z-index: 0;
+        }
+        body::before {
+            width: 300px; height: 300px;
+            background: rgba(255, 255, 255, 0.6);
+            top: -50px; right: -50px;
+        }
+        body::after {
+            width: 400px; height: 400px;
+            background: rgba(56, 189, 248, 0.4);
+            bottom: -100px; left: -100px;
+        }
+        .header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 10px;
+            z-index: 1;
+        }
+        .header-icon {
+            width: 55px; height: 55px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #f59e0b, #d97706);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 28px;
+            box-shadow: 0 6px 15px rgba(217, 119, 6, 0.3);
+        }
+        h1 {
+            color: #0c4a6e;
+            font-size: 22px;
+            font-weight: 900;
+            text-shadow: 0 2px 5px rgba(255,255,255,0.8);
+        }
+        .stats-bar {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 25px;
+            margin-top: 15px;
+            z-index: 1;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+        .stat {
+            background: rgba(255, 255, 255, 0.6);
+            backdrop-filter: blur(10px);
+            padding: 10px 18px;
+            border-radius: 15px;
+            border: 1.5px solid rgba(255, 255, 255, 0.9);
+            font-size: 13px;
+            font-weight: bold;
+            color: #0c4a6e;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+        }
+        .stat span { color: #0284c7; font-size: 16px; }
+        .container {
+            width: 100%;
+            max-width: 700px;
+            z-index: 1;
+        }
+        .user-card {
+            background: rgba(255, 255, 255, 0.6);
+            backdrop-filter: blur(15px);
+            border: 1.5px solid rgba(255, 255, 255, 0.9);
+            border-radius: 18px;
+            padding: 18px 20px;
+            margin-bottom: 15px;
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
+        }
+        .user-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 12px;
+        }
+        .avatar {
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #38bdf8, #0284c7);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            font-size: 18px;
+            flex-shrink: 0;
+        }
+        .user-info { flex: 1; text-align: right; }
+        .user-name {
+            font-size: 16px;
+            font-weight: 900;
+            color: #0c4a6e;
+            margin-bottom: 3px;
+        }
+        .user-email {
+            font-size: 12px;
+            color: #64748b;
+            direction: ltr;
+            text-align: right;
+        }
+        .badges {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 12px;
+            flex-wrap: wrap;
+            justify-content: flex-end;
+        }
+        .badge {
+            font-size: 11px;
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-weight: bold;
+        }
+        .badge.pending {
+            background: rgba(251, 191, 36, 0.2);
+            color: #b45309;
+            border: 1px solid rgba(251, 191, 36, 0.5);
+        }
+        .badge.approved {
+            background: rgba(52, 211, 153, 0.2);
+            color: #047857;
+            border: 1px solid rgba(52, 211, 153, 0.5);
+        }
+        .badge.rejected {
+            background: rgba(248, 113, 113, 0.2);
+            color: #b91c1c;
+            border: 1px solid rgba(248, 113, 113, 0.5);
+        }
+        .badge.role {
+            background: rgba(56, 189, 248, 0.2);
+            color: #0369a1;
+            border: 1px solid rgba(56, 189, 248, 0.5);
+        }
+        .actions {
+            display: flex;
+            gap: 8px;
+            justify-content: flex-end;
+            flex-wrap: wrap;
+        }
+        .btn {
+            padding: 8px 16px;
+            border-radius: 10px;
+            font-family: Vazirmatn, sans-serif;
+            font-size: 13px;
+            font-weight: bold;
+            cursor: pointer;
+            border: none;
+            transition: all 0.2s;
+        }
+        .btn.approve {
+            background: linear-gradient(135deg, #34d399, #047857);
+            color: white;
+        }
+        .btn.reject {
+            background: rgba(248, 113, 113, 0.15);
+            color: #b91c1c;
+            border: 1.5px solid rgba(248, 113, 113, 0.4);
+        }
+        .btn.promote {
+            background: rgba(168, 85, 247, 0.15);
+            color: #7c3aed;
+            border: 1.5px solid rgba(168, 85, 247, 0.4);
+        }
+        .btn:hover { transform: translateY(-2px); }
+        .empty, .loading {
+            text-align: center;
+            color: #64748b;
+            padding: 40px;
+            font-size: 14px;
+            background: rgba(255, 255, 255, 0.5);
+            border-radius: 20px;
+            backdrop-filter: blur(15px);
+            border: 1.5px solid rgba(255, 255, 255, 0.85);
+        }
+        .section-title {
+            font-size: 15px;
+            font-weight: 900;
+            color: #0c4a6e;
+            margin: 25px 0 12px 0;
+            text-align: right;
+            padding-right: 5px;
+        }
+        .back-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            margin-top: 25px;
+            padding: 12px 22px;
+            background: rgba(255, 255, 255, 0.6);
+            backdrop-filter: blur(10px);
+            color: #0c4a6e;
+            text-decoration: none;
+            border-radius: 25px;
+            font-weight: bold;
+            font-size: 13px;
+            border: 1.5px solid rgba(255, 255, 255, 0.9);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+            z-index: 1;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="header">
+        <div class="header-icon">👨‍💼</div>
+        <h1>پنل مدیریت کاربران</h1>
+    </div>
+
+    <div class="stats-bar" id="statsBar"></div>
+    <div class="container" id="container">
+        <div class="loading">⏳ در حال بارگذاری...</div>
+    </div>
+
+    <a href="index.html" class="back-btn">🏠 بازگشت به خانه</a>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script>
+        const db = window.supabase.createClient(
+            'https://ddbcwyuoghdyrfqyvnab.supabase.co',
+            'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRkYmN3eXVvZ2hkeXJmcXl2bmFiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTE2NzUyOTMsImV4cCI6MjEwNzI1MTI5M30.QID2XFnkYFs-afjAbhZ_e7QSzaBrLbDWXFRWl0BHnbo'
+        );
+
+        let currentUserId = null;
+
+        (async function loadUsers() {
+            const { data: { session } } = await db.auth.getSession();
+            if (!session) {
+                window.location.href = 'login.html';
+                return;
+            }
+            currentUserId = session.user.id;
+
+            const { data: myProfile } = await db
+                .from('profiles')
+                .select('role, status')
+                .eq('id', session.user.id)
+                .single();
+
+            if (!myProfile || myProfile.role !== 'admin' || myProfile.status !== 'approved') {
+                document.getElementById('container').innerHTML = 
+                    '<div class="empty">❌ شما دسترسی به این صفحه ندارید</div>';
+                return;
+            }
+
+            await loadAllUsers();
+        })();
+
+        async function loadAllUsers() {
+            const { data: users, error } = await db
+                .from('profiles')
+                .select('*')
+                .order('created_at', { ascending: false });
+
+            if (error) {
+                document.getElementById('container').innerHTML = 
+                    '<div class="empty">خطا در بارگذاری کاربران</div>';
+                return;
+            }
+
+            if (!users || users.length === 0) {
+                document.getElementById('container').innerHTML = 
+                    '<div class="empty">کاربری یافت نشد</div>';
+                return;
+            }
+
+            const pending = users.filter(u => u.status === 'pending').length;
+            const approved = users.filter(u => u.status === 'approved').length;
+            const rejected = users.filter(u => u.status === 'rejected').length;
+
+            document.getElementById('statsBar').innerHTML = `
+                <div class="stat">⏳ در انتظار: <span>${pending}</span></div>
+                <div class="stat">✅ تأییدشده: <span>${approved}</span></div>
+                <div class="stat">❌ ردشده: <span>${rejected}</span></div>
+                <div class="stat">👥 کل: <span>${users.length}</span></div>
+            `;
+
+            const sortOrder = { pending: 0, approved: 1, rejected: 2 };
+            users.sort((a, b) => (sortOrder[a.status] || 0) - (sortOrder[b.status] || 0));
+
+            const pendingUsers = users.filter(u => u.status === 'pending');
+            const otherUsers = users.filter(u => u.status !== 'pending');
+
+            let html = '';
+
+            if (pendingUsers.length > 0) {
+                html += '<div class="section-title">⏳ در انتظار تأیید</div>';
+                html += pendingUsers.map(u => renderUserCard(u)).join('');
+            }
+
+            if (otherUsers.length > 0) {
+                html += '<div class="section-title">👥 سایر کاربران</div>';
+                html += otherUsers.map(u => renderUserCard(u)).join('');
+            }
+
+            document.getElementById('container').innerHTML = html;
+        }
+
+        function renderUserCard(user) {
+            const statusLabel = {
+                pending: '⏳ در انتظار تأیید',
+                approved: '✅ تأییدشده',
+                rejected: '❌ ردشده'
+            }[user.status] || user.status;
+
+            const roleLabel = {
+                student: '👨‍🎓 دانشجو',
+                teacher: '👨‍🏫 مربی',
+                admin: '👨‍💼 مدیر'
+            }[user.role] || user.role;
+
+            const initial = (user.full_name || 'ک').charAt(0).toUpperCase();
+            const isMe = user.id === currentUserId;
+
+            return `
+                <div class="user-card">
+                    <div class="user-header">
+                        <div class="avatar">${initial}</div>
+                        <div class="user-info">
+                            <div class="user-name">${user.full_name || 'بدون نام'} ${isMe ? '(شما)' : ''}</div>
+                            <div class="user-email">${user.email || ''}</div>
+                        </div>
+                    </div>
+                    <div class="badges">
+                        <span class="badge ${user.status}">${statusLabel}</span>
+                        <span class="badge role">${roleLabel}</span>
+                    </div>
+                    ${!isMe ? `
+                    <div class="actions">
+                        ${user.status !== 'approved' ? 
+                            `<button class="btn approve" onclick="changeStatus('${user.id}', 'approved')">✅ تأیید</button>` : ''}
+                        ${user.status !== 'rejected' ? 
+                            `<button class="btn reject" onclick="changeStatus('${user.id}', 'rejected')">❌ رد</button>` : ''}
+                        ${user.role === 'student' && user.status === 'approved' ? 
+                            `<button class="btn promote" onclick="promoteToTeacher('${user.id}')">⬆️ ارتقا به مربی</button>` : ''}
+                    </div>
+                    ` : '<div class="actions"><small style="color:#64748b;">حساب خودتان</small></div>'}
+                </div>
+            `;
+        }
+
+        window.changeStatus = async function(userId, newStatus) {
+            const action = newStatus === 'approved' ? 'تأیید' : 'رد';
+            if (!confirm(`آیا مطمئنید که می‌خواهید این کاربر را ${action} کنید؟`)) return;
+
+            const { error } = await db
+                .from('profiles')
+                .update({ status: newStatus })
+                .eq('id', userId);
+
+            if (error) {
+                alert('خطا: ' + error.message);
+            } else {
+                alert('✅ با موفقیت انجام شد');
+                await loadAllUsers();
+            }
+        };
+
+        window.promoteToTeacher = async function(userId) {
+            if (!confirm('آیا می‌خواهید این کاربر را به مربی ارتقا دهید؟')) return;
+
+            const { error } = await db
+                .from('profiles')
+                .update({ role: 'teacher' })
+                .eq('id', userId);
+
+            if (error) {
+                alert('خطا: ' + error.message);
+            } else {
+                alert('✅ کاربر به مربی ارتقا یافت');
+                await loadAllUsers();
+            }
+        };
+    </script>
+</body>
+</html>
