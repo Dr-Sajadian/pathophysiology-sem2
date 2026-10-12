@@ -26,13 +26,10 @@
             width: 100%;
             box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
         }
-        h1 { color: #0c4a6e; text-align: center; margin-bottom: 25px; font-size: 22px; }
-        
-        .input-group {
-            position: relative;
-            margin-bottom: 15px;
-        }
-        input {
+        h1 { color: #0c4a6e; text-align: center; margin-bottom: 10px; font-size: 22px; }
+        .desc { color: #475569; text-align: center; font-size: 12px; margin-bottom: 25px; line-height: 1.8; }
+        .input-group { position: relative; margin-bottom: 15px; }
+        input, select {
             width: 100%;
             padding: 12px 15px;
             padding-left: 45px;
@@ -43,6 +40,7 @@
             font-size: 14px;
             box-sizing: border-box;
         }
+        select { padding-left: 15px; }
         .toggle-password {
             position: absolute;
             left: 12px;
@@ -54,12 +52,9 @@
             font-size: 18px;
             color: #475569;
             padding: 0;
-            line-height: 1;
             width: auto;
             height: auto;
         }
-        
-        /* ✅ اصلاح شد: استایل دکمه ثبت‌نام با آی‌دی مشخص شده */
         #registerBtn {
             width: 100%;
             padding: 12px;
@@ -73,7 +68,7 @@
             cursor: pointer;
             margin-top: 5px;
         }
-        .msg { text-align: center; margin-top: 15px; font-size: 13px; }
+        .msg { text-align: center; margin-top: 15px; font-size: 13px; line-height: 1.7; }
         .msg.error { color: #dc2626; }
         .msg.success { color: #047857; }
         .link { text-align: center; margin-top: 20px; font-size: 13px; color: #0c4a6e; }
@@ -84,13 +79,20 @@
 
     <div class="form-box">
         <h1>📝 ثبت‌نام</h1>
+        <p class="desc">پس از ثبت‌نام، حساب شما باید توسط مدیر تأیید شود.</p>
+
         <input type="text" id="fullName" placeholder="نام و نام خانوادگی" required>
         <input type="email" id="email" placeholder="ایمیل" required>
-        
+
         <div class="input-group">
             <input type="password" id="password" placeholder="رمز عبور (حداقل ۶ کاراکتر)" required>
             <button type="button" class="toggle-password" id="togglePassword">👁️</button>
         </div>
+
+        <select id="role">
+            <option value="student">👨‍🎓 دانشجو</option>
+            <option value="teacher">👨‍🏫 مربی</option>
+        </select>
 
         <button id="registerBtn">ثبت‌نام</button>
         <p class="msg" id="message"></p>
@@ -99,7 +101,6 @@
 
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script>
-        // ✅ اصلاح شد: آدرس تمیز و بدون /rest/v1/
         const db = window.supabase.createClient(
             'https://ddbcwyuoghdyrfqyvnab.supabase.co',
             'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRkYmN3eXVvZ2hkeXJmcXl2bmFiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTE2NzUyOTMsImV4cCI6MjEwNzI1MTI5M30.QID2XFnkYFs-afjAbhZ_e7QSzaBrLbDWXFRWl0BHnbo'
@@ -117,6 +118,7 @@
             const fullName = document.getElementById('fullName').value.trim();
             const email = document.getElementById('email').value.trim();
             const password = document.getElementById('password').value;
+            const role = document.getElementById('role').value;
             const messageEl = document.getElementById('message');
 
             if (!fullName || !email || !password) {
@@ -137,16 +139,22 @@
                 email: email,
                 password: password,
                 options: {
-                    data: { full_name: fullName }
+                    data: {
+                        full_name: fullName,
+                        role: role
+                    }
                 }
             });
 
             if (error) {
                 messageEl.textContent = 'خطا: ' + error.message;
                 messageEl.className = 'msg error';
-            } else {
-                messageEl.textContent = '✅ ثبت‌نام موفق! لطفاً ایمیل خود را تأیید کنید.';
+            } else if (data.user) {
+                messageEl.innerHTML = '✅ ثبت‌نام موفق!<br><small>حساب شما در انتظار تأیید مدیر است. بعد از تأیید، می‌توانید وارد شوید.</small>';
                 messageEl.className = 'msg success';
+                document.getElementById('fullName').value = '';
+                document.getElementById('email').value = '';
+                document.getElementById('password').value = '';
             }
         });
     </script>
