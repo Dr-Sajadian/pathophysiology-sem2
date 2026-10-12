@@ -27,15 +27,11 @@
             box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
         }
         h1 { color: #0c4a6e; text-align: center; margin-bottom: 25px; font-size: 22px; }
-        
-        .input-group {
-            position: relative;
-            margin-bottom: 15px;
-        }
+        .input-group { position: relative; margin-bottom: 15px; }
         input {
             width: 100%;
             padding: 12px 15px;
-            padding-left: 45px; /* فاصله برای آیکون چشم */
+            padding-left: 45px;
             border: 1.5px solid rgba(56, 189, 248, 0.4);
             border-radius: 12px;
             background: rgba(255, 255, 255, 0.7);
@@ -54,12 +50,9 @@
             font-size: 18px;
             color: #475569;
             padding: 0;
-            line-height: 1;
             width: auto;
             height: auto;
         }
-        
-        /* ✅ اصلاح شد: استایل دکمه ورود با آی‌دی مشخص شده */
         #loginBtn {
             width: 100%;
             padding: 12px;
@@ -73,9 +66,10 @@
             cursor: pointer;
             margin-top: 5px;
         }
-        .msg { text-align: center; margin-top: 15px; font-size: 13px; }
+        .msg { text-align: center; margin-top: 15px; font-size: 13px; line-height: 1.7; }
         .msg.error { color: #dc2626; }
         .msg.success { color: #047857; }
+        .msg.warning { color: #d97706; }
         .link { text-align: center; margin-top: 20px; font-size: 13px; color: #0c4a6e; }
         .link a { color: #0284c7; font-weight: bold; }
     </style>
@@ -85,7 +79,7 @@
     <div class="form-box">
         <h1>🔐 ورود</h1>
         <input type="email" id="email" placeholder="ایمیل" required>
-        
+
         <div class="input-group">
             <input type="password" id="password" placeholder="رمز عبور" required>
             <button type="button" class="toggle-password" id="togglePassword">👁️</button>
@@ -99,11 +93,10 @@
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script>
         const db = window.supabase.createClient(
-            'https://ddbcwyuoghdyrfqyvnab.supabase.co', // آدرس تمیز و درست
+            'https://ddbcwyuoghdyrfqyvnab.supabase.co',
             'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRkYmN3eXVvZ2hkeXJmcXl2bmFiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTE2NzUyOTMsImV4cCI6MjEwNzI1MTI5M30.QID2XFnkYFs-afjAbhZ_e7QSzaBrLbDWXFRWl0BHnbo'
         );
 
-        // نمایش/مخفی کردن رمز عبور
         const togglePassword = document.getElementById('togglePassword');
         const passwordInput = document.getElementById('password');
         togglePassword.addEventListener('click', function() {
@@ -134,13 +127,43 @@
             if (error) {
                 messageEl.textContent = 'خطا: ایمیل یا رمز عبور اشتباه است';
                 messageEl.className = 'msg error';
-            } else {
-                messageEl.textContent = '✅ ورود موفق! در حال انتقال...';
-                messageEl.className = 'msg success';
-                setTimeout(() => {
-                    window.location.href = 'index.html';
-                }, 1000);
+                return;
             }
+
+            // بررسی وضعیت پروفایل
+            const { data: profile } = await db
+                .from('profiles')
+                .select('*')
+                .eq('id', data.user.id)
+                .single();
+
+            if (!profile) {
+                messageEl.textContent = 'خطا در دریافت اطلاعات کاربر';
+                messageEl.className = 'msg error';
+                await db.auth.signOut();
+                return;
+            }
+
+            if (profile.status === 'pending') {
+                messageEl.innerHTML = '⏳ حساب شما در انتظار تأیید مدیر است.<br><small>لطفاً بعداً دوباره تلاش کنید.</small>';
+                messageEl.className = 'msg warning';
+                await db.auth.signOut();
+                return;
+            }
+
+            if (profile.status === 'rejected') {
+                messageEl.textContent = '❌ متأسفانه حساب شما رد شده است.';
+                messageEl.className = 'msg error';
+                await db.auth.signOut();
+                return;
+            }
+
+            // موفق
+            messageEl.textContent = '✅ ورود موفق! در حال انتقال...';
+            messageEl.className = 'msg success';
+            setTimeout(() => {
+                window.location.href = 'index.html';
+            }, 800);
         });
     </script>
 </body>
