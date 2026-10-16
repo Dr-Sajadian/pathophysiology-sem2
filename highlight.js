@@ -208,6 +208,7 @@ async function init() {
     }
 
     currentUser = session?.user || null;
+    console.log('🔍 Highlight DB Session:', currentUser ? currentUser.email : 'خالی');
 
     if (currentUser) {
         console.log('✅ کاربر لاگین کرده:', currentUser.email);
