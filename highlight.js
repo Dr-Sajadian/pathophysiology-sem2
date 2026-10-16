@@ -4,11 +4,44 @@
 
 (function() {
     // ============ ۱. متغیرهای عمومی ============
-    // 🔥 اول از کلاینت موجود استفاده کن (که menu.js ساخته)، در غیر این صورت یکی بساز
-    const db = window.appDb || (window.supabase ? window.supabase.createClient(
-        'https://ddbcwyuoghdyrfqyvnab.supabase.co',
-        'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRkYmN3eXVvZ2hkeXJmcXl2bmFiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTE2NzUyOTMsImV4cCI6MjEwNzI1MTI5M30.QID2XFnkYFs-afjAbhZ_e7QSzaBrLbDWXFRWl0BHnbo'
-    ) : null);
+    const SUPABASE_URL = 'https://ddbcwyuoghdyrfqyvnab.supabase.co';
+    const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRkYmN3eXVvZ2hkeXJmcXl2bmFiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTE2NzUyOTMsImV4cCI6MjEwNzI1MTI5M30.QID2XFnkYFs-afjAbhZ_e7QSzaBrLbDWXFRWl0BHnbo';
+    const SESSION_KEY = 'sb-ddbcwyuoghdyrfqyvnab-auth-token';
+    
+    // 🔥 تابع بخون session از localStorage
+    function getSessionFromStorage() {
+        try {
+            const raw = localStorage.getItem(SESSION_KEY);
+            if (!raw) return null;
+            const data = JSON.parse(raw);
+            if (data && data.access_token && data.user) {
+                return data;
+            }
+            return null;
+        } catch (e) {
+            return null;
+        }
+    }
+    
+    // 🔥 کلاینت رو با session موجود میسازیم
+    let db = null;
+    const sessionData = getSessionFromStorage();
+    
+    if (window.supabase) {
+        db = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+        
+        // اگه session توی localStorage بود، به کلاینت تزریق کن
+        if (sessionData && sessionData.access_token) {
+            db.auth.setSession({
+                access_token: sessionData.access_token,
+                refresh_token: sessionData.refresh_token || ''
+            }).then(() => {
+                console.log('✅ Session به highlight.js تزریق شد');
+            }).catch(e => {
+                console.warn('⚠️ خطا در تزریق session:', e);
+            });
+        }
+    }
 
     const PAGE_URL = window.location.pathname;
     const STORAGE_KEY = 'myHighlights_v3';
