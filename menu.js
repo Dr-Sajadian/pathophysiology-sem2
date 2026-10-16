@@ -414,27 +414,13 @@
     // ۵. بررسی وضعیت کاربر
     // ========================================
     if (window.supabase) {
-        const db = window.supabase.createClient(
+        const db = window.appDb || window.supabase.createClient(
             'https://ddbcwyuoghdyrfqyvnab.supabase.co',
-            'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRkYmN3eXVvZ2hkeXJmcXl2bmFiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTE2NzUyOTMsImV4cCI6MjEwNzI1MTI5M30.QID2XFnkYFs-afjAbhZ_e7QSzaBrLbDWXFRWl0BHnbo'
+            'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRkYmN3eXVvZ2hkeXJmcXl2bmFiIiwiaWF0IjoxNzkxNjc1MjkzLCJleHAiOjIxMDcyNTEyOTN9.QID2XFnkYFs-afjAbhZ_e7QSzaBrLbDWXFRWl0BHnbo',
+            { auth: { persistSession: true, autoRefreshToken: true, detectSessionInUrl: true } }
         );
-        // 🌐 به اشتراک‌گذاری کلاینت برای استفاده در فایل‌های دیگه
-window.appDb = db;
-// 🔥 تنظیم صریح کلید دسترسی از localStorage
-const savedSession = localStorage.getItem('sb-ddbcwyuoghdyrfqyvnab-auth-token');
-if (savedSession) {
-    try {
-        const sessionData = JSON.parse(savedSession);
-        if (sessionData?.access_token) {
-            db.auth.setSession({
-                access_token: sessionData.access_token,
-                refresh_token: sessionData.refresh_token
-            });
-        }
-    } catch (e) {
-        console.warn('Session parse error:', e);
-    }
-}
+        // کلاینت واحد برای menu.js و highlight.js؛ از setSession دستی خودداری می‌کنیم.
+        window.appDb = db;
         (async function checkUser() {
             const { data: { session } } = await db.auth.getSession();
             console.log('🔍 Session:', session ? 'موجود' : 'خالی', session?.user?.email || '');
