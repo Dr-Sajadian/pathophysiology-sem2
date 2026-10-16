@@ -218,6 +218,14 @@
 
     // ============ ۵. شروع ============
 async function init() {
+    // 🐛 تست اولیه: session از localStorage
+    const testSession = getSessionFromStorage();
+    console.log('🧪 Session از localStorage:', testSession ? 'موجود ✓' : 'خالی ✗');
+    if (testSession) {
+        console.log('🧪 ایمیل کاربر:', testSession.user?.email);
+    }
+
+    async function init() {
     // گوش دادن به وضعیت آنلاین/آفلاین
     window.addEventListener('online', handleOnline);
     window.addEventListener('offline', handleOffline);
