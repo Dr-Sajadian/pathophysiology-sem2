@@ -1,52 +1,20 @@
 // ========================================
-// highlight.js - هایلایت با ذخیره‌سازی در Supabase + سینک خودکار
+// highlight.js - هایلایت با ذخیره‌سازی در Supabase
 // ========================================
 
 (function() {
     // ============ ۱. متغیرهای عمومی ============
-    const SUPABASE_URL = 'https://ddbcwyuoghdyrfqyvnab.supabase.co';
-    const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRkYmN3eXVvZ2hkeXJmcXl2bmFiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTE2NzUyOTMsImV4cCI6MjEwNzI1MTI5M30.QID2XFnkYFs-afjAbhZ_e7QSzaBrLbDWXFRWl0BHnbo';
-    const SESSION_KEY = 'sb-ddbcwyuoghdyrfqyvnab-auth-token';
-    
-    // 🔥 تابع بخون session از localStorage
-    function getSessionFromStorage() {
-        try {
-            const raw = localStorage.getItem(SESSION_KEY);
-            if (!raw) return null;
-            const data = JSON.parse(raw);
-            if (data && data.access_token && data.user) {
-                return data;
-            }
-            return null;
-        } catch (e) {
-            return null;
-        }
-    }
-    
-    // از کلاینت مشترک استفاده کن؛ اگر menu.js اجرا نشده باشد، خودت بساز.
-    // Supabase خودش session را از localStorage بازیابی می‌کند؛ setSession دستی لازم نیست.
-    let db = window.appDb || null;
-    if (!db && window.supabase) {
-        db = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY, {
-            auth: {
-                persistSession: true,
-                autoRefreshToken: true,
-                detectSessionInUrl: true
-            }
-        });
-        window.appDb = db;
-    }
+    const db = window.supabase ? window.supabase.createClient(
+        'https://ddbcwyuoghdyrfqyvnab.supabase.co',
+        'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRkYmN3eXVvZ2hkeXJmcXl2bmFiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTE2NzUyOTMsImV4cCI6MjEwNzI1MTI5M30.QID2XFnkYFs-afjAbhZ_e7QSzaBrLbDWXFRWl0BHnbo'
+    ) : null;
 
-    const PAGE_URL = window.location.pathname;
-    const STORAGE_KEY = 'myHighlights_v3';
-    const PENDING_KEY = 'pendingHighlights'; // برای هایلایت‌هایی که هنوز سینک نشدن
-    
+    const PAGE_URL = window.location.pathname; // مثلاً /jalali-session1-hormones.html
     let currentUser = null;
     let savedHighlights = [];
     let activeColor = '#fde047';
-    let isOnline = navigator.onLine;
 
-    // ============ ۲. CSS ============
+    // ============ ۲. اضافه کردن CSS ============
     const style = document.createElement('style');
     style.innerHTML = `
         #highlight-toolbar {
@@ -61,7 +29,6 @@
             font-family: Vazirmatn, Tahoma, sans-serif;
             box-sizing: border-box;
             transition: transform 0.3s ease, opacity 0.3s ease;
-            overflow-x: auto;
         }
         #highlight-toolbar.hidden {
             transform: translateY(-100%);
@@ -75,10 +42,12 @@
             box-shadow: 0 0 0 1px rgba(0,0,0,0.1);
             cursor: pointer;
             transition: transform 0.2s;
-            flex-shrink: 0;
         }
         .color-btn:hover { transform: scale(1.2); }
-        .my-highlight { cursor: pointer; transition: opacity 0.2s; }
+        .my-highlight {
+            cursor: pointer;
+            transition: opacity 0.2s;
+        }
         .my-highlight:active { opacity: 0.6; }
         body { padding-top: 50px !important; }
 
@@ -102,20 +71,17 @@
         #show-toolbar-btn:hover { transform: scale(1.1); }
 
         #sync-status {
-            font-size: 10px;
+            font-size: 11px;
             color: #64748b;
             margin-left: auto;
             margin-right: 8px;
             display: flex;
             align-items: center;
-            gap: 3px;
-            white-space: nowrap;
-            flex-shrink: 0;
+            gap: 4px;
         }
         #sync-status.synced { color: #047857; }
         #sync-status.syncing { color: #d97706; }
         #sync-status.local { color: #64748b; }
-        #sync-status.offline { color: #dc2626; }
 
         @media print {
             #highlight-toolbar, #show-toolbar-btn { display: none !important; }
@@ -130,21 +96,21 @@
     `;
     document.head.appendChild(style);
 
-    // ============ ۳. نوار ابزار ============
+    // ============ ۳. ساخت نوار ابزار ============
     let toolbarHidden = localStorage.getItem('highlightToolbarHidden') === 'true';
 
     const toolbar = document.createElement('div');
     toolbar.id = 'highlight-toolbar';
     toolbar.innerHTML = `
-        <span style="color: #0c4a6e; font-weight: bold; font-size: 11px; margin-left: 5px;">رنگ:</span>
+        <span style="color: #0c4a6e; font-weight: bold; font-size: 12px; margin-left: 5px;">رنگ هایلایت:</span>
         <button class="color-btn" data-color="#a7c957" style="background-color: #a7c957;" title="سبز پسته‌ای"></button>
         <button class="color-btn" data-color="#fde047" style="background-color: #fde047;" title="زرد"></button>
         <button class="color-btn" data-color="#ff8a8a" style="background-color: #ff8a8a;" title="قرمز روشن"></button>
         <button class="color-btn" data-color="#90e0ef" style="background-color: #90e0ef;" title="آبی آسمانی"></button>
         <button class="color-btn" data-color="#ffb74d" style="background-color: #ffb74d;" title="نارنجی روشن"></button>
-        <span id="sync-status">⏳</span>
-        <button id="clear-highlights" style="background: #ef4444; color: white; border: none; border-radius: 4px; padding: 4px 8px; font-size: 11px; cursor: pointer; flex-shrink: 0;">پاک کردن همه</button>
-        <button id="toggle-toolbar" title="مخفی کردن" style="background: #64748b; color: white; border: none; border-radius: 4px; padding: 4px 10px; font-size: 13px; cursor: pointer; font-weight: bold; flex-shrink: 0;">✕</button>
+        <span id="sync-status">☁️ در حال بارگذاری...</span>
+        <button id="clear-highlights" style="background: #ef4444; color: white; border: none; border-radius: 4px; padding: 4px 8px; font-size: 11px; cursor: pointer;">پاک کردن همه</button>
+        <button id="toggle-toolbar" title="مخفی کردن" style="background: #64748b; color: white; border: none; border-radius: 4px; padding: 4px 10px; font-size: 13px; cursor: pointer; font-weight: bold;">✕</button>
     `;
     document.body.appendChild(toolbar);
 
@@ -178,6 +144,7 @@
         applyToolbarState();
     });
 
+    // ============ ۴. دکمه‌های رنگ ============
     document.querySelectorAll('.color-btn').forEach(btn => {
         btn.addEventListener('click', function() {
             activeColor = this.getAttribute('data-color');
@@ -186,234 +153,73 @@
         });
     });
 
-    // ============ ۴. نمایش وضعیت سینک ============
-    function updateSyncStatus(status, debugInfo) {
-    const el = document.getElementById('sync-status');
-    if (!el) return;
-    
-    const statuses = {
-        syncing: { text: '⏳ سینک...', class: 'syncing' },
-        synced: { text: '✅ فعال', class: 'synced' },
-        local: { text: '📱 محلی', class: 'local' },
-        offline: { text: '⚠️ آفلاین', class: 'offline' },
-        error: { text: '⚠️ خطای سینک', class: 'offline' },
-        pending: { text: '⏳ در انتظار', class: 'syncing' }
-    };
-    
-    const s = statuses[status] || statuses.local;
-    el.textContent = s.text;
-    el.className = s.class;
-    
-    // 🐛 نمایش اطلاعات دیباگ
-    if (debugInfo) {
-        el.title = debugInfo;
-        console.log('🔍 وضعیت:', status, '|', debugInfo);
-    }
-    }
-
-    // ============ ۵. شروع ============
-    let authListenerRegistered = false;
-
-    async function syncAfterLogin() {
-        if (!db || !isOnline) {
-            updateSyncStatus(isOnline ? 'local' : 'offline');
-            loadFromLocalStorage();
-            return;
-        }
-        updateSyncStatus('syncing');
-        try {
-            const okMigration = await migrateLocalToSupabase();
-            const okPending = await syncPendingHighlights();
-            const okLoad = await loadFromSupabase();
-            updateSyncStatus(okMigration && okPending && okLoad ? 'synced' : 'error');
-        } catch (err) {
-            console.error('خطا در همگام‌سازی هایلایت‌ها:', err);
-            updateSyncStatus('error', err.message || 'خطای نامشخص');
-        }
-    }
-
+    // ============ ۵. بررسی کاربر و بارگذاری ============
     async function init() {
-        window.addEventListener('online', handleOnline);
-        window.addEventListener('offline', handleOffline);
+        const syncStatus = document.getElementById('sync-status');
 
         if (!db) {
-            console.error('Supabase library/client پیدا نشد. ترتیب بارگذاری supabase-js را بررسی کنید.');
-            updateSyncStatus('local', 'کلاینت Supabase در دسترس نیست');
+            syncStatus.textContent = '⚠️ Supabase در دسترس نیست';
+            syncStatus.className = 'local';
             loadFromLocalStorage();
             return;
         }
 
-        try {
-            const { data, error } = await db.auth.getSession();
-            if (error) throw error;
-            currentUser = data?.session?.user || null;
-            console.log('🔍 وضعیت نشست هایلایت:', currentUser ? currentUser.email : 'بدون ورود');
-        } catch (err) {
-            console.error('دریافت نشست Supabase ناموفق بود:', err);
-            currentUser = null;
-        }
+        const { data: { session } } = await db.auth.getSession();
+        currentUser = session?.user || null;
 
-        if (currentUser) await syncAfterLogin();
-        else {
-            updateSyncStatus('local');
-            loadFromLocalStorage();
-        }
-
-        if (!authListenerRegistered) {
-            authListenerRegistered = true;
-            db.auth.onAuthStateChange((event, session) => {
-                // عمداً عملیات شبکه را به microtask بعدی می‌بریم تا داخل callback احراز هویت قفل نشود.
-                if (event === 'SIGNED_IN' && session) {
-                    currentUser = session.user;
-                    setTimeout(() => syncAfterLogin(), 0);
-                } else if (event === 'TOKEN_REFRESHED' && session) {
-                    currentUser = session.user;
-                } else if (event === 'SIGNED_OUT') {
-                    currentUser = null;
-                    updateSyncStatus('local');
-                }
-            });
-        }
-    }
-
-    // ============ ۶. مدیریت آنلاین/آفلاین ============
-    async function handleOnline() {
-        isOnline = true;
-        console.log('🌐 اتصال اینترنت برقرار شد');
-        if (currentUser) await syncAfterLogin();
-        else {
-            updateSyncStatus('local');
+        if (currentUser) {
+            // ✅ کاربر لاگین کرده → از Supabase بخون
+            syncStatus.textContent = '☁️ در حال همگام‌سازی...';
+            syncStatus.className = 'syncing';
+            
+            await loadFromSupabase();
+            
+            syncStatus.textContent = '✅ همگام‌سازی فعال';
+            syncStatus.className = 'synced';
+        } else {
+            // ⚠️ کاربر مهمان → از localStorage بخون
+            syncStatus.textContent = '📱 حالت محلی (بدون سینک)';
+            syncStatus.className = 'local';
+            
             loadFromLocalStorage();
         }
     }
 
-    function handleOffline() {
-        isOnline = false;
-        console.log('📴 اتصال اینترنت قطع شد');
-        updateSyncStatus('offline');
-    }
-
-    // ============ ۷. انتقال هایلایت‌های محلی همین صفحه ============
-    async function migrateLocalToSupabase() {
-        if (!currentUser || !db || !isOnline) return false;
-        let localHighlights = [];
-        try { localHighlights = JSON.parse(localStorage.getItem(STORAGE_KEY)) || []; }
-        catch (_) { localHighlights = []; }
-
-        const localForPage = localHighlights.filter(item =>
-            item && item.text && (item.page_url === PAGE_URL || !item.page_url)
-        );
-        if (!localForPage.length) return true;
-
-        const remaining = [...localHighlights];
-        let allSucceeded = true;
-        for (const item of localForPage) {
-            const { data: existing, error: lookupError } = await db
-                .from('highlights').select('id')
-                .eq('user_id', currentUser.id)
-                .eq('page_url', PAGE_URL)
-                .eq('text_content', item.text)
-                .eq('occurrence', item.occurrence || 1)
-                .maybeSingle();
-            if (lookupError) {
-                console.error('خطا در بررسی هایلایت محلی:', lookupError);
-                allSucceeded = false;
-                continue;
-            }
-            if (!existing) {
-                const { error: insertError } = await db.from('highlights').insert({
-                    user_id: currentUser.id,
-                    page_url: item.page_url || PAGE_URL,
-                    text_content: item.text,
-                    color: item.color,
-                    occurrence: item.occurrence || 1
-                });
-                if (insertError) {
-                    console.error('خطا در انتقال هایلایت:', insertError);
-                    allSucceeded = false;
-                    continue;
-                }
-            }
-            const idx = remaining.findIndex(x => x === item);
-            if (idx >= 0) remaining.splice(idx, 1);
-        }
-        // حذف فقط مواردی که سرور تأیید کرده؛ هایلایت‌های سایر صفحات دست‌نخورده می‌مانند.
-        localStorage.setItem(STORAGE_KEY, JSON.stringify(remaining));
-        return allSucceeded;
-    }
-
-    // ============ ۸. سینک موارد در انتظار ============
-    async function syncPendingHighlights() {
-        if (!currentUser || !db || !isOnline) return false;
-        let pending = [];
-        try { pending = JSON.parse(localStorage.getItem(PENDING_KEY)) || []; }
-        catch (_) { pending = []; }
-        if (!pending.length) return true;
-
-        const remaining = [];
-        let allSucceeded = true;
-        for (const item of pending) {
-            if (!item || !item.text || !item.page_url) { remaining.push(item); continue; }
-            // موارد مربوط به صفحات دیگر نیز پردازش می‌شوند، چون localStorage بین صفحات مشترک است.
-            const { data: existing, error: lookupError } = await db
-                .from('highlights').select('id')
-                .eq('user_id', currentUser.id)
-                .eq('page_url', item.page_url)
-                .eq('text_content', item.text)
-                .eq('occurrence', item.occurrence || 1)
-                .maybeSingle();
-            if (lookupError) {
-                console.error('خطا در بررسی pending:', lookupError);
-                remaining.push(item); allSucceeded = false; continue;
-            }
-            if (!existing) {
-                const { error } = await db.from('highlights').insert({
-                    user_id: currentUser.id,
-                    page_url: item.page_url,
-                    text_content: item.text,
-                    color: item.color,
-                    occurrence: item.occurrence || 1
-                });
-                if (error) {
-                    console.error('خطا در سینک pending:', error);
-                    remaining.push(item); allSucceeded = false;
-                }
-            }
-        }
-        localStorage.setItem(PENDING_KEY, JSON.stringify(remaining));
-        return allSucceeded;
-    }
-
-    // ============ ۹. بارگذاری از localStorage ============
+    // ============ ۶. بارگذاری از localStorage ============
     function loadFromLocalStorage() {
-        savedHighlights = JSON.parse(localStorage.getItem(STORAGE_KEY)) || [];
-        // فیلتر فقط برای این صفحه (چون localStorage مشترکه)
-        const forThisPage = savedHighlights.filter(h => h.page_url === PAGE_URL || !h.page_url);
-        
-        forThisPage.forEach(item => {
-            restoreHighlight(item.text, item.color, item.occurrence || 1);
+        savedHighlights = JSON.parse(localStorage.getItem('myHighlights_v3')) || [];
+        savedHighlights.forEach(item => {
+            restoreHighlight(item.text, item.color, item.occurrence);
         });
     }
 
-    // ============ ۱۰. بارگذاری از Supabase ============
+    // ============ ۷. بارگذاری از Supabase ============
     async function loadFromSupabase() {
-        if (!isOnline || !currentUser || !db) return false;
-        const { data, error } = await db.from('highlights').select('*')
-            .eq('user_id', currentUser.id).eq('page_url', PAGE_URL);
+        const { data, error } = await db
+            .from('highlights')
+            .select('*')
+            .eq('user_id', currentUser.id)
+            .eq('page_url', PAGE_URL);
+
         if (error) {
-            console.error('خطا در بارگذاری هایلایت‌ها:', error);
+            console.error('خطا در بارگذاری:', error);
             loadFromLocalStorage();
-            return false;
+            return;
         }
-        savedHighlights = (data || []).map(h => ({
-            id: h.id, text: h.text_content, color: h.color, occurrence: h.occurrence || 1,
-            page_url: h.page_url
+
+        savedHighlights = data.map(h => ({
+            id: h.id,
+            text: h.text_content,
+            color: h.color,
+            occurrence: h.occurrence
         }));
-        savedHighlights.forEach(item => restoreHighlight(item.text, item.color, item.occurrence));
-        return true;
+
+        savedHighlights.forEach(item => {
+            restoreHighlight(item.text, item.color, item.occurrence);
+        });
     }
 
-    // ============ ۱۱. هایلایت کردن ============
+    // ============ ۸. هایلایت کردن انتخاب ============
     document.addEventListener('mouseup', handleSelection);
     document.addEventListener('touchend', handleSelection);
 
@@ -432,88 +238,62 @@
             const range = selection.getRangeAt(0);
             const occurrence = getOccurrenceNumber(selectedText, range);
 
+            // ذخیره در حافظه داخلی
             savedHighlights = savedHighlights.filter(h => 
                 !(h.text === selectedText && h.occurrence === occurrence)
             );
             savedHighlights.push({ text: selectedText, color: activeColor, occurrence: occurrence });
 
+            // اعمال هایلایت
             wrapSelection(selection, activeColor);
+
+            // ذخیره‌سازی
             saveHighlight(selectedText, activeColor, occurrence);
 
             selection.removeAllRanges();
         }
     }
 
-    // ============ ۱۲. ذخیره هایلایت ============
+    // ============ ۹. ذخیره هایلایت ============
     async function saveHighlight(text, color, occurrence) {
-        const highlightData = {
-            user_id: currentUser?.id,
-            page_url: PAGE_URL,
-            text_content: text,
-            color: color,
-            occurrence: occurrence
-        };
-
-        // اگه آفلاین هستیم یا کاربر مهمان → ذخیره در localStorage
-        if (!isOnline || !currentUser || !db) {
-            saveToLocalStorage(text, color, occurrence);
-            
-            // اگه کاربر لاگین کرده ولی آفلاینه → به pending اضافه کن
-            if (currentUser && !isOnline) {
-                const pending = JSON.parse(localStorage.getItem(PENDING_KEY)) || [];
-                if (!pending.some(h => h.page_url === PAGE_URL && h.text === text && h.occurrence === occurrence)) {
-                    pending.push({ text, color, occurrence, page_url: PAGE_URL });
-                }
-                localStorage.setItem(PENDING_KEY, JSON.stringify(pending));
-                updateSyncStatus('pending');
-            }
-            return;
-        }
-
-        // آنلاین و لاگین‌کرده → ذخیره در Supabase
-        try {
+        if (currentUser && db) {
+            // ذخیره در Supabase
             const { data, error } = await db
                 .from('highlights')
-                .insert(highlightData)
+                .insert({
+                    user_id: currentUser.id,
+                    page_url: PAGE_URL,
+                    text_content: text,
+                    color: color,
+                    occurrence: occurrence
+                })
                 .select()
                 .single();
 
-            if (error) throw error;
-            
-            // آپدیت id توی حافظه داخلی
-            const lastItem = savedHighlights[savedHighlights.length - 1];
-            if (lastItem && lastItem.text === text) {
-                lastItem.id = data.id;
-            }
-            updateSyncStatus('synced');
-        } catch (error) {
-            console.error('خطا در ذخیره آنلاین، ذخیره محلی:', error);
-            // fallback به localStorage + pending
-            saveToLocalStorage(text, color, occurrence);
-            
-            if (currentUser) {
-                const pending = JSON.parse(localStorage.getItem(PENDING_KEY)) || [];
-                if (!pending.some(h => h.page_url === PAGE_URL && h.text === text && h.occurrence === occurrence)) {
-                    pending.push({ text, color, occurrence, page_url: PAGE_URL });
+            if (error) {
+                console.error('خطا در ذخیره:', error);
+                // fallback به localStorage
+                saveToLocalStorage(text, color, occurrence);
+            } else {
+                // آپدیت id توی حافظه داخلی
+                const lastItem = savedHighlights[savedHighlights.length - 1];
+                if (lastItem && lastItem.text === text) {
+                    lastItem.id = data.id;
                 }
-                localStorage.setItem(PENDING_KEY, JSON.stringify(pending));
-                updateSyncStatus('pending');
             }
+        } else {
+            // ذخیره در localStorage
+            saveToLocalStorage(text, color, occurrence);
         }
     }
 
     function saveToLocalStorage(text, color, occurrence) {
-        const local = JSON.parse(localStorage.getItem(STORAGE_KEY)) || [];
-        local.push({ 
-            text: text, 
-            color: color, 
-            occurrence: occurrence,
-            page_url: PAGE_URL
-        });
-        localStorage.setItem(STORAGE_KEY, JSON.stringify(local));
+        const local = JSON.parse(localStorage.getItem('myHighlights_v3')) || [];
+        local.push({ text, color, occurrence });
+        localStorage.setItem('myHighlights_v3', JSON.stringify(local));
     }
 
-    // ============ ۱۳. wrapSelection ============
+    // ============ ۱۰. تابع wrapSelection ============
     function wrapSelection(selection, color) {
         try {
             const range = selection.getRangeAt(0);
@@ -534,7 +314,7 @@
         }
     }
 
-    // ============ ۱۴. getOccurrenceNumber ============
+    // ============ ۱۱. محاسبه شماره تکرار ============
     function getOccurrenceNumber(searchText, range) {
         const walker = document.createTreeWalker(
             document.body,
@@ -577,7 +357,7 @@
         return count + 1;
     }
 
-    // ============ ۱۵. restoreHighlight ============
+    // ============ ۱۲. بازیابی هایلایت ============
     function restoreHighlight(searchText, color, occurrence) {
         const walker = document.createTreeWalker(
             document.body,
@@ -631,7 +411,7 @@
         }
     }
 
-    // ============ ۱۶. حذف تکی ============
+    // ============ ۱۳. حذف تکی ============
     function attachRemoveHandler(element) {
         let pressTimer = null;
 
@@ -672,7 +452,7 @@
             parent.normalize();
 
             // حذف از Supabase
-            if (currentUser && db && isOnline) {
+            if (currentUser && db) {
                 const match = savedHighlights.find(h => 
                     h.text === textToRemove && 
                     hexToRgb(h.color) === currentColor
@@ -682,11 +462,12 @@
                     await db.from('highlights').delete().eq('id', match.id);
                 }
                 
+                // حذف از حافظه
                 const idx = savedHighlights.findIndex(h => h.id === match?.id);
                 if (idx > -1) savedHighlights.splice(idx, 1);
             } else {
                 // حذف از localStorage
-                let local = JSON.parse(localStorage.getItem(STORAGE_KEY)) || [];
+                let local = JSON.parse(localStorage.getItem('myHighlights_v3')) || [];
                 let removed = false;
                 local = local.filter(item => {
                     if (!removed && item.text === textToRemove && hexToRgb(item.color) === currentColor) {
@@ -695,7 +476,7 @@
                     }
                     return true;
                 });
-                localStorage.setItem(STORAGE_KEY, JSON.stringify(local));
+                localStorage.setItem('myHighlights_v3', JSON.stringify(local));
                 
                 const idx = savedHighlights.findIndex(h => 
                     h.text === textToRemove && hexToRgb(h.color) === currentColor
@@ -712,31 +493,21 @@
             null;
     }
 
-    // ============ ۱۷. پاک کردن همه ============
+    // ============ ۱۴. پاک کردن همه ============
     document.getElementById('clear-highlights').addEventListener('click', async function() {
-        if (confirm('آیا مطمئن هستید که می‌خواهید همه هایلایت‌های این صفحه را پاک کنید؟')) {
-            // حذف از Supabase
-            if (currentUser && db && isOnline) {
+        if (confirm('آیا مطمئن هستید که می‌خواهید همه هایلایت‌ها را پاک کنید؟')) {
+            if (currentUser && db) {
+                // حذف از Supabase
                 await db.from('highlights').delete()
                     .eq('user_id', currentUser.id)
                     .eq('page_url', PAGE_URL);
             }
-            
-            // حذف از localStorage (فقط این صفحه)
-            const local = JSON.parse(localStorage.getItem(STORAGE_KEY)) || [];
-            const filtered = local.filter(h => h.page_url && h.page_url !== PAGE_URL);
-            localStorage.setItem(STORAGE_KEY, JSON.stringify(filtered));
-            
-            // حذف از pending (فقط این صفحه)
-            const pending = JSON.parse(localStorage.getItem(PENDING_KEY)) || [];
-            const filteredPending = pending.filter(h => h.page_url !== PAGE_URL);
-            localStorage.setItem(PENDING_KEY, JSON.stringify(filteredPending));
-            
+            localStorage.removeItem('myHighlights_v3');
             location.reload();
         }
     });
 
-    // ============ ۱۸. شروع ============
+    // ============ ۱۵. شروع ============
     init();
 
 })();
