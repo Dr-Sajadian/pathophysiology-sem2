@@ -437,7 +437,9 @@ if (savedSession) {
 }
         (async function checkUser() {
             const { data: { session } } = await db.auth.getSession();
+            console.log('🔍 Session:', session ? 'موجود' : 'خالی', session?.user?.email || '');
 
+            // 👇 اگه کاربر لاگین نکرده → فقط ورود و ثبت‌نام نشون بده
             if (!session) {
                 document.getElementById('guestOptions').style.display = 'block';
                 document.getElementById('userOptions').style.display = 'none';
