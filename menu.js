@@ -418,6 +418,8 @@
             'https://ddbcwyuoghdyrfqyvnab.supabase.co',
             'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRkYmN3eXVvZ2hkeXJmcXl2bmFiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTE2NzUyOTMsImV4cCI6MjEwNzI1MTI5M30.QID2XFnkYFs-afjAbhZ_e7QSzaBrLbDWXFRWl0BHnbo'
         );
+        // 🌐 به اشتراک‌گذاری کلاینت برای استفاده در فایل‌های دیگه
+window.appDb = db;
 // 🔥 تنظیم صریح کلید دسترسی از localStorage
 const savedSession = localStorage.getItem('sb-ddbcwyuoghdyrfqyvnab-auth-token');
 if (savedSession) {
