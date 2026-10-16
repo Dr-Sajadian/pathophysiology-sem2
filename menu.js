@@ -1,7 +1,6 @@
 // menu.js - منوی همبرگری + دکمه آپلود مشترک برای همه صفحات
 
 (function() {
-    // اگه منو از قبل اضافه شده، خارج شو
     if (document.getElementById('menuBtn')) return;
 
     // ========================================
@@ -9,229 +8,141 @@
     // ========================================
     const style = document.createElement('style');
     style.innerHTML = `
-        /* ===== منوی همبرگری ===== */
         .menu-btn {
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            width: 40px;
-            height: 40px;
-            border-radius: 12px;
+            position: fixed; top: 20px; right: 20px;
+            width: 40px; height: 40px; border-radius: 12px;
             background: rgba(255, 255, 255, 0.6);
             backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
             border: 1.5px solid rgba(255, 255, 255, 0.9);
             box-shadow: 0 4px 15px rgba(2, 132, 199, 0.2);
-            cursor: pointer;
-            z-index: 10000;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            gap: 4px;
-            transition: all 0.3s;
+            cursor: pointer; z-index: 10000;
+            display: flex; flex-direction: column;
+            align-items: center; justify-content: center;
+            gap: 4px; transition: all 0.3s;
         }
         .menu-btn:hover { background: rgba(255, 255, 255, 0.85); transform: scale(1.05); }
         .menu-btn span {
-            display: block;
-            width: 20px;
-            height: 2px;
+            display: block; width: 20px; height: 2px;
             background: linear-gradient(135deg, #38bdf8, #0284c7);
-            border-radius: 3px;
-            transition: all 0.3s;
+            border-radius: 3px; transition: all 0.3s;
         }
         .menu-btn.open span:nth-child(1) { transform: rotate(45deg) translate(6px, 6px); }
         .menu-btn.open span:nth-child(2) { opacity: 0; }
         .menu-btn.open span:nth-child(3) { transform: rotate(-45deg) translate(6px, -6px); }
 
         .side-menu {
-            position: fixed;
-            top: 70px;
-            right: 20px;
-            width: 220px;
-            background: rgba(255, 255, 255, 0.85);
+            position: fixed; top: 70px; right: 20px; width: 230px;
+            background: rgba(255, 255, 255, 0.9);
             backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
             border: 1.5px solid rgba(255, 255, 255, 0.95);
             border-radius: 20px;
             box-shadow: 0 10px 35px rgba(2, 132, 199, 0.25);
-            padding: 10px;
-            z-index: 9999;
-            opacity: 0;
-            transform: translateY(-15px) scale(0.95);
-            pointer-events: none;
-            transition: all 0.3s ease;
+            padding: 10px; z-index: 9999;
+            opacity: 0; transform: translateY(-15px) scale(0.95);
+            pointer-events: none; transition: all 0.3s ease;
             font-family: Vazirmatn, Tahoma, sans-serif;
             box-sizing: border-box;
         }
         .side-menu.open { opacity: 1; transform: translateY(0) scale(1); pointer-events: all; }
         .side-menu a, .side-menu button {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            padding: 12px 15px;
-            border-radius: 12px;
-            text-decoration: none;
-            color: #0c4a6e;
-            font-family: Vazirmatn, sans-serif;
-            font-size: 14px;
-            font-weight: bold;
-            transition: all 0.2s;
-            border: none;
-            background: transparent;
-            width: 100%;
-            text-align: right;
-            cursor: pointer;
+            display: flex; align-items: center; gap: 12px;
+            padding: 12px 15px; border-radius: 12px;
+            text-decoration: none; color: #0c4a6e;
+            font-family: Vazirmatn, sans-serif; font-size: 14px;
+            font-weight: bold; transition: all 0.2s;
+            border: none; background: transparent;
+            width: 100%; text-align: right; cursor: pointer;
             box-sizing: border-box;
         }
         .side-menu a:hover, .side-menu button:hover {
-            background: rgba(56, 189, 248, 0.15);
-            color: #0284c7;
+            background: rgba(56, 189, 248, 0.15); color: #0284c7;
         }
         .side-menu .icon { font-size: 18px; }
         .side-menu .divider { height: 1px; background: rgba(56, 189, 248, 0.25); margin: 8px 10px; }
         .side-menu .user-info {
-            padding: 10px 15px;
-            font-size: 12px;
-            color: #0369a1;
-            text-align: right;
-            border-bottom: 1px solid rgba(56, 189, 248, 0.2);
+            padding: 10px 15px; font-size: 12px; color: #0369a1;
+            text-align: right; border-bottom: 1px solid rgba(56, 189, 248, 0.2);
             margin-bottom: 5px;
         }
         .side-menu .user-info strong { color: #0c4a6e; display: block; margin-bottom: 3px; font-size: 14px; }
 
-        /* ===== دکمه آپلود شناور (فقط برای مربی/ادمین) ===== */
         .upload-fab {
-            position: fixed;
-            top: 20px;
-            left: 20px;
-            width: 45px;
-            height: 45px;
-            border-radius: 12px;
+            position: fixed; top: 20px; left: 20px;
+            width: 45px; height: 45px; border-radius: 12px;
             background: linear-gradient(135deg, #f59e0b, #d97706);
             border: 1.5px solid rgba(255, 255, 255, 0.9);
             box-shadow: 0 4px 15px rgba(217, 119, 6, 0.4);
-            cursor: pointer;
-            z-index: 10000;
-            display: none;
-            align-items: center;
-            justify-content: center;
-            font-size: 22px;
-            color: white;
-            transition: all 0.3s;
+            cursor: pointer; z-index: 10000;
+            display: none; align-items: center;
+            justify-content: center; font-size: 22px;
+            color: white; transition: all 0.3s;
         }
-        .upload-fab:hover { transform: scale(1.08); box-shadow: 0 6px 20px rgba(217, 119, 6, 0.6); }
         .upload-fab.visible { display: flex; }
+        .upload-fab:hover { transform: scale(1.08); box-shadow: 0 6px 20px rgba(217, 119, 6, 0.6); }
 
-        /* ===== مودال آپلود ===== */
         .up-modal-overlay {
-            position: fixed;
-            top: 0; left: 0;
+            position: fixed; top: 0; left: 0;
             width: 100%; height: 100%;
             background: rgba(0, 0, 0, 0.5);
             backdrop-filter: blur(5px);
-            display: none;
-            align-items: center;
-            justify-content: center;
-            z-index: 99999;
-            padding: 20px;
+            display: none; align-items: center;
+            justify-content: center; z-index: 99999; padding: 20px;
             box-sizing: border-box;
         }
         .up-modal-overlay.open { display: flex; }
         .up-modal-box {
-            background: white;
-            border-radius: 24px;
-            padding: 30px 25px;
-            max-width: 450px;
-            width: 100%;
+            background: white; border-radius: 24px;
+            padding: 30px 25px; max-width: 450px; width: 100%;
             box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
-            max-height: 90vh;
-            overflow-y: auto;
+            max-height: 90vh; overflow-y: auto;
             font-family: Vazirmatn, Tahoma, sans-serif;
             box-sizing: border-box;
         }
-        .up-modal-title {
-            font-size: 20px;
-            font-weight: 900;
-            color: #0c4a6e;
-            margin-bottom: 20px;
-            text-align: center;
-        }
+        .up-modal-title { font-size: 20px; font-weight: 900; color: #0c4a6e; margin-bottom: 20px; text-align: center; }
         .up-storage-selector { display: flex; gap: 10px; margin-bottom: 20px; }
         .up-storage-option {
-            flex: 1;
-            padding: 15px 10px;
+            flex: 1; padding: 15px 10px;
             border: 2px solid #e2e8f0;
-            border-radius: 14px;
-            cursor: pointer;
-            text-align: center;
-            transition: all 0.3s;
-            background: #f8fafc;
-            box-sizing: border-box;
+            border-radius: 14px; cursor: pointer;
+            text-align: center; transition: all 0.3s;
+            background: #f8fafc; box-sizing: border-box;
         }
-        .up-storage-option:hover { border-color: #38bdf8; background: #f0f9ff; }
         .up-storage-option.active {
             border-color: #0284c7;
             background: linear-gradient(135deg, rgba(56, 189, 248, 0.15), rgba(2, 132, 199, 0.15));
-            box-shadow: 0 4px 12px rgba(2, 132, 199, 0.2);
         }
         .up-storage-option .up-option-icon { font-size: 28px; margin-bottom: 6px; }
         .up-storage-option .up-option-name { font-size: 13px; font-weight: 900; color: #0c4a6e; }
         .up-storage-option .up-option-desc { font-size: 10px; color: #64748b; margin-top: 3px; }
-
-        .up-modal-label {
-            display: block;
-            font-size: 13px;
-            color: #475569;
-            font-weight: bold;
-            margin-bottom: 6px;
-            text-align: right;
-        }
+        .up-modal-label { display: block; font-size: 13px; color: #475569; font-weight: bold; margin-bottom: 6px; text-align: right; }
         .up-modal-input, .up-modal-select {
-            width: 100%;
-            padding: 11px 14px;
+            width: 100%; padding: 11px 14px;
             border: 1.5px solid rgba(56, 189, 248, 0.4);
-            border-radius: 12px;
-            background: #f8fafc;
-            font-family: Vazirmatn, sans-serif;
-            font-size: 14px;
-            margin-bottom: 15px;
-            box-sizing: border-box;
+            border-radius: 12px; background: #f8fafc;
+            font-family: Vazirmatn, sans-serif; font-size: 14px;
+            margin-bottom: 15px; box-sizing: border-box;
         }
         .up-modal-file {
-            width: 100%;
-            padding: 20px;
+            width: 100%; padding: 20px;
             border: 2px dashed rgba(56, 189, 248, 0.5);
-            border-radius: 12px;
-            background: #f0f9ff;
-            font-family: Vazirmatn, sans-serif;
-            font-size: 13px;
-            margin-bottom: 15px;
-            text-align: center;
-            cursor: pointer;
+            border-radius: 12px; background: #f0f9ff;
+            font-family: Vazirmatn, sans-serif; font-size: 13px;
+            margin-bottom: 15px; text-align: center; cursor: pointer;
             box-sizing: border-box;
         }
         .up-modal-buttons { display: flex; gap: 10px; margin-top: 10px; }
         .up-modal-btn {
-            flex: 1;
-            padding: 12px;
-            border-radius: 12px;
-            font-family: Vazirmatn, sans-serif;
-            font-size: 14px;
-            font-weight: bold;
-            cursor: pointer;
-            border: none;
+            flex: 1; padding: 12px; border-radius: 12px;
+            font-family: Vazirmatn, sans-serif; font-size: 14px;
+            font-weight: bold; cursor: pointer; border: none;
             transition: all 0.3s;
         }
         .up-modal-btn.upload { background: linear-gradient(135deg, #38bdf8, #0284c7); color: white; }
         .up-modal-btn.cancel { background: #e2e8f0; color: #475569; }
         .up-modal-btn:disabled { opacity: 0.6; cursor: not-allowed; }
         .up-upload-status {
-            text-align: center;
-            font-size: 13px;
-            margin-top: 10px;
-            min-height: 20px;
-            line-height: 1.6;
+            text-align: center; font-size: 13px; margin-top: 10px;
+            min-height: 20px; line-height: 1.6;
         }
         .up-upload-status.success { color: #047857; }
         .up-upload-status.error { color: #dc2626; }
@@ -241,10 +152,9 @@
     document.head.appendChild(style);
 
     // ========================================
-    // ۲. اضافه کردن HTML منو و مودال به body
+    // ۲. اضافه کردن HTML
     // ========================================
     const html = `
-        <!-- منوی همبرگری -->
         <button class="menu-btn" id="menuBtn" aria-label="منو">
             <span></span><span></span><span></span>
         </button>
@@ -268,10 +178,8 @@
             </div>
         </div>
 
-        <!-- دکمه آپلود شناور -->
         <button class="upload-fab" id="uploadFab" title="آپلود فایل">⬆️</button>
 
-        <!-- مودال آپلود -->
         <div class="up-modal-overlay" id="uploadModal">
             <div class="up-modal-box">
                 <h2 class="up-modal-title">📤 آپلود فایل جدید</h2>
@@ -363,7 +271,6 @@
                     <p style="font-size:11px;color:#64748b;margin-top:-10px;margin-bottom:15px;text-align:right;">
                         یک بار وارد کنید، توی مرورگر ذخیره میشه.
                     </p>
-
                     <label class="up-modal-label">مسیر فایل در مخزن:</label>
                     <input type="text" class="up-modal-input" id="filePath" placeholder="مثال: pdfs/lecture1.pdf">
                 </div>
@@ -383,19 +290,21 @@
     document.body.insertAdjacentHTML('beforeend', html);
 
     // ========================================
-    // ۳. متغیرهای عمومی
+    // ۳. متغیرها
     // ========================================
     const menuBtn = document.getElementById('menuBtn');
     const sideMenu = document.getElementById('sideMenu');
     const uploadFab = document.getElementById('uploadFab');
     const uploadModal = document.getElementById('uploadModal');
 
+    const SUPABASE_URL = 'https://ddbcwyuoghdyrfqyvnab.supabase.co';
+    const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRkYmN3eXVvZ2hkeXJmcXl2bmFiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTE2NzUyOTMsImV4cCI6MjEwNzI1MTI5M30.QID2XFnkYFs-afjAbhZ_e7QSzaBrLbDWXFRWl0BHnbo';
     const GITHUB_OWNER = 'Dr-Sajadian';
     const GITHUB_REPO = 'physiopathology-sem2';
     const GITHUB_BRANCH = 'main';
 
     // ========================================
-    // ۴. باز و بسته کردن منو
+    // ۴. منو
     // ========================================
     menuBtn.addEventListener('click', function(e) {
         e.stopPropagation();
@@ -411,21 +320,34 @@
     });
 
     // ========================================
-    // ۵. بررسی وضعیت کاربر
+    // ۵. بررسی کاربر
     // ========================================
     if (window.supabase) {
-        const db = window.appDb || window.supabase.createClient(
-            'https://ddbcwyuoghdyrfqyvnab.supabase.co',
-            'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRkYmN3eXVvZ2hkeXJmcXl2bmFiIiwiaWF0IjoxNzkxNjc1MjkzLCJleHAiOjIxMDcyNTEyOTN9.QID2XFnkYFs-afjAbhZ_e7QSzaBrLbDWXFRWl0BHnbo',
-            { auth: { persistSession: true, autoRefreshToken: true, detectSessionInUrl: true } }
-        );
-        // کلاینت واحد برای menu.js و highlight.js؛ از setSession دستی خودداری می‌کنیم.
+        const db = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+        
+        // 🌐 به اشتراک‌گذاری کلاینت برای فایل‌های دیگه
         window.appDb = db;
+
+        // تزریق session از localStorage
+        const savedSession = localStorage.getItem('sb-ddbcwyuoghdyrfqyvnab-auth-token');
+        if (savedSession) {
+            try {
+                const sessionData = JSON.parse(savedSession);
+                if (sessionData?.access_token) {
+                    db.auth.setSession({
+                        access_token: sessionData.access_token,
+                        refresh_token: sessionData.refresh_token || ''
+                    }).catch(e => console.warn('Session injection error:', e));
+                }
+            } catch (e) {
+                console.warn('Session parse error:', e);
+            }
+        }
+
         (async function checkUser() {
             const { data: { session } } = await db.auth.getSession();
-            console.log('🔍 Session:', session ? 'موجود' : 'خالی', session?.user?.email || '');
 
-            // 👇 اگه کاربر لاگین نکرده → فقط ورود و ثبت‌نام نشون بده
+            // اگه کاربر لاگین نکرده → فقط ورود و ثبت‌نام
             if (!session) {
                 document.getElementById('guestOptions').style.display = 'block';
                 document.getElementById('userOptions').style.display = 'none';
@@ -447,211 +369,197 @@
             document.getElementById('guestOptions').style.display = 'none';
             document.getElementById('userOptions').style.display = 'block';
 
-            // 🔥 نمایش دکمه آپلود برای مربی‌ها و ادمین‌های تأییدشده
+            // دکمه آپلود فقط برای مربی و ادمین تأییدشده
             if (profile && profile.status === 'approved' && 
                 (profile.role === 'teacher' || profile.role === 'admin')) {
                 uploadFab.classList.add('visible');
             }
 
-            // نمایش لینک پنل مدیریت فقط برای ادمین
+            // لینک پنل مدیریت فقط برای ادمین
             if (profile && profile.role === 'admin' && profile.status === 'approved') {
                 document.getElementById('adminMenuLink').style.display = 'flex';
             }
 
-            // ===== منطق آپلود =====
             setupUpload(db);
+
+            // دکمه خروج
+            document.getElementById('logoutBtn')?.addEventListener('click', async function() {
+                if (confirm('آیا می‌خواهید از حساب خود خارج شوید؟')) {
+                    await db.auth.signOut();
+                    window.location.href = 'index.html';
+                }
+            });
         })();
 
-        // ===== دکمه خروج =====
-document.getElementById('logoutBtn')?.addEventListener('click', async function() {
-    if (confirm('آیا می‌خواهید از حساب خود خارج شوید؟')) {
-        await db.auth.signOut();
-        window.location.href = 'login.html';
-    }
-});
-    }
+        // ========================================
+        // ۶. آپلود
+        // ========================================
+        function setupUpload(db) {
+            const cancelBtn = document.getElementById('cancelBtn');
+            const uploadBtn = document.getElementById('uploadBtn');
+            const uploadStatus = document.getElementById('uploadStatus');
+            const githubTokenInput = document.getElementById('githubToken');
 
-    // ========================================
-    // ۶. منطق آپلود
-    // ========================================
-    function setupUpload(db) {
-        const cancelBtn = document.getElementById('cancelBtn');
-        const uploadBtn = document.getElementById('uploadBtn');
-        const uploadStatus = document.getElementById('uploadStatus');
-        const githubTokenInput = document.getElementById('githubToken');
+            const savedToken = localStorage.getItem('github_token');
+            if (savedToken) githubTokenInput.value = savedToken;
 
-        const savedToken = localStorage.getItem('github_token');
-        if (savedToken) githubTokenInput.value = savedToken;
+            let selectedStorage = 'supabase';
 
-        let selectedStorage = 'supabase';
+            document.querySelectorAll('.up-storage-option').forEach(opt => {
+                opt.addEventListener('click', function() {
+                    document.querySelectorAll('.up-storage-option').forEach(o => o.classList.remove('active'));
+                    this.classList.add('active');
+                    selectedStorage = this.getAttribute('data-storage');
 
-        document.querySelectorAll('.up-storage-option').forEach(opt => {
-            opt.addEventListener('click', function() {
-                document.querySelectorAll('.up-storage-option').forEach(o => o.classList.remove('active'));
-                this.classList.add('active');
-                selectedStorage = this.getAttribute('data-storage');
-
-                if (selectedStorage === 'supabase') {
-                    document.getElementById('supabaseFields').classList.add('active');
-                    document.getElementById('githubFields').classList.remove('active');
-                } else {
-                    document.getElementById('supabaseFields').classList.remove('active');
-                    document.getElementById('githubFields').classList.add('active');
-                }
-                uploadStatus.textContent = '';
-                uploadStatus.className = 'up-upload-status';
-            });
-        });
-
-        uploadFab.addEventListener('click', () => uploadModal.classList.add('open'));
-        cancelBtn.addEventListener('click', () => { uploadModal.classList.remove('open'); resetModal(); });
-        uploadModal.addEventListener('click', (e) => {
-            if (e.target === uploadModal) { uploadModal.classList.remove('open'); resetModal(); }
-        });
-
-        function resetModal() {
-            document.getElementById('displayName').value = '';
-            document.getElementById('fileName').value = '';
-            document.getElementById('filePath').value = '';
-            document.getElementById('fileInput').value = '';
-            document.getElementById('destination').value = '';
-            uploadStatus.textContent = '';
-            uploadStatus.className = 'up-upload-status';
-            uploadBtn.disabled = false;
-        }
-
-        uploadBtn.addEventListener('click', async function() {
-            const file = document.getElementById('fileInput').files[0];
-            if (!file) {
-                uploadStatus.textContent = 'لطفاً یک فایل انتخاب کنید';
-                uploadStatus.className = 'up-upload-status error';
-                return;
-            }
-
-            uploadBtn.disabled = true;
-            uploadStatus.textContent = 'در حال آپلود...';
-            uploadStatus.className = 'up-upload-status';
-
-            try {
-                if (selectedStorage === 'supabase') {
-                    await uploadToSupabase(db, file);
-                } else {
-                    await uploadToGitHub(file);
-                }
-            } catch (err) {
-                console.error(err);
-                uploadStatus.textContent = '❌ خطا: ' + err.message;
-                uploadStatus.className = 'up-upload-status error';
-                uploadBtn.disabled = false;
-            }
-        });
-
-        async function uploadToSupabase(db, file) {
-            const displayName = document.getElementById('displayName').value.trim();
-            const fileName = document.getElementById('fileName').value.trim();
-            const ext = document.getElementById('fileExt').value;
-            const destination = document.getElementById('destination').value;
-
-            if (!displayName || !fileName) throw new Error('لطفاً نام نمایشی و نام فایل را پر کنید');
-            if (!destination) throw new Error('لطفاً مقصد نهایی فایل را انتخاب کنید');
-
-            const [section, subsection, teacher] = destination.split('|');
-            const fullPath = fileName + ext;
-
-            const { error: uploadError } = await db.storage
-                .from('course-files')
-                .upload(fullPath, file, { cacheControl: '3600', upsert: true });
-
-            if (uploadError) throw uploadError;
-
-            const { error: dbError } = await db
-                .from('files')
-                .insert({
-                    display_name: displayName,
-                    file_path: fullPath,
-                    file_type: ext.replace('.', ''),
-                    section: section,
-                    subsection: subsection,
-                    teacher: teacher || null
-                });
-
-            if (dbError) throw dbError;
-
-            uploadStatus.innerHTML = `✅ فایل با موفقیت آپلود شد!<br><small style="color:#64748b;">به صورت خودکار در صفحه مقصد نمایش داده می‌شود.</small>`;
-            uploadStatus.className = 'up-upload-status success';
-
-            setTimeout(() => {
-                uploadModal.classList.remove('open');
-                resetModal();
-            }, 2000);
-        }
-
-        async function uploadToGitHub(file) {
-            const token = githubTokenInput.value.trim();
-            const filePath = document.getElementById('filePath').value.trim();
-
-            if (!token || !filePath) throw new Error('لطفاً توکن و مسیر فایل را وارد کنید');
-            if (file.size > 25 * 1024 * 1024) throw new Error('حجم فایل بیشتر از ۲۵ مگابایت است');
-
-            localStorage.setItem('github_token', token);
-
-            const base64 = await fileToBase64(file);
-            const url = `https://api.github.com/repos/${GITHUB_OWNER}/${GITHUB_REPO}/contents/${filePath}`;
-
-            let sha = null;
-            try {
-                const checkRes = await fetch(url + `?ref=${GITHUB_BRANCH}`, {
-                    headers: {
-                        'Authorization': `token ${token}`,
-                        'Accept': 'application/vnd.github.v3+json'
+                    if (selectedStorage === 'supabase') {
+                        document.getElementById('supabaseFields').classList.add('active');
+                        document.getElementById('githubFields').classList.remove('active');
+                    } else {
+                        document.getElementById('supabaseFields').classList.remove('active');
+                        document.getElementById('githubFields').classList.add('active');
                     }
                 });
-                if (checkRes.ok) {
-                    const checkData = await checkRes.json();
-                    sha = checkData.sha;
+            });
+
+            uploadFab.addEventListener('click', () => uploadModal.classList.add('open'));
+            cancelBtn.addEventListener('click', () => { uploadModal.classList.remove('open'); resetModal(); });
+            uploadModal.addEventListener('click', (e) => {
+                if (e.target === uploadModal) { uploadModal.classList.remove('open'); resetModal(); }
+            });
+
+            function resetModal() {
+                document.getElementById('displayName').value = '';
+                document.getElementById('fileName').value = '';
+                document.getElementById('filePath').value = '';
+                document.getElementById('fileInput').value = '';
+                document.getElementById('destination').value = '';
+                uploadStatus.textContent = '';
+                uploadStatus.className = 'up-upload-status';
+                uploadBtn.disabled = false;
+            }
+
+            uploadBtn.addEventListener('click', async function() {
+                const file = document.getElementById('fileInput').files[0];
+                if (!file) {
+                    uploadStatus.textContent = 'لطفاً یک فایل انتخاب کنید';
+                    uploadStatus.className = 'up-upload-status error';
+                    return;
                 }
-            } catch (e) {}
+                uploadBtn.disabled = true;
+                uploadStatus.textContent = 'در حال آپلود...';
+                uploadStatus.className = 'up-upload-status';
 
-            const body = {
-                message: `آپلود فایل: ${filePath}`,
-                content: base64,
-                branch: GITHUB_BRANCH
-            };
-            if (sha) body.sha = sha;
-
-            const response = await fetch(url, {
-                method: 'PUT',
-                headers: {
-                    'Authorization': `token ${token}`,
-                    'Accept': 'application/vnd.github.v3+json',
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(body)
+                try {
+                    if (selectedStorage === 'supabase') {
+                        await uploadToSupabase(db, file);
+                    } else {
+                        await uploadToGitHub(file);
+                    }
+                } catch (err) {
+                    console.error(err);
+                    uploadStatus.textContent = '❌ خطا: ' + err.message;
+                    uploadStatus.className = 'up-upload-status error';
+                    uploadBtn.disabled = false;
+                }
             });
 
-            const result = await response.json();
-            if (!response.ok) throw new Error(result.message || 'خطا در آپلود');
+            async function uploadToSupabase(db, file) {
+                const displayName = document.getElementById('displayName').value.trim();
+                const fileName = document.getElementById('fileName').value.trim();
+                const ext = document.getElementById('fileExt').value;
+                const destination = document.getElementById('destination').value;
 
-            const publicUrl = `https://${GITHUB_OWNER.toLowerCase()}.github.io/${GITHUB_REPO}/${filePath}`;
+                if (!displayName || !fileName) throw new Error('لطفاً نام نمایشی و نام فایل را پر کنید');
+                if (!destination) throw new Error('لطفاً مقصد نهایی فایل را انتخاب کنید');
 
-            uploadStatus.innerHTML = `
-                ✅ فایل در گیت‌هاب آپلود شد!<br><br>
-                <strong>لینک:</strong><br>
-                <input type="text" value="${publicUrl}" readonly
-                    style="width:100%;padding:8px;border-radius:8px;border:1px solid #cbd5e1;font-size:11px;direction:ltr;margin-top:5px;background:#f1f5f9;"
-                    onclick="this.select()">
-            `;
-            uploadStatus.className = 'up-upload-status success';
-            uploadBtn.disabled = false;
-        }
+                const [section, subsection, teacher] = destination.split('|');
+                const fullPath = fileName + ext;
 
-        function fileToBase64(file) {
-            return new Promise((resolve, reject) => {
-                const reader = new FileReader();
-                reader.onload = () => resolve(reader.result.split(',')[1]);
-                reader.onerror = reject;
-                reader.readAsDataURL(file);
-            });
+                let contentType = 'application/octet-stream';
+                if (ext === '.html') contentType = 'text/html';
+                else if (ext === '.pdf') contentType = 'application/pdf';
+                else if (ext === '.jpg' || ext === '.jpeg') contentType = 'image/jpeg';
+                else if (ext === '.png') contentType = 'image/png';
+
+                const { error: uploadError } = await db.storage
+                    .from('course-files')
+                    .upload(fullPath, file, { cacheControl: '3600', upsert: true, contentType });
+
+                if (uploadError) throw uploadError;
+
+                const { error: dbError } = await db
+                    .from('files')
+                    .insert({
+                        display_name: displayName,
+                        file_path: fullPath,
+                        file_type: ext.replace('.', ''),
+                        section: section,
+                        subsection: subsection,
+                        teacher: teacher || null
+                    });
+
+                if (dbError) throw dbError;
+
+                uploadStatus.innerHTML = '✅ فایل با موفقیت آپلود شد!';
+                uploadStatus.className = 'up-upload-status success';
+                setTimeout(() => { uploadModal.classList.remove('open'); resetModal(); }, 2000);
+            }
+
+            async function uploadToGitHub(file) {
+                const token = githubTokenInput.value.trim();
+                const filePath = document.getElementById('filePath').value.trim();
+                if (!token || !filePath) throw new Error('لطفاً توکن و مسیر فایل را وارد کنید');
+                if (file.size > 25 * 1024 * 1024) throw new Error('حجم فایل بیشتر از ۲۵ مگابایت است');
+
+                localStorage.setItem('github_token', token);
+                const base64 = await fileToBase64(file);
+                const url = `https://api.github.com/repos/${GITHUB_OWNER}/${GITHUB_REPO}/contents/${filePath}`;
+
+                let sha = null;
+                try {
+                    const checkRes = await fetch(url + `?ref=${GITHUB_BRANCH}`, {
+                        headers: { 'Authorization': `token ${token}`, 'Accept': 'application/vnd.github.v3+json' }
+                    });
+                    if (checkRes.ok) { const d = await checkRes.json(); sha = d.sha; }
+                } catch (e) {}
+
+                const body = { message: `آپلود: ${filePath}`, content: base64, branch: GITHUB_BRANCH };
+                if (sha) body.sha = sha;
+
+                const response = await fetch(url, {
+                    method: 'PUT',
+                    headers: {
+                        'Authorization': `token ${token}`,
+                        'Accept': 'application/vnd.github.v3+json',
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(body)
+                });
+
+                const result = await response.json();
+                if (!response.ok) throw new Error(result.message || 'خطا در آپلود');
+
+                const publicUrl = `https://${GITHUB_OWNER.toLowerCase()}.github.io/${GITHUB_REPO}/${filePath}`;
+
+                uploadStatus.innerHTML = `
+                    ✅ فایل در گیت‌هاب آپلود شد!<br><br>
+                    <strong>لینک:</strong><br>
+                    <input type="text" value="${publicUrl}" readonly
+                        style="width:100%;padding:8px;border-radius:8px;border:1px solid #cbd5e1;font-size:11px;direction:ltr;margin-top:5px;background:#f1f5f9;"
+                        onclick="this.select()">
+                `;
+                uploadStatus.className = 'up-upload-status success';
+                uploadBtn.disabled = false;
+            }
+
+            function fileToBase64(file) {
+                return new Promise((resolve, reject) => {
+                    const reader = new FileReader();
+                    reader.onload = () => resolve(reader.result.split(',')[1]);
+                    reader.onerror = reject;
+                    reader.readAsDataURL(file);
+                });
+            }
         }
     }
 })();
