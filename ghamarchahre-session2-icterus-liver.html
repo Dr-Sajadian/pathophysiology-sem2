@@ -1,0 +1,1475 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl" data-theme="light">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>مقدمات گوارش | ایکتر و تست‌های کبدی - جلسه ۲</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#F4FAF7; --surface:#FFFFFF; --surface-2:#EDF6F1; --ink:#123B32; --ink-soft:#3E5F57;
+  --line:#D9EAE3; --primary:#0E7C5A; --primary-dark:#0A5A41; --primary-light:#E3F4EC;
+  --amber:#B9821F; --amber-bg:#FDF3DE; --amber-line:#EFD9A3;
+  --blue:#2E6DA4; --blue-bg:#E7F1FA; --blue-line:#BFDAF0;
+  --rose:#B5493B; --rose-bg:#FBE9E6; --rose-line:#F0C4BC;
+  --violet:#6E5A9E; --violet-bg:#F0ECFA; --violet-line:#D6CBF0;
+  --shadow: 0 4px 18px rgba(14,60,45,.08);
+  --radius: 14px;
+  --font-body: 'Vazirmatn', Tahoma, sans-serif;
+  --wrap: 880px;
+}
+html[data-theme="dark"]{
+  --bg:#0B1C17; --surface:#0F2620; --surface-2:#123027; --ink:#DFF3EA; --ink-soft:#AFC9BF;
+  --line:#1D3A31; --primary:#3FCB9A; --primary-dark:#2FA37B; --primary-light:#123027;
+  --amber:#E7BE6B; --amber-bg:#2A2312; --amber-line:#4A3B18;
+  --blue:#7FB8E8; --blue-bg:#122430; --blue-line:#1E3C52;
+  --rose:#E38C7E; --rose-bg:#2A1614; --rose-line:#4A2620;
+  --violet:#BBA6E8; --violet-bg:#1E1A2E; --violet-line:#352A4E;
+  --shadow: 0 4px 18px rgba(0,0,0,.35);
+}
+html[data-theme="galaxy"]{
+  --bg:#0B0A21; --surface:#151238; --surface-2:#1B1745; --ink:#EDEBFF; --ink-soft:#B7B2E6;
+  --line:#332C6B; --primary:#8E7CFF; --primary-dark:#6C5CE0; --primary-light:#1F1A4A;
+  --amber:#F0C46B; --amber-bg:#251E3E; --amber-line:#4A3D63;
+  --blue:#6FC7F5; --blue-bg:#131A45; --blue-line:#233B72;
+  --rose:#FF8FA3; --rose-bg:#2A1530; --rose-line:#4C2440;
+  --violet:#C9A8FF; --violet-bg:#211a44; --violet-line:#3a2e66;
+  --shadow: 0 4px 24px rgba(90,60,220,.28);
+}
+html[data-theme="galaxy"] body{
+  background-image: radial-gradient(1px 1px at 20% 30%, #ffffff90 0, transparent 100%),
+    radial-gradient(1px 1px at 70% 15%, #ffffff70 0, transparent 100%),
+    radial-gradient(1.5px 1.5px at 40% 70%, #ffffffaa 0, transparent 100%),
+    radial-gradient(1px 1px at 85% 60%, #ffffff70 0, transparent 100%),
+    radial-gradient(1.5px 1.5px at 60% 40%, #ffffff90 0, transparent 100%),
+    radial-gradient(1px 1px at 10% 85%, #ffffff70 0, transparent 100%);
+  background-attachment: fixed;
+}
+*{box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{
+  margin:0; background:var(--bg); color:var(--ink); font-family:var(--font-body);
+  line-height:1.9; font-size: var(--fs, 17px); transition:background .3s,color .3s;
+}
+img{max-width:100%; display:block;}
+a{color:var(--primary);}
+.wrap{max-width:var(--wrap); margin:0 auto; padding:0 20px;}
+
+/* ---------- Toolbar ---------- */
+#toolbar{
+  position:sticky; top:0; z-index:50; background:var(--surface); border-bottom:1px solid var(--line);
+  box-shadow:var(--shadow);
+}
+.tb-row{display:flex; align-items:center; gap:10px; flex-wrap:wrap; padding:10px 20px; max-width:var(--wrap); margin:0 auto;}
+.tb-group{display:flex; align-items:center; gap:6px; background:var(--surface-2); border:1px solid var(--line); border-radius:10px; padding:4px 6px;}
+.tb-btn{
+  border:none; background:transparent; color:var(--ink); cursor:pointer; font-family:inherit;
+  font-size:14px; padding:6px 9px; border-radius:8px; transition:background .15s, color .15s;
+}
+.tb-btn:hover{background:var(--primary); color:#fff;}
+.tb-btn.active{background:var(--primary); color:#fff;}
+.tb-btn.dot{width:22px;height:22px;padding:0;border-radius:50%;border:2px solid var(--line);}
+#searchBox{
+  flex:1; min-width:160px; border:1px solid var(--line); background:var(--surface); color:var(--ink);
+  border-radius:10px; padding:8px 14px; font-family:inherit; font-size:14px;
+}
+#searchBox:focus{outline:2px solid var(--primary); outline-offset:1px;}
+.searchCount{font-size:12px; color:var(--ink-soft); min-width:56px; text-align:center;}
+
+/* floating highlight toolbar */
+#hlToolbar{
+  position:absolute; display:none; z-index:200; background:var(--surface); border:1px solid var(--line);
+  border-radius:10px; box-shadow:var(--shadow); padding:6px; gap:5px; flex-direction:row;
+}
+#hlToolbar.show{display:flex;}
+.hl-swatch{width:24px;height:24px;border-radius:50%;border:2px solid #0002; cursor:pointer;}
+
+/* ---------- Cover ---------- */
+.cover{
+  position:relative; overflow:hidden; padding:56px 20px 70px; text-align:center;
+  background: linear-gradient(180deg, var(--primary-light) 0%, var(--bg) 100%);
+  border-bottom:1px solid var(--line);
+}
+.cover-img{
+  width:220px; margin:0 auto 18px; border-radius:18px; box-shadow: 0 10px 30px rgba(14,60,45,.22);
+  overflow:hidden;
+}
+.cover-img img{width:100%; height:100%; object-fit:cover;}
+.cover h1{font-size:clamp(28px,5vw,44px); margin:6px 0 8px; color:var(--primary-dark); font-weight:800;}
+html[data-theme="dark"] .cover h1, html[data-theme="galaxy"] .cover h1{color:var(--primary);}
+.cover .sub{font-size:18px; color:var(--ink-soft); margin-bottom:18px;}
+.tags{display:flex; gap:8px; flex-wrap:wrap; justify-content:center;}
+.tag{
+  background:var(--surface); border:1px solid var(--line); color:var(--primary-dark); font-size:13px;
+  padding:5px 13px; border-radius:999px;
+}
+html[data-theme="dark"] .tag, html[data-theme="galaxy"] .tag{color:var(--primary);}
+
+/* ---------- TOC ---------- */
+.toc{background:var(--surface); border:1px solid var(--line); border-radius:var(--radius); padding:22px 24px; margin:-40px auto 30px; max-width:var(--wrap); box-shadow:var(--shadow); position:relative; z-index:2;}
+.toc h2{margin-top:0; font-size:19px; color:var(--primary-dark);}
+html[data-theme="dark"] .toc h2, html[data-theme="galaxy"] .toc h2{color:var(--primary);}
+.toc ol{margin:0; padding-inline-start:22px; columns:2; column-gap:28px;}
+.toc li{break-inside:avoid; margin-bottom:8px;}
+.toc a{text-decoration:none; font-size:15px;}
+.toc a:hover{text-decoration:underline;}
+@media(max-width:640px){.toc ol{columns:1;}}
+
+/* ---------- Sections & cards ---------- */
+main{padding:10px 0 40px;}
+.chapter{margin:44px 0;}
+.chapter > h2{
+  font-size:24px; color:var(--primary-dark); border-inline-start:5px solid var(--primary);
+  padding-inline-start:14px; margin-bottom:18px;
+}
+html[data-theme="dark"] .chapter>h2, html[data-theme="galaxy"] .chapter>h2{color:var(--primary);}
+.card{
+  background:var(--surface); border:1px solid var(--line); border-radius:var(--radius);
+  padding:20px 22px; margin-bottom:16px; box-shadow:var(--shadow); scroll-margin-top:130px;
+}
+.card > h3{margin-top:0; font-size:18px; color:var(--ink); display:flex; align-items:center; gap:10px; cursor:pointer;}
+.card > h3 .chev{margin-inline-start:auto; transition:transform .2s; font-size:14px; color:var(--ink-soft);}
+.card.collapsed .card-body{display:none;}
+.card.collapsed h3 .chev{transform:rotate(-90deg);}
+.card-body p{margin:.6em 0;}
+.en{direction:ltr; unicode-bidi:isolate; font-family:'Times New Roman',serif; font-style:italic; color:var(--ink-soft); font-size:.94em;}
+
+/* boxes */
+.box{border-radius:12px; padding:14px 16px; margin:14px 0; border:1px solid; font-size:15.5px;}
+.box .box-title{font-weight:700; margin-bottom:4px; display:flex; align-items:center; gap:6px;}
+.box.def{background:var(--blue-bg); border-color:var(--blue-line); color:var(--ink);}
+.box.def .box-title{color:var(--blue);}
+.box.key{background:var(--amber-bg); border-color:var(--amber-line); color:var(--ink);}
+.box.key .box-title{color:var(--amber);}
+.box.clin{background:var(--rose-bg); border-color:var(--rose-line); color:var(--ink);}
+.box.clin .box-title{color:var(--rose);}
+.box.mem{background:var(--violet-bg); border-color:var(--violet-line); color:var(--ink);}
+.box.mem .box-title{color:var(--violet);}
+.box ul{margin:6px 0 0; padding-inline-start:20px;}
+
+/* tables */
+.tbl-wrap{overflow-x:auto; margin:14px 0; border-radius:10px; border:1px solid var(--line);}
+table{width:100%; border-collapse:collapse; font-size:14.5px; min-width:420px;}
+th,td{padding:10px 12px; text-align:right; border-bottom:1px solid var(--line);}
+th{background:var(--surface-2); color:var(--primary-dark);}
+tr:last-child td{border-bottom:none;}
+
+/* grid2 comparisons */
+.grid2{display:grid; grid-template-columns:1fr 1fr; gap:14px; margin:16px 0;}
+@media(max-width:640px){.grid2{grid-template-columns:1fr;}}
+.g2-col{border:1px solid var(--line); border-radius:12px; padding:14px 16px; background:var(--surface-2);}
+.g2-col h4{margin:0 0 8px; color:var(--primary-dark); font-size:16px;}
+html[data-theme="dark"] .g2-col h4, html[data-theme="galaxy"] .g2-col h4{color:var(--primary);}
+.g2-col ul{margin:0; padding-inline-start:18px;}
+
+/* flow diagram */
+.flow{display:flex; flex-wrap:wrap; align-items:center; gap:8px; margin:16px 0; justify-content:center;}
+.flow .fbox{background:var(--primary-light); border:1px solid var(--primary); color:var(--primary-dark); border-radius:10px; padding:10px 14px; font-size:14px; text-align:center; min-width:110px;}
+html[data-theme="dark"] .flow .fbox, html[data-theme="galaxy"] .flow .fbox{color:var(--primary);}
+.flow .arrow{font-size:20px; color:var(--primary);}
+@media(max-width:640px){.flow{flex-direction:column;} .flow .arrow{transform:rotate(90deg);}}
+
+/* figure */
+figure{margin:18px 0; text-align:center;}
+figure img{border-radius:12px; margin:0 auto; box-shadow:var(--shadow); max-width:280px;}
+figcaption{font-size:13px; color:var(--ink-soft); margin-top:8px;}
+
+/* chapter summary */
+.chap-summary{background:var(--primary-light); border:1px solid var(--line); border-radius:var(--radius); padding:18px 22px; margin-top:10px;}
+.chap-summary h4{margin-top:0; color:var(--primary-dark);}
+html[data-theme="dark"] .chap-summary h4, html[data-theme="galaxy"] .chap-summary h4{color:var(--primary);}
+.chap-summary ul{margin:0; padding-inline-start:20px;}
+.chap-summary li{margin-bottom:6px;}
+
+/* final review */
+.review-item{border:1px solid var(--line); border-radius:12px; margin-bottom:10px; background:var(--surface); overflow:hidden;}
+.review-q{padding:14px 18px; cursor:pointer; font-weight:700; display:flex; justify-content:space-between; align-items:center;}
+.review-a{padding:0 18px; max-height:0; overflow:hidden; transition:max-height .25s ease, padding .25s ease; color:var(--ink-soft); font-size:15px;}
+.review-item.open .review-a{padding:0 18px 16px; max-height:400px;}
+.review-item.open .review-q{color:var(--primary-dark);}
+
+/* quiz */
+#quizWrap{margin-top:10px;}
+.qprogress-wrap{background:var(--surface-2); border-radius:999px; height:12px; overflow:hidden; margin-bottom:8px; border:1px solid var(--line);}
+#qprogressBar{height:100%; width:0%; background:linear-gradient(90deg,var(--primary),var(--primary-dark)); transition:width .3s;}
+.qmeta{display:flex; justify-content:space-between; font-size:13px; color:var(--ink-soft); margin-bottom:20px;}
+.qcard{
+  background:var(--surface); border:1px solid var(--line); border-radius:var(--radius); padding:20px;
+  margin-bottom:16px; box-shadow:var(--shadow);
+}
+.qhead{display:flex; justify-content:space-between; align-items:flex-start; gap:10px; margin-bottom:10px;}
+.qnum{color:var(--primary-dark); font-weight:700;}
+html[data-theme="dark"] .qnum, html[data-theme="galaxy"] .qnum{color:var(--primary);}
+.qtag{font-size:12px; padding:3px 10px; border-radius:999px; white-space:nowrap;}
+.qtag.mid{background:var(--blue-bg); color:var(--blue); border:1px solid var(--blue-line);}
+.qtag.hard{background:var(--amber-bg); color:var(--amber); border:1px solid var(--amber-line);}
+.qtag.vhard{background:var(--rose-bg); color:var(--rose); border:1px solid var(--rose-line);}
+.qopts{display:flex; flex-direction:column; gap:8px; margin:12px 0;}
+.qopt{
+  text-align:right; padding:10px 14px; border:1px solid var(--line); border-radius:10px; background:var(--surface-2);
+  cursor:pointer; font-family:inherit; font-size:15px; color:var(--ink); transition:.15s;
+}
+.qopt:hover:not(:disabled){border-color:var(--primary);}
+.qopt:disabled{cursor:default;}
+.qopt.correct{background:#DCF5E6; border-color:#59B37F; color:#1F5C3A; font-weight:700;}
+.qopt.wrong{background:var(--rose-bg); border-color:var(--rose); color:var(--rose); font-weight:700;}
+html[data-theme="dark"] .qopt.correct, html[data-theme="galaxy"] .qopt.correct{background:#123A29;color:#7FE0AC;border-color:#2FA37B;}
+.qcheck-btn{
+  border:none; background:var(--primary); color:#fff; padding:9px 22px; border-radius:9px; cursor:pointer;
+  font-family:inherit; font-size:14px;
+}
+.qcheck-btn:disabled{opacity:.5; cursor:default;}
+.qexplain{margin-top:12px; background:var(--blue-bg); border:1px solid var(--blue-line); border-radius:10px; padding:12px 14px; font-size:14.5px; color:var(--ink); display:none;}
+.qexplain.show{display:block;}
+#quizFinal{display:none; text-align:center; background:var(--primary-light); border:1px solid var(--line); border-radius:var(--radius); padding:32px 20px;}
+#quizFinal.show{display:block;}
+#quizFinal .score{font-size:40px; font-weight:800; color:var(--primary-dark);}
+html[data-theme="dark"] #quizFinal .score, html[data-theme="galaxy"] #quizFinal .score{color:var(--primary);}
+#restartQuiz{margin-top:14px; border:none; background:var(--primary); color:#fff; padding:10px 26px; border-radius:10px; cursor:pointer; font-family:inherit; font-size:15px;}
+
+/* survey */
+.survey{text-align:center;}
+.survey-emojis{display:flex; justify-content:center; gap:14px; margin:18px 0; flex-wrap:wrap;}
+.emoji-btn{font-size:34px; background:var(--surface-2); border:1px solid var(--line); border-radius:50%; width:66px; height:66px; cursor:pointer; transition:.15s;}
+.emoji-btn:hover{transform:translateY(-3px); border-color:var(--primary);}
+.emoji-btn.picked{border-color:var(--primary); background:var(--primary-light);}
+.survey-results{max-width:420px; margin:18px auto 0; text-align:right; display:none;}
+.survey-results.show{display:block;}
+.sr-row{display:flex; align-items:center; gap:10px; margin-bottom:8px; font-size:14px;}
+.sr-bar-wrap{flex:1; background:var(--surface-2); border-radius:999px; height:14px; overflow:hidden; border:1px solid var(--line);}
+.sr-bar{height:100%; background:var(--primary);}
+
+footer{text-align:center; padding:30px 20px; color:var(--ink-soft); font-size:13px; border-top:1px solid var(--line);}
+
+/* search highlight */
+mark.searchmark{background:#FFEB8A; color:#3a2c00; padding:0 2px; border-radius:3px;}
+@keyframes blinkCard{0%,100%{box-shadow:var(--shadow);} 50%{box-shadow:0 0 0 4px var(--primary);}}
+.blink{animation:blinkCard .6s ease 2;}
+
+@media print{
+  #toolbar, #hlToolbar, .qcheck-btn, #restartQuiz, .survey{display:none !important;}
+  .card{break-inside:avoid; box-shadow:none;}
+  body{background:#fff;}
+  .card.collapsed .card-body{display:block !important;}
+}
+</style>
+</head>
+<body>
+
+<div id="toolbar">
+  <div class="tb-row">
+    <div class="tb-group" title="حالت نمایش">
+      <button class="tb-btn" data-theme-btn="light">☀️ روشن</button>
+      <button class="tb-btn" data-theme-btn="dark">🌙 تیره</button>
+      <button class="tb-btn" data-theme-btn="galaxy">🌌 کهکشانی</button>
+    </div>
+    <div class="tb-group" title="اندازه فونت">
+      <button class="tb-btn" id="fontMinus">A-</button>
+      <button class="tb-btn" id="fontPlus">A+</button>
+    </div>
+    <div class="tb-group" title="رنگ هایلایت">
+      <button class="tb-btn dot" style="background:#FFEB8A" data-hlcolor="#FFEB8A"></button>
+      <button class="tb-btn dot" style="background:#B9F6CA" data-hlcolor="#B9F6CA"></button>
+      <button class="tb-btn dot" style="background:#F8BBD0" data-hlcolor="#F8BBD0"></button>
+      <button class="tb-btn dot" style="background:#B3E5FC" data-hlcolor="#B3E5FC"></button>
+      <button class="tb-btn" id="clearHl">پاک‌کردن هایلایت‌ها</button>
+    </div>
+    <div class="tb-group">
+      <button class="tb-btn" id="toggleAll">باز/بستن همه</button>
+      <button class="tb-btn" id="printBtn">🖨️ چاپ / PDF</button>
+    </div>
+    <input type="text" id="searchBox" placeholder="جستجو در متن جزوه...">
+    <span class="searchCount" id="searchCount"></span>
+  </div>
+</div>
+<div id="hlToolbar">
+  <div class="hl-swatch" style="background:#FFEB8A" data-pick="#FFEB8A"></div>
+  <div class="hl-swatch" style="background:#B9F6CA" data-pick="#B9F6CA"></div>
+  <div class="hl-swatch" style="background:#F8BBD0" data-pick="#F8BBD0"></div>
+  <div class="hl-swatch" style="background:#B3E5FC" data-pick="#B3E5FC"></div>
+</div>
+
+<header class="cover">
+  <div class="cover-img"><img src="data:image/jpeg;base64,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" alt="نقاشی دستگاه گوارش - جلد جزوه"></div>
+  <h1>مقدمات گوارش</h1>
+  <div class="sub">ایکتر و تست‌های کبدی &mdash; جلسه دوم</div>
+  <div class="tags">
+    <span class="tag">استاد: دکتر قمرچهره</span>
+    <span class="tag">جلسه دوم</span>
+    <span class="tag">تاریخ: ۱۴۰۴/۰۷/۱۲</span>
+    <span class="tag">دانشگاه علوم پزشکی بقیه‌الله</span>
+    <span class="tag">گروه هپاتولوژی و کبد</span>
+  </div>
+</header>
+
+<nav class="toc wrap">
+  <h2>فهرست مطالب</h2>
+  <ol>
+    <li><a href="#sec1">۱. بررسی عملکرد کبد و تست‌های بیوشیمیایی</a></li>
+    <li><a href="#sec2">۲. متابولیسم بیلی‌روبین</a></li>
+    <li><a href="#sec3">۳. اپروچ به بیمار ایکتریک</a></li>
+    <li><a href="#sec4">۴. آنزیم‌های کبدی: <span class="en">AST</span> و <span class="en">ALT</span></a></li>
+    <li><a href="#sec5">۵. آلکالین فسفاتاز و کولستاز</a></li>
+    <li><a href="#sec6">۶. ارزیابی بیوسنتز کبد</a></li>
+    <li><a href="#sec7">۷. خلاصه‌ی جامع بیماری‌ها</a></li>
+    <li><a href="#sec8">۸. مرور نهایی</a></li>
+    <li><a href="#sec9">۹. آزمون تستی تعاملی</a></li>
+    <li><a href="#sec10">۱۰. نظرسنجی</a></li>
+  </ol>
+</nav>
+<main class="wrap">
+<section class="chapter" id="sec1">
+  <h2>۱. بررسی عملکرد کبد و تست‌های بیوشیمیایی</h2>
+
+  <div class="card" data-search-card>
+    <h3 onclick="toggleCard(this)">سه راه بررسی عملکرد کبد <span class="chev">▾</span></h3>
+    <div class="card-body">
+      <p>بیماری‌های کبدی یکی از شایع‌ترین گروه بیماری‌هایی هستند که مردم دنیا از آن رنج می‌برند. وقتی درباره‌ی ارزیابی «عملکرد» کبد صحبت می‌کنیم، منظور اصلی، عملکرد بیوسنتزی کبد است.</p>
+      <p>سه راه اصلی بررسی و ارزیابی عملکرد کبد وجود دارد که می‌توانند مکمل یکدیگر باشند:</p>
+      <div class="flow">
+        <div class="fbox">۱. آزمایشات بیوشیمیایی</div>
+        <div class="arrow">+</div>
+        <div class="fbox">۲. تصویربرداری رادیولوژی</div>
+        <div class="arrow">+</div>
+        <div class="fbox">۳. نمونه‌برداری و بررسی پاتولوژیک</div>
+      </div>
+      <p>موضوع اصلی این جلسه، تست‌های بیوشیمیایی کبد است.</p>
+    </div>
+  </div>
+
+  <div class="card" data-search-card>
+    <h3 onclick="toggleCard(this)">چرا نام <span class="en">Liver Function Test</span> نامناسب است؟ <span class="chev">▾</span></h3>
+    <div class="card-body">
+      <div class="box def">
+        <div class="box-title">🔵 تعریف</div>
+        اصطلاحاً به این آزمایشات <span class="en">Liver Function Test (LFT)</span> گفته می‌شود، اما این نام‌گذاری دقیق نیست؛ چون بسیاری از این آزمایشات، عملکرد کبد را از منظر بیوسنتز ارزیابی نمی‌کنند (مثل تست آنزیم‌های کبدی که صرفاً آسیب را نشان می‌دهند نه سنتز را).
+      </div>
+      <p>آزمایشاتی که برای بررسی عملکرد کبد درخواست می‌شوند، می‌توانند چهار سرنخ اصلی به ما بدهند:</p>
+      <div class="box key">
+        <div class="box-title">💡 چهار هدف اصلی آزمایشات کبدی</div>
+        <ul>
+          <li>۱. آیا اساساً بیماری کبدی وجود دارد یا نه؟</li>
+          <li>۲. بیماری، سلول‌های کبدی (<span class="en">hepatocellular damage</span>) را درگیر کرده یا مجاری صفراوی داخل کبد را (<span class="en">cholestatic disease</span>)؟</li>
+          <li>۳. وسعت بیماری و میزان آسیب واردشده به کبد چقدر است؟</li>
+          <li>۴. پس از درمان، میزان پاسخ به درمان چگونه است؟</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="card" data-search-card>
+    <h3 onclick="toggleCard(this)">نواقص آزمایشات بیوشیمیایی کبد <span class="chev">▾</span></h3>
+    <div class="card-body">
+      <div class="box clin">
+        <div class="box-title">⚠️ نکته‌ی بالینی: حساسیت و اختصاصیت پایین</div>
+        وقتی نتیجه‌ی آزمایش مثبت باشد، نمی‌توان ۱۰۰٪ با اطمینان گفت فرد بیماری کبدی دارد؛ همچنین اگر نتیجه منفی باشد، نمی‌توان ۱۰۰٪ مطمئن بود که فرد بیماری کبدی ندارد.
+      </div>
+      <div class="box clin">
+        <div class="box-title">⚠️ نکته‌ی بالینی: عدم تعیین تشخیص اختصاصی</div>
+        این آزمایشات نمی‌توانند مشخصاً نام بیماری کبدی را اعلام کنند؛ برای مثال اگر فردی <span class="en">AST</span> و <span class="en">ALT</span> بالایی داشته باشد، نمی‌توان گفت ناشی از چه بیماری خاصی است، بلکه صرفاً نشان‌دهنده‌ی وجود آسیب در کبد است.
+      </div>
+    </div>
+  </div>
+
+  <div class="card" data-search-card>
+    <h3 onclick="toggleCard(this)">۵ آزمایش اصلی ارزیابی کبد <span class="chev">▾</span></h3>
+    <div class="card-body">
+      <p>ارزیابی عملکرد کبد در بالین و کلینیک، شامل ۵ آزمایش اصلی است:</p>
+      <div class="tbl-wrap">
+        <table>
+          <tr><th>#</th><th>آزمایش</th><th>گروه عملکردی</th></tr>
+          <tr><td>۱</td><td>بیلی‌روبین</td><td>نشان‌دهنده‌ی آسیب</td></tr>
+          <tr><td>۲</td><td>آمینوترانسفرازها (<span class="en">AST</span>, <span class="en">ALT</span>)</td><td>نشان‌دهنده‌ی آسیب</td></tr>
+          <tr><td>۳</td><td>آلکالین فسفاتاز (<span class="en">ALP</span>)</td><td>نشان‌دهنده‌ی آسیب</td></tr>
+          <tr><td>۴</td><td>آلبومین</td><td>نشان‌دهنده‌ی بیوسنتز واقعی</td></tr>
+          <tr><td>۵</td><td>پروترومبین تایم (<span class="en">PT</span>)</td><td>نشان‌دهنده‌ی بیوسنتز واقعی</td></tr>
+        </table>
+      </div>
+      <div class="box mem">
+        <div class="box-title">🧠 نکته‌ی حفظی</div>
+        اگر بخواهیم دقیق صحبت کنیم، تنها دو تست آخر (آلبومین و <span class="en">PT</span>) واقعاً حول ارزیابی «عملکرد» کبد هستند. بیلی‌روبین، آمینوترانسفرازها و آلکالین فسفاتاز، صرفاً نشان‌دهنده‌ی وجود <b>آسیب</b> در کبد هستند، نه نوع دقیق بیماری.
+      </div>
+      <p>اگر فردی در بیش از یک مورد از این تست‌ها مثبت (ابنورمال) باشد، می‌توان گفت (نه حتماً) که این فرد اختلال کبدی دارد؛ و اگر همه‌ی این تست‌ها منفی باشند، نمی‌توان با قطعیت گفت فرد بیماری کبدی ندارد، ولی می‌توان گفت احتمال آن بسیار پایین است.</p>
+    </div>
+  </div>
+
+  <div class="chap-summary">
+    <h4>جمع‌بندی فصل ۱</h4>
+    <ul>
+      <li>سه راه ارزیابی کبد: آزمایشات بیوشیمیایی، تصویربرداری، بیوپسی پاتولوژیک</li>
+      <li>نام <span class="en">Liver Function Test</span> نادرست است چون اکثر این تست‌ها فقط آسیب را نشان می‌دهند نه سنتز را</li>
+      <li>تست‌های کبدی حساسیت و اختصاصیت پایینی دارند و نمی‌توانند تشخیص قطعی بدهند</li>
+      <li>از ۵ تست اصلی، فقط آلبومین و <span class="en">PT</span> نشان‌دهنده‌ی عملکرد بیوسنتزی واقعی کبد هستند</li>
+    </ul>
+  </div>
+</section>
+
+<section class="chapter" id="sec2">
+  <h2>۲. متابولیسم بیلی‌روبین</h2>
+
+  <div class="card" data-search-card>
+    <h3 onclick="toggleCard(this)">بیلی‌روبین چگونه تولید می‌شود؟ <span class="chev">▾</span></h3>
+    <div class="card-body">
+      <p>در گلبول قرمز (<span class="en">RBC</span>) یک مولکول <span class="en">heme</span> وجود دارد که همان گلوبین (<span class="en">Hb</span>) است؛ درون آن آهن و یک حلقه‌ی پورفیرینی قرار دارد. وقتی این حلقه‌ی پورفیرینی شکسته می‌شود، بیلی‌روبین از آن ایجاد می‌شود.</p>
+      <div class="box def">
+        <div class="box-title">🔵 تعریف: بیلی‌روبین توتال</div>
+        وقتی می‌گوییم «بیلی‌روبین»، منظورمان بیلی‌روبین توتال است؛ یعنی مجموع بیلی‌روبین کانژوگیت (مستقیم/<span class="en">direct</span>) و آنکانژوگیت (غیرمستقیم/<span class="en">indirect</span>).
+      </div>
+      <div class="flow">
+        <div class="fbox">شکستن حلقه‌ی هم</div><div class="arrow">←</div>
+        <div class="fbox">بیلی‌روبین <span class="en">unconjugated</span> (ایندایرکت)</div><div class="arrow">←</div>
+        <div class="fbox">ورود به کبد و کونژوگاسیون</div><div class="arrow">←</div>
+        <div class="fbox">بیلی‌روبین <span class="en">conjugated</span> (دایرکت)</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card" data-search-card>
+    <h3 onclick="toggleCard(this)">تفاوت بیلی‌روبین مستقیم و غیرمستقیم <span class="chev">▾</span></h3>
+    <div class="card-body">
+      <div class="grid2">
+        <div class="g2-col">
+          <h4>بیلی‌روبین غیرمستقیم (<span class="en">Indirect</span>)</h4>
+          <ul>
+            <li>در آب نامحلول است</li>
+            <li>به‌شدت به آلبومین سرم متصل می‌شود</li>
+            <li>به‌همین‌دلیل توسط کلیه‌ها دفع نمی‌شود (بیلی‌روبین در ادرار دیده نمی‌شود)</li>
+          </ul>
+        </div>
+        <div class="g2-col">
+          <h4>بیلی‌روبین مستقیم (<span class="en">Direct/Conjugated</span>)</h4>
+          <ul>
+            <li>محلول در آب است</li>
+            <li>اتصال ضعیفی به آلبومین دارد</li>
+            <li>از طریق ادرار دفع می‌شود</li>
+          </ul>
+        </div>
+      </div>
+      <div class="box key">
+        <div class="box-title">💡 نکته‌ی کلیدی</div>
+        افرادی که بیلی‌روبین در ادرارشان وجود دارد (<span class="en">bilirubinuria</span>)، دچار بیماری کبدی یا مجاری صفراوی هستند؛ چون فقط بیلی‌روبین مستقیم قابلیت دفع ادراری دارد.
+      </div>
+      <div class="box mem">
+        <div class="box-title">🧠 نکته‌ی حفظی: محدوده‌ی طبیعی</div>
+        میزان توتال بیلی‌روبین نرمال در افراد سالم، بین ۱ تا ۱.۵ میلی‌گرم در دسی‌لیتر است؛ کمتر از ۱۵٪ آن دایرکت (مستقیم) و مابقی (حدود ۸۵٪) غیرمستقیم است. بالاترین میزان طبیعی بیلی‌روبین دایرکت، ۰.۳ میلی‌گرم بر دسی‌لیتر است.
+      </div>
+    </div>
+  </div>
+
+  <div class="chap-summary">
+    <h4>جمع‌بندی فصل ۲</h4>
+    <ul>
+      <li>بیلی‌روبین از شکستن حلقه‌ی پورفیرینی <span class="en">heme</span> تولید می‌شود</li>
+      <li>بیلی‌روبین توتال = مستقیم (کانژوگیت) + غیرمستقیم (آنکانژوگیت)</li>
+      <li>غیرمستقیم: نامحلول، متصل به آلبومین، در ادرار دفع نمی‌شود</li>
+      <li>مستقیم: محلول، اتصال ضعیف به آلبومین، در ادرار دفع می‌شود</li>
+      <li>وجود بیلی‌روبین در ادرار = بیماری کبدی یا مجاری صفراوی</li>
+    </ul>
+  </div>
+</section>
+
+<section class="chapter" id="sec3">
+  <h2>۳. اپروچ به بیمار ایکتریک</h2>
+
+  <div class="card" data-search-card>
+    <h3 onclick="toggleCard(this)">قدم اول: تعیین نوع هایپربیلی‌روبینمی <span class="chev">▾</span></h3>
+    <div class="card-body">
+      <p>بیماری مراجعه می‌کند و می‌گوید اسکلرای چشمش زرد شده (اصطلاحاً <span class="en">icteric</span> شده است). اولین سؤالی که مطرح می‌شود این است: اگر بیلی‌روبین توتال بالایی دارد (مثلاً ۵)، دایرکتش بالاست یا ایندایرکت؟</p>
+      <div class="box key">
+        <div class="box-title">💡 نکته‌ی کلیدی: قانون ۱۵٪</div>
+        اگر بیلی‌روبین دایرکت زیر ۱۵٪ باشد، می‌فهمیم بیمار دچار <span class="en">indirect hyperbilirubinemia</span> است. اگر بیش از ۱۵٪ باشد، دچار <span class="en">direct hyperbilirubinemia</span> است.
+      </div>
+
+      <div class="flow">
+        <div class="fbox">بیمار ایکتریک</div><div class="arrow">←</div>
+        <div class="fbox">بیلی‌روبین توتال + درصد دایرکت</div><div class="arrow">←</div>
+        <div class="fbox">دایرکت &lt; ۱۵٪ = ایندایرکت<br>دایرکت &gt; ۱۵٪ = دایرکت</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card" data-search-card>
+    <h3 onclick="toggleCard(this)">مسیر ایندایرکت هایپربیلی‌روبینمی <span class="chev">▾</span></h3>
+    <div class="card-body">
+      <p>در این مسیر، دو دسته‌ی بزرگ بیماری مطرح می‌شود:</p>
+      <div class="grid2">
+        <div class="g2-col">
+          <h4>۱. همولیز</h4>
+          <ul>
+            <li>بیلی‌روبین به‌سرعت تخریب می‌شود و کبد نمی‌تواند به‌موقع آن را به دایرکت تبدیل و دفع کند</li>
+            <li>خارج از حیطه‌ی بیماری‌های گوارشی است؛ باید بیمار نزد متخصص خون ارجاع شود</li>
+            <li>بررسی: <span class="en">CBC</span>، شمارش رتیکولوسیت‌ها و <span class="en">LDH</span> &mdash; اگر بالا باشند، همولیز مطرح است</li>
+          </ul>
+        </div>
+        <div class="g2-col">
+          <h4>۲. در غیاب همولیز</h4>
+          <ul>
+            <li>سندروم ژیلبرت (<span class="en">Gilbert's syndrome</span>)</li>
+            <li>یا سندروم کریگلر-نجار (<span class="en">Crigler-Najjar syndrome</span>)</li>
+          </ul>
+        </div>
+      </div>
+      <div class="box mem">
+        <div class="box-title">🧠 نکته‌ی حفظی</div>
+        اگر ایندایرکت بود: اول به همولیز شک می‌کنیم؛ اگر همولیز نداشت، یا ژیلبرت است یا کریگلر-نجار.
+      </div>
+    </div>
+  </div>
+
+  <div class="card" data-search-card>
+    <h3 onclick="toggleCard(this)">سندروم ژیلبرت <span class="en">(Gilbert's Syndrome)</span> <span class="chev">▾</span></h3>
+    <div class="card-body">
+      <p>یک بیماری کبدی نسبتاً شایع است که می‌تواند <span class="en">indirect hyperbilirubinemia</span> بدهد؛ شاید ۱۰ تا ۱۵ درصد مردم جامعه به آن مبتلا باشند.</p>
+      <p>گاهی افراد مراجعه می‌کنند و می‌گویند زمانی که روزه می‌گیرند یا ورزش می‌کنند، چشمانشان زرد می‌شود. اگر <span class="en">AST</span> و <span class="en">ALT</span> این افراد را اندازه بگیریم و نرمال باشد و همولیز هم نداشته باشند، تشخیص سندروم ژیلبرت است.</p>
+      <div class="box def">
+        <div class="box-title">🔵 تعریف</div>
+        سندروم ژیلبرت یعنی وجود یک اختلال مادرزادی خفیف در آنزیم کبدی که <span class="en">indirect</span> بیلی‌روبین را نمی‌تواند به‌طور کامل در کبد به <span class="en">direct</span> تبدیل کند و فرد دچار <span class="en">indirect hyperbilirubinemia</span> خفیف می‌شود.
+      </div>
+      <div class="box key">
+        <div class="box-title">💡 نکته‌ی کلیدی</div>
+        سندروم ژیلبرت بیماری‌ای است که با استرس‌های فیزیکی (روزه‌داری، ورزش شدید) دچار ایکتر خفیف می‌شود؛ فقط بیلی‌روبین ایندایرکتش بالاست و بقیه‌ی آزمایش‌ها کاملاً نرمال هستند.
+      </div>
+    </div>
+  </div>
+
+  <div class="card" data-search-card>
+    <h3 onclick="toggleCard(this)">مسیر دایرکت هایپربیلی‌روبینمی <span class="chev">▾</span></h3>
+    <div class="card-body">
+      <div class="box clin">
+        <div class="box-title">⚠️ نکته‌ی بالینی</div>
+        اگر بیلی‌روبین دایرکت بیمار بالای ۱۵٪ باشد (<span class="en">direct hyperbilirubinemia</span>)، این وضعیت دلالت بر بیماری کبدی (سلول کبدی) یا بیماری مجاری صفراوی دارد.
+      </div>
+      <p>گفتیم بیلی‌روبین غیرمستقیم در سرم باقی می‌ماند و با ادرار دفع نمی‌شود؛ پس بیمارانی که بیلی‌روبین در ادرار دارند، دلالت بر بیلی‌روبین دایرکت بالا و در نتیجه یک بیماری کبدی یا مجاری صفراوی حتمی دارند. اما اگر بیلی‌روبین در ادرار وجود نداشت، بیماری کبدی نبوده است.</p>
+      <div class="box key">
+        <div class="box-title">💡 نکته‌ی کلیدی</div>
+        زمانی که بیماری کبدی رو به بهبود می‌رود، بیلی‌روبین ادراری زودتر از بیلی‌روبین سرم، از ادرار دفع (پاک) می‌شود.
+      </div>
+    </div>
+  </div>
+
+  <div class="card" data-search-card>
+    <h3 onclick="toggleCard(this)">آیا شدت بیلی‌روبین با شدت بیماری رابطه دارد؟ <span class="chev">▾</span></h3>
+    <div class="card-body">
+      <div class="box clin">
+        <div class="box-title">⚠️ نکته‌ی بالینی</div>
+        میزان افزایش بیلی‌روبین الزاماً نشان‌دهنده‌ی شدت بیماری نیست؛ یعنی میزان بیلی‌روبین ربطی مستقیم به شدت بیماری ندارد (هر دو حالت امکان‌پذیر است). البته در برخی بیماری‌ها مانند هپاتیت ویروسی، الکلیسم یا مسمومیت با استامینوفن، می‌توان از آن برای تعیین شدت بیماری کمک گرفت.
+      </div>
+    </div>
+  </div>
+
+  <div class="chap-summary">
+    <h4>جمع‌بندی فصل ۳</h4>
+    <ul>
+      <li>قدم اول: تعیین درصد بیلی‌روبین دایرکت از توتال (مرز ۱۵٪)</li>
+      <li>ایندایرکت &larr; ابتدا رد همولیز (<span class="en">CBC</span>، رتیک، <span class="en">LDH</span>)؛ سپس ژیلبرت یا کریگلر-نجار</li>
+      <li>دایرکت &larr; بیماری کبدی یا مجاری صفراوی مطرح است</li>
+      <li>بیلی‌روبین ادراری همیشه یعنی دایرکت بالا و بیماری کبدی/صفراوی</li>
+      <li>شدت زردی الزاماً با شدت بیماری کبدی متناسب نیست</li>
+    </ul>
+  </div>
+</section>
+
+<section class="chapter" id="sec4">
+  <h2>۴. آنزیم‌های کبدی: <span class="en">AST</span> و <span class="en">ALT</span></h2>
+
+  <div class="card" data-search-card>
+    <h3 onclick="toggleCard(this)">مکانیسم افزایش آنزیم‌های کبدی <span class="chev">▾</span></h3>
+    <div class="card-body">
+      <div class="box def">
+        <div class="box-title">🔵 تعریف</div>
+        افزایش آنزیم‌های کبدی در سرم، در نتیجه‌ی <b>آسیب و تخریب</b> سلول‌ها (نه لزوماً مرگ سلولی) و ورود محتویات آن‌ها به سرم است.
+      </div>
+      <p>برای افتراق نوع آسیب کبدی از دو گروه آنزیم استفاده می‌کنیم:</p>
+      <div class="grid2">
+        <div class="g2-col">
+          <h4>بیماری هپاتوسلولار</h4>
+          <ul><li>باعث افزایش عمده‌ی <span class="en">AST</span> و <span class="en">ALT</span> می‌شود</li></ul>
+        </div>
+        <div class="g2-col">
+          <h4>بیماری کولستاتیک</h4>
+          <ul><li>باعث افزایش عمده‌ی <span class="en">ALP</span> (آلکالین فسفاتاز) می‌شود</li></ul>
+        </div>
+      </div>
+      <div class="box clin">
+        <div class="box-title">⚠️ نکته‌ی بالینی</div>
+        این به این معنا نیست که در بیماری هپاتوسلولار، <span class="en">ALP</span> اصلاً افزایش نمی‌یابد؛ بلکه تأثیر بیماری بر روی <span class="en">AST</span> و <span class="en">ALT</span> بسیار بیشتر است. به همین ترتیب در بیماری‌های کولستاتیک، آمینوترانسفرازها هم بالا می‌روند اما افزایش <span class="en">ALP</span> بارزتر است.
+      </div>
+    </div>
+  </div>
+
+  <div class="card" data-search-card>
+    <h3 onclick="toggleCard(this)">اختصاصیت <span class="en">AST</span> در برابر <span class="en">ALT</span> <span class="chev">▾</span></h3>
+    <div class="card-body">
+      <div class="grid2">
+        <div class="g2-col">
+          <h4><span class="en">AST</span></h4>
+          <ul>
+            <li>فقط از کبد ترشح نمی‌شود</li>
+            <li>منابع دیگر: قلب (سکته‌ی قلبی)، عضله (تزریق آمپول عضلانی)، کلیه (<span class="en">CKD</span>)، مغز، پانکراس، ریه، لکوسیت‌ها و اریتروسیت‌ها</li>
+          </ul>
+        </div>
+        <div class="g2-col">
+          <h4><span class="en">ALT</span></h4>
+          <ul>
+            <li>با اینکه از جاهای دیگر هم می‌تواند ترشح شود</li>
+            <li>اختصاصیت آن برای کبد بیشتر است</li>
+          </ul>
+        </div>
+      </div>
+      <div class="box mem">
+        <div class="box-title">🧠 نکته‌ی حفظی: محدوده‌ی طبیعی</div>
+        رنج نرمال <span class="en">AST</span> و <span class="en">ALT</span> بر مبنای هاریسون، بین ۱۰ تا ۴۰ است. اما بر اساس مقالات جدیدتر، اگر <span class="en">AST</span> و <span class="en">ALT</span> در خانم‌ها بیشتر از ۲۰ و در آقایان بالای ۳۰ باشد، قطعاً آسیب کبدی وجود دارد.
+      </div>
+    </div>
+  </div>
+
+  <div class="card" data-search-card>
+    <h3 onclick="toggleCard(this)">آیا میزان افزایش آنزیم‌ها با شدت آسیب رابطه دارد؟ <span class="chev">▾</span></h3>
+    <div class="card-body">
+      <p><span class="en">AST</span> و <span class="en">ALT</span> با آسیب سلول‌های کبدی افزایش می‌یابند، اما افزایش آن‌ها دلیلی بر از بین رفتن کامل (نکروز) سلول‌های کبدی نیست. برای بالارفتن آنزیم‌های کبدی، صرفِ آسیب سلولی کافی است و نیازی نیست حتماً نکروز رخ دهد.</p>
+      <div class="box clin">
+        <div class="box-title">⚠️ نکته‌ی بالینی مهم</div>
+        ارتباط مستقیم و همیشگی بین میزان افزایش <span class="en">AST</span>/<span class="en">ALT</span> و میزان آسیب کبدی وجود ندارد. مثالی از استاد: بیمارانی با نارسایی حاد کبدی و <span class="en">AST</span>/<span class="en">ALT</span> حدود ۲۰۰۰ که چند روز در <span class="en">ICU</span> بستری‌اند، ممکن است بعداً آنزیم‌هایشان به ۷۰ برسد؛ این افت لزوماً خبر خوبی نیست، چون ممکن است دیگر سلول کبدی سالمی باقی نمانده باشد که آنزیم تولید کند.
+      </div>
+    </div>
+  </div>
+
+  <div class="card" data-search-card>
+    <h3 onclick="toggleCard(this)">تفسیر سطوح مختلف افزایش <span class="en">AST</span>/<span class="en">ALT</span> <span class="chev">▾</span></h3>
+    <div class="card-body">
+      <div class="tbl-wrap">
+        <table>
+          <tr><th>سطح افزایش</th><th>تفسیر بالینی</th></tr>
+          <tr><td>تا ۶۰ تا ۷۰</td><td>غیراختصاصی؛ تقریباً هر بیماری کبدی خفیف (حتی مصرف آتورواستاتین) می‌تواند این مقدار افزایش ایجاد کند</td></tr>
+          <tr><td>حدود ۳۰۰</td><td>می‌تواند نشان‌دهنده‌ی بیماری خاصی باشد</td></tr>
+          <tr><td>بالاتر از ۱۰۰۰</td><td>آسیب جدی؛ سه تشخیص افتراقی اصلی مطرح است</td></tr>
+        </table>
+      </div>
+      <p>شایع‌ترین علت افزایش آمینوترانسفرازها در جامعه، کبد چرب است؛ اما این به این معنا نیست که هر بیمار مبتلا حتماً کبد چرب دارد &mdash; باید سایر علل نیز بررسی شوند (مثلاً هپاتیت).</p>
+      <div class="box key">
+        <div class="box-title">💡 سه تشخیص افتراقی آنزیم کبدی بالای ۱۰۰۰</div>
+        <ul>
+          <li>۱. هپاتیت ویرال</li>
+          <li>۲. آسیب ایسکمیک (افت فشار خون &rarr; کاهش خون‌رسانی کبد &rarr; آسیب سلولی)</li>
+          <li>۳. توکسین‌ها و داروها (از جمله مسمومیت با استامینوفن)</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="card" data-search-card>
+    <h3 onclick="toggleCard(this)">نسبت <span class="en">AST:ALT</span> &mdash; کلید تشخیص الکلیسم و سیروز <span class="chev">▾</span></h3>
+    <div class="card-body">
+      <p>از نظر کلینیکی، پترن (الگوی) افزایش <span class="en">AST</span> و <span class="en">ALT</span> اهمیت زیادی دارد. در هر پروسه‌ی حاد کبدی که سلول‌های کبدی آسیب ببینند، <span class="en">ALT</span> بیشتر از <span class="en">AST</span> بالا می‌رود؛ پس نسبت <span class="en">AST</span> به <span class="en">ALT</span> در حالت نرمال و بیماری حاد، کمتر از یک است.</p>
+      <div class="box mem">
+        <div class="box-title">🧠 نکته‌ی حفظی: جدول تفسیر نسبت <span class="en">AST:ALT</span></div>
+        <div class="tbl-wrap">
+          <table>
+            <tr><th>نسبت <span class="en">AST:ALT</span></th><th>تفسیر</th></tr>
+            <tr><td>کمتر از ۱</td><td>طبیعی یا بیماری حاد کبدی</td></tr>
+            <tr><td>بیشتر از ۱</td><td>احتمال سیروز کبدی (فیبروز شدید، مراحل انتهایی بیماری مزمن کبدی)</td></tr>
+            <tr><td>بیشتر از ۲</td><td>شک شدید به مصرف الکل</td></tr>
+            <tr><td>بیشتر از ۳</td><td>قطعاً الکل مصرف کرده؛ هپاتیت حاد الکلی</td></tr>
+          </table>
+        </div>
+      </div>
+      <p style="font-size:14px;">علت افزایش چند برابری <span class="en">AST</span> در برابر <span class="en">ALT</span> در مصرف الکل: الکل آنزیم پیریدوکسین (ویتامین <span class="en">B6</span>) ردوکتاز را مختل کرده و تولید <span class="en">ALT</span> بیشتر از <span class="en">AST</span> دچار مشکل می‌شود.</p>
+    </div>
+  </div>
+
+  <div class="chap-summary">
+    <h4>جمع‌بندی فصل ۴</h4>
+    <ul>
+      <li>افزایش آنزیم کبدی = آسیب سلولی، نه لزوماً نکروز یا مرگ سلولی</li>
+      <li><span class="en">ALT</span> اختصاصیت بیشتری برای کبد دارد؛ <span class="en">AST</span> منابع خارج‌کبدی متعدد دارد</li>
+      <li>هیچ ارتباط مستقیم و همیشگی بین میزان آنزیم و شدت آسیب کبدی وجود ندارد</li>
+      <li>بالای ۱۰۰۰: هپاتیت ویرال، ایسکمی، یا توکسین/دارو مطرح است</li>
+      <li>نسبت <span class="en">AST:ALT</span> بالای ۲ تا ۳ = شک قوی به مصرف الکل</li>
+    </ul>
+  </div>
+</section>
+
+<section class="chapter" id="sec5">
+  <h2>۵. آلکالین فسفاتاز و کولستاز</h2>
+
+  <div class="card" data-search-card>
+    <h3 onclick="toggleCard(this)">منشأ آلکالین فسفاتاز <span class="en">(ALP)</span> <span class="chev">▾</span></h3>
+    <div class="card-body">
+      <p>در بیماری‌های کولستاتیک یا انسدادی مجاری صفراوی، افزایش آمینوترانسفرازها هم دیده می‌شود، اما آلکالین فسفاتاز خیلی بیشتر بالا می‌رود.</p>
+      <div class="box clin">
+        <div class="box-title">⚠️ نکته‌ی بالینی مهم</div>
+        آلکالین فسفاتاز فقط از مجاری صفراوی ترشح نمی‌شود؛ می‌تواند از استخوان‌ها، جفت و روده نیز ترشح شود. بنابراین از نظر بالینی خیلی مهم است که ثابت کنیم <span class="en">ALP</span> بالا رفته، واقعاً منشأ کبدی دارد یا نه.
+      </div>
+      <p>موارد زیر می‌توانند <span class="en">ALP</span> را بالا ببرند بدون آنکه بیمار مشکل کبدی داشته باشد:</p>
+      <ul>
+        <li>سن بالای ۶۰ سال همراه با پوکی استخوان</li>
+        <li>کودکان در سن رشد (<span class="en">turnover</span> بالای استخوان)</li>
+        <li>خانم‌های باردار در ماه‌های آخر بارداری (منشأ جفتی)</li>
+        <li>گروه خونی <span class="en">O</span> و <span class="en">B</span> پس از یک وعده غذای چرب</li>
+      </ul>
+      <div class="box key">
+        <div class="box-title">💡 نکته‌ی کلیدی</div>
+        هر جا فقط آلکالین فسفاتاز بالا بود، ابتدا باید منشأ آن (کبد یا استخوان) تعیین شود. برای این کار به دو آنزیم دیگر مراجعه می‌کنیم: <span class="en">5'-nucleotidase</span> و گاما <span class="en">GT (γ-glutamyl transpeptidase)</span>؛ این دو فقط از کبد ترشح می‌شوند و اختصاصی هستند، اما هزینه‌ی بیشتری دارند و معمولاً فقط برای ارزیابی تکمیلی درخواست می‌شوند.
+      </div>
+      <div class="box mem">
+        <div class="box-title">🧠 نکته‌ی حفظی: محدوده‌ی طبیعی</div>
+        رنج نرمال <span class="en">ALP</span> حدود ۵۰ تا ۱۵۰ است؛ تا زیر ۳۰۰ غیراختصاصی است، اما اگر بیش از ۳ برابر نرمال باشد، ارزش تشخیصی برای مشکل صفراوی دارد.
+      </div>
+    </div>
+  </div>
+
+  <div class="card" data-search-card>
+    <h3 onclick="toggleCard(this)">افتراق الگوی هپاتوسلولار از کولستاتیک <span class="chev">▾</span></h3>
+    <div class="card-body">
+      <p>افزایش <span class="en">AST</span>/<span class="en">ALT</span> می‌تواند در بیماری‌های صفراوی هم دیده شود، همان‌طور که <span class="en">ALP</span> می‌تواند در بیماری هپاتوسلولار هم بالا برود. افتراق این دو با «غالبیت» (<span class="en">predominance</span>) نسبت افزایش مشخص می‌شود:</p>
+      <div class="grid2">
+        <div class="g2-col">
+          <h4>غالبیت با <span class="en">ALP</span></h4>
+          <ul><li>بیماری مجاری صفراوی (کولستاتیک) مطرح است، هرچند <span class="en">AST</span>/<span class="en">ALT</span> هم مقداری بالا رفته‌اند</li></ul>
+        </div>
+        <div class="g2-col">
+          <h4>غالبیت با <span class="en">AST</span>/<span class="en">ALT</span></h4>
+          <ul><li>بیماری هپاتوسلولار مطرح است، هرچند <span class="en">ALP</span> هم مقداری بالا رفته است</li></ul>
+        </div>
+      </div>
+      <div class="box clin">
+        <div class="box-title">⚠️ نکته‌ی بالینی: استثنای کوله‌سیستیت حاد</div>
+        بیماری با درد شدید، ایکتر، تهوع و استفراغ به‌همراه سنگ صفرا و علامت مورفی مثبت، نشان‌دهنده‌ی کوله‌سیستیت حاد است؛ اما پترن آزمایشات ممکن است در ۲۴ تا ۴۸ ساعت اول <b>هپاتوسلولار</b> باشد (نه کولستاتیک) و بعد از یکی‌دو روز، آلکالین فسفاتاز بالا رفته و <span class="en">AST</span>/<span class="en">ALT</span> پایین می‌آیند.
+      </div>
+    </div>
+  </div>
+
+  <div class="card" data-search-card>
+    <h3 onclick="toggleCard(this)">کولستاز اینتراهپاتیک در برابر اکستراهپاتیک <span class="chev">▾</span></h3>
+    <div class="card-body">
+      <p>بیماری‌های مجاری صفراوی به دو گروه بزرگ تقسیم می‌شوند: <span class="en">intrahepatic cholestatic</span> و <span class="en">extrahepatic cholestatic</span>. افتراق این دو با <b>سونوگرافی</b> مشخص می‌شود، نه صرفاً با نام‌گذاری تشریحی:</p>
+      <div class="grid2">
+        <div class="g2-col">
+          <h4>اکستراهپاتیک کولستاتیک</h4>
+          <ul><li>در سونوگرافی، مجاری صفراوی <b>گشاد</b> شده دیده می‌شود (مثل انسداد ناشی از سنگ یا توده)</li></ul>
+        </div>
+        <div class="g2-col">
+          <h4>اینتراهپاتیک کولستاتیک</h4>
+          <ul><li>در سونوگرافی، مجاری صفراوی طبیعی است و انسدادی دیده نمی‌شود</li></ul>
+        </div>
+      </div>
+      <div class="box def">
+        <div class="box-title">🔵 مثال بالینی: <span class="en">PBC</span></div>
+        خانمی ۴۲ ساله با خارش بدن مراجعه می‌کند و <span class="en">ALP</span> بالایی دارد. در سونوگرافی، انسدادی دیده نمی‌شود؛ پس این بیمار <span class="en">Primary Biliary Cirrhosis (PBC)</span> دارد که یک بیماری اینتراهپاتیک کولستاتیک همراه با خارش است.
+      </div>
+    </div>
+  </div>
+
+  <div class="chap-summary">
+    <h4>جمع‌بندی فصل ۵</h4>
+    <ul>
+      <li><span class="en">ALP</span> اختصاصی کبد نیست؛ منابع دیگر: استخوان، جفت، روده</li>
+      <li>برای تأیید منشأ کبدی <span class="en">ALP</span>: <span class="en">5'-nucleotidase</span> یا گاما <span class="en">GT</span></li>
+      <li><span class="en">ALP</span> بالای ۳ برابر نرمال = ارزش تشخیصی برای مشکل صفراوی</li>
+      <li>غالبیت آنزیمی تعیین‌کننده‌ی الگوی هپاتوسلولار یا کولستاتیک است</li>
+      <li>افتراق اینترا/اکستراهپاتیک کولستاتیک با سونوگرافی مجاری صفراوی مشخص می‌شود</li>
+    </ul>
+  </div>
+</section>
+
+<section class="chapter" id="sec6">
+  <h2>۶. ارزیابی بیوسنتز کبد</h2>
+  <p>تا اینجا بیلی‌روبین، <span class="en">AST</span>، <span class="en">ALT</span> و آلکالین فسفاتاز را بررسی کردیم که همگی نشان‌دهنده‌ی <b>آسیب</b> کبدی هستند، نه لزوماً عملکرد آن. برای بررسی واقعی عملکرد (بیوسنتز) کبد، از آلبومین، گلوبولین و پروترومبین‌ها استفاده می‌کنیم.</p>
+
+  <div class="card" data-search-card>
+    <h3 onclick="toggleCard(this)">۶.۱ آلبومین <span class="chev">▾</span></h3>
+    <div class="card-body">
+      <div class="box def">
+        <div class="box-title">🔵 تعریف</div>
+        آلبومین سرم فقط و فقط توسط کبد (هپاتوسیت‌ها) ساخته می‌شود؛ هیچ ارگان دیگری در بدن، آلبومین تولید نمی‌کند.
+      </div>
+      <div class="box mem">
+        <div class="box-title">🧠 نکته‌ی حفظی</div>
+        نیمه‌عمر آلبومین ۱۸ تا ۲۰ روز است و روزانه حدود ۴٪ آن از بین می‌رود.
+      </div>
+      <div class="box clin">
+        <div class="box-title">⚠️ نکته‌ی بالینی بسیار مهم</div>
+        اگر بیماری، بیماری <b>حاد</b> کبدی دارد (کمتر از شش هفته از شروع آن گذشته)، برای ارزیابی عملکرد کبد نباید از آلبومین استفاده کرد؛ چون آلبومین به‌دلیل نیمه‌عمر طولانی، زمان زیادی طول می‌کشد تا سطحش پایین بیاید. اگر سؤال بیماری را مطرح کرد که تازه دچار ایکتر شده، برای ارزیابی بیوسنتز کبدش هرگز آلبومین را انتخاب نکنید.
+      </div>
+      <p>هایپوآلبومینمی بیشتر در بیماری‌های <b>مزمن</b> کبدی دیده می‌شود، مثل سیروز که نشان می‌دهد سنتز کبد مختل شده است.</p>
+      <div class="box clin">
+        <div class="box-title">⚠️ نکته‌ی بالینی: علل غیرکبدی کاهش آلبومین</div>
+        پایین‌بودن آلبومین همیشه به‌معنای بیماری کبدی نیست؛ ممکن است بیماری کلیوی (دفع آلبومین از کلیه)، آنتروپاتی همراه با از‌دست‌دادن پروتئین (<span class="en">protein-losing enteropathy</span>)، یا رقیق‌شدن ناشی از افزایش حجم مایع (مثلاً آسیت) علت آن باشد.
+      </div>
+      <p>به همین دلیل، سطح آلبومین سرم نباید برای اسکرینینگ و غربالگری اولیه در بیماری که فقط شک به بیماری کبدی دارد، استفاده شود.</p>
+    </div>
+  </div>
+
+  <div class="card" data-search-card>
+    <h3 onclick="toggleCard(this)">۶.۲ گلوبولین <span class="chev">▾</span></h3>
+    <div class="card-body">
+      <p>گلوبولین‌های سرم به دو گروه بزرگ تقسیم می‌شوند:</p>
+      <div class="grid2">
+        <div class="g2-col">
+          <h4>گاما گلوبولین</h4>
+          <ul>
+            <li>جزو ایمنوگلوبولین‌هاست</li>
+            <li>ترشح آن توسط لنفوسیت‌های <span class="en">B</span> انجام می‌شود</li>
+            <li>در بیماری‌های مزمن کبدی (سیروز، هپاتیت مزمن) <b>بالا</b> می‌رود</li>
+          </ul>
+        </div>
+        <div class="g2-col">
+          <h4>آلفا و بتا گلوبولین</h4>
+          <ul>
+            <li>به‌صورت اولیه از کبد (هپاتوسیت‌ها) ساخته می‌شوند</li>
+            <li>در بیماری‌های مزمن کبدی، به‌دلیل کاهش عملکرد هپاتوسیت‌ها، <b>پایین</b> می‌آیند</li>
+          </ul>
+        </div>
+      </div>
+      <div class="box mem">
+        <div class="box-title">🧠 مکانیسم بالارفتن گاما گلوبولین در سیروز</div>
+        در افراد سیروزی، به‌دلیل کاهش آپسونین‌ها، باکتریمی گذرای روزمره (که همه‌ی افراد پس از غذاخوردن به‌طور خفیف تجربه می‌کنند) طولانی‌تر باقی می‌ماند؛ این تحریک مداوم باعث می‌شود لنفوسیت‌ها گاما گلوبولین بیشتری ترشح کنند.
+      </div>
+      <div class="box key">
+        <div class="box-title">💡 جمع‌بندی</div>
+        در بیماری مزمن کبدی: سطح گاما گلوبولین بالا و سطح آلفا و بتا گلوبولین پایین است.
+      </div>
+    </div>
+  </div>
+
+  <div class="card" data-search-card>
+    <h3 onclick="toggleCard(this)">۶.۳ تست‌های کوآگولاسیون: <span class="en">PT (Prothrombin Time)</span> <span class="chev">▾</span></h3>
+    <div class="card-body">
+      <p>تمام فاکتورهای انعقادی توسط کبد تولید می‌شوند، <b>به‌جز فاکتور هشت</b> که توسط سلول‌های اندوتلیال عروق تولید می‌شود. فاکتورهای ۵ و ۷ نیمه‌عمر کوتاهی حدود ۶ ساعت دارند.</p>
+      <div class="box key">
+        <div class="box-title">💡 نکته‌ی کلیدی</div>
+        <span class="en">PT (protrombin time)</span> عملکرد فاکتورهای ۲، ۵، ۷ و ۱۰ را نشان می‌دهد. به‌دلیل نیمه‌عمر کوتاه این فاکتورها، برخلاف آلبومین، <b>PT برای ارزیابی بیماری‌های حاد کبدی مناسب است</b>.
+      </div>
+      <div class="box mem">
+        <div class="box-title">🧠 نکته‌ی حفظی</div>
+        ویتامین <span class="en">K</span> فاکتورهای ۲، ۷، ۹ و ۱۰ را اصلاح می‌کند.
+      </div>
+      <p>اگر بیماری، بیماری کبدی و اختلال انعقادی دارد (<span class="en">PT</span> بالا، بیش از ۵ ثانیه از کنترل) و با تزریق ویتامین <span class="en">K</span> بهبود نیابد، پیش‌آگهی بسیار بدی دارد و بیماری مزمن کبدی مطرح است (فانکشن کبد کاملاً مختل شده است). اما اگر با تزریق ویتامین <span class="en">K</span>، <span class="en">PT</span> بهبود یابد، بیماری حاد کبدی است.
+      </p>
+      <div class="grid2">
+        <div class="g2-col">
+          <h4>آلبومین</h4>
+          <ul><li>نشانگر بیماری <b>مزمن</b> (نیمه‌عمر طولانی)</li></ul>
+        </div>
+        <div class="g2-col">
+          <h4><span class="en">PT</span></h4>
+          <ul><li>نشانگر بیماری <b>حاد</b> کبدی (نیمه‌عمر فاکتورهای انعقادی کوتاه است)</li></ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="chap-summary">
+    <h4>جمع‌بندی فصل ۶</h4>
+    <ul>
+      <li>آلبومین و <span class="en">PT</span> واقعاً نشان‌دهنده‌ی بیوسنتز کبدند</li>
+      <li>آلبومین برای بیماری <b>حاد</b> مناسب نیست (نیمه‌عمر طولانی)؛ برای بیماری <b>مزمن</b> مناسب است</li>
+      <li><span class="en">PT</span> برای بیماری <b>حاد</b> مناسب است (فاکتورهای ۵ و ۷ نیمه‌عمر کوتاه دارند)</li>
+      <li>سیروز: گاما گلوبولین بالا + آلفا/بتا گلوبولین پایین</li>
+      <li><span class="en">PT</span> اصلاح‌نشده با ویتامین <span class="en">K</span> = پیش‌آگهی بد و بیماری مزمن کبدی</li>
+    </ul>
+  </div>
+</section>
+
+<section class="chapter" id="sec7">
+  <h2>۷. خلاصه‌ی جامع بیماری‌ها</h2>
+  <p>در این بخش، الگوی آزمایشات پنج‌گانه (بیلی‌روبین، آمینوترانسفرازها، آلکالین فسفاتاز، آلبومین و <span class="en">PT</span>) برای دسته‌های اصلی بیماری‌های کبدی و صفراوی جمع‌بندی شده است.</p>
+
+  <div class="card" data-search-card>
+    <h3 onclick="toggleCard(this)">همولیز و سندروم ژیلبرت <span class="chev">▾</span></h3>
+    <div class="card-body">
+      <p>بیماری که با همولیز یا ژیلبرت مراجعه می‌کند، بیلی‌روبینش معمولاً تا حدود ۵ میلی‌گرم بر دسی‌لیتر بالا می‌رود؛ ۸۵٪ آن ایندایرکت است و هیچ بیلی‌روبینی در ادرار وجود ندارد.</p>
+      <ul>
+        <li>آمینوترانسفرازها: نرمال</li>
+        <li>آلکالین فسفاتاز: نرمال</li>
+        <li>آلبومین: نرمال</li>
+        <li><span class="en">PT</span>: نرمال</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="card" data-search-card>
+    <h3 onclick="toggleCard(this)"><span class="en">Acute Hepatocellular Necrosis</span> <span class="chev">▾</span></h3>
+    <div class="card-body">
+      <p>هر دو جزء بیلی‌روبین (دایرکت و ایندایرکت) بالاست، اما دایرکت بیش از ۱۵٪ است؛ بیمار حتماً بیلی‌روبین در ادرار دارد.</p>
+      <ul>
+        <li>آمینوترانسفرازها: بالا (نسبت <span class="en">AST</span> به <span class="en">ALT</span> کمتر از یک)</li>
+        <li>آلکالین فسفاتاز: بالا اما زیر ۳ برابر نرمال</li>
+        <li>آلبومین: نرمال</li>
+        <li><span class="en">PT</span>: معمولاً نرمال؛ با تزریق ویتامین <span class="en">K</span> معمولاً اصلاح می‌شود</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="card" data-search-card>
+    <h3 onclick="toggleCard(this)"><span class="en">Chronic Hepatocellular Necrosis</span> <span class="chev">▾</span></h3>
+    <div class="card-body">
+      <p>هر دو جزء بیلی‌روبین بالاست و دایرکت بیش از ۱۵٪ است؛ در ادرار بیلی‌روبین وجود دارد.</p>
+      <ul>
+        <li>آمینوترانسفرازها: بالا اما زیر ۳۰۰</li>
+        <li>آلکالین فسفاتاز: زیر ۳ برابر نرمال</li>
+        <li>آلبومین: کاهش‌یافته</li>
+        <li><span class="en">PT</span>: اغلب افزایش‌یافته (چون کرونیک است)</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="card" data-search-card>
+    <h3 onclick="toggleCard(this)">هپاتیت الکلی یا سیروز <span class="chev">▾</span></h3>
+    <div class="card-body">
+      <p>ایکتر دارد و ایکترش دایرکت است؛ در ادرار بیلی‌روبین وجود دارد.</p>
+      <ul>
+        <li>نسبت <span class="en">AST</span> به <span class="en">ALT</span>: بالای ۲</li>
+        <li>آلبومین: ممکن است به‌دلیل سوءتغذیه پایین باشد</li>
+        <li><span class="en">PT</span>: بالاست</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="card" data-search-card>
+    <h3 onclick="toggleCard(this)">کولستاز <span class="en">(Cholestasis)</span> <span class="chev">▾</span></h3>
+    <div class="card-body">
+      <p>هر دو جزء بیلی‌روبین بالاست.</p>
+      <ul>
+        <li>آلکالین فسفاتاز: بالاتر از ۴ برابر نرمال</li>
+        <li>آمینوترانسفرازها: نرمال یا مقدار کمی بالا</li>
+        <li>آلبومین: معمولاً نرمال مگر بیماری مزمن مجاری صفراوی مثل <span class="en">PBC</span> یا <span class="en">PSC</span> باشد</li>
+        <li><span class="en">PT</span>: نرمال (در کلستاز مزمن ممکن است بالا برود)</li>
+      </ul>
+      <div class="box clin">
+        <div class="box-title">⚠️ نکته‌ی بالینی</div>
+        بیماری‌های اینفیلتراتیو مانند تومورها معمولاً علائمی شبیه کلستاز دارند؛ یعنی <span class="en">ALP</span> بالاتر از آمینوترانسفرازها است.
+      </div>
+    </div>
+  </div>
+
+  <div class="card" data-search-card>
+    <h3 onclick="toggleCard(this)">جدول جامع الگوهای آزمایشگاهی <span class="chev">▾</span></h3>
+    <div class="card-body">
+      <div class="tbl-wrap">
+        <table>
+          <tr>
+            <th>نوع اختلال</th><th>بیلی‌روبین</th><th>آمینوترانسفرازها</th><th>آلکالین فسفاتاز</th><th>آلبومین</th><th><span class="en">PT</span></th>
+          </tr>
+          <tr>
+            <td>همولیز / ژیلبرت</td>
+            <td>نرمال تا ۵ &mdash; ۸۵٪ ایندایرکت &mdash; بدون بیلی‌روبینوری</td>
+            <td>نرمال</td><td>نرمال</td><td>نرمال</td><td>نرمال</td>
+          </tr>
+          <tr>
+            <td>نکروز حاد هپاتوسلولار<br><span style="font-size:12.5px;color:var(--ink-soft)">(هپاتیت ویرال/دارویی، توکسین، نارسایی حاد قلب)</span></td>
+            <td>هر دو جزء ممکن است بالا باشد &mdash; بیلی‌روبینوری</td>
+            <td>بالا (اغلب &gt;۵۰۰)، <span class="en">ALT&gt;AST</span></td>
+            <td>نرمال تا &lt;۳ برابر</td>
+            <td>نرمال</td>
+            <td>معمولاً نرمال؛ اگر &gt;۵ برابر و با ویتامین <span class="en">K</span> اصلاح نشود، پیش‌آگهی بد</td>
+          </tr>
+          <tr>
+            <td>اختلال مزمن هپاتوسلولار</td>
+            <td>هر دو جزء ممکن است بالا باشد &mdash; بیلی‌روبینوری</td>
+            <td>بالا اما معمولاً &lt;۳۰۰</td>
+            <td>نرمال تا &lt;۳ برابر</td>
+            <td>اغلب کاهش‌یافته</td>
+            <td>اغلب طولانی؛ با ویتامین <span class="en">K</span> اصلاح نمی‌شود</td>
+          </tr>
+          <tr>
+            <td>هپاتیت الکلی / سیروز</td>
+            <td>هر دو جزء بالا &mdash; بیلی‌روبینوری</td>
+            <td><span class="en">AST:ALT&gt;2</span> مطرح‌کننده‌ی الکل یا سیروز</td>
+            <td>نرمال تا &lt;۳ برابر</td>
+            <td>اغلب کاهش‌یافته</td>
+            <td>اغلب طولانی؛ با ویتامین <span class="en">K</span> اصلاح نمی‌شود</td>
+          </tr>
+          <tr>
+            <td>کلستاز اینترا/اکستراهپاتیک</td>
+            <td>هر دو جزء ممکن است بالا باشد</td>
+            <td>نرمال تا افزایش متوسط</td>
+            <td>بالا، اغلب &gt;۴ برابر</td>
+            <td>نرمال مگر مزمن باشد</td>
+            <td>نرمال؛ اگر طولانی بود با ویتامین <span class="en">K</span> تزریقی اصلاح می‌شود</td>
+          </tr>
+          <tr>
+            <td>ایکتر انسدادی / بیماری‌های اینفیلتراتیو (تومور، گرانولوما)؛ انسداد جزئی مجرا</td>
+            <td>بیلی‌روبینوری؛ معمولاً نرمال</td>
+            <td>به‌ندرت &gt;۵۰۰؛ نرمال تا افزایش خفیف</td>
+            <td>بالا، اغلب &gt;۴ برابر (تأیید منشأ کبدی با <span class="en">5'-NT</span> یا گاما <span class="en">GT</span>)</td>
+            <td>نرمال</td>
+            <td>نرمال</td>
+          </tr>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <div class="chap-summary">
+    <h4>جمع‌بندی فصل ۷</h4>
+    <ul>
+      <li>هر الگوی آزمایشگاهی (بیلی‌روبین + آنزیم‌ها + آلبومین + <span class="en">PT</span>) امضای مشخصی برای هر دسته از بیماری‌های کبدی/صفراوی دارد</li>
+      <li>ترکیب این پنج تست، دقت تشخیص افتراقی را به‌طور چشمگیری افزایش می‌دهد</li>
+    </ul>
+  </div>
+</section>
+
+<section class="chapter" id="sec8">
+  <h2>۸. مرور نهایی</h2>
+  <p>روی هر سؤال کلیک کنید تا پاسخ آن باز شود.</p>
+  <div class="review-item" data-search-card>
+        <div class="review-q" onclick="toggleReview(this)">چرا نام Liver Function Test برای این آزمایشات دقیق نیست؟<span>+</span></div>
+        <div class="review-a"><p>چون بسیاری از این آزمایشات (مثل آنزیم‌های کبدی) عملکرد بیوسنتزی کبد را ارزیابی نمی‌کنند، بلکه صرفاً آسیب کبدی را نشان می‌دهند.</p></div>
+      </div>
+      <div class="review-item" data-search-card>
+        <div class="review-q" onclick="toggleReview(this)">کدام دو تست از پنج تست اصلی، واقعاً بیوسنتز کبد را نشان می‌دهند؟<span>+</span></div>
+        <div class="review-a"><p>آلبومین و پروترومبین تایم (PT)؛ سه تست دیگر (بیلی‌روبین، AST/ALT، ALP) فقط نشان‌دهنده‌ی آسیب هستند.</p></div>
+      </div>
+      <div class="review-item" data-search-card>
+        <div class="review-q" onclick="toggleReview(this)">مرز ۱۵٪ در تفسیر بیلی‌روبین دایرکت چه کاربردی دارد؟<span>+</span></div>
+        <div class="review-a"><p>اگر بیلی‌روبین دایرکت کمتر از ۱۵٪ توتال باشد، هایپربیلی‌روبینمی ایندایرکت مطرح است (همولیز، ژیلبرت، کریگلر-نجار)؛ اگر بیشتر از ۱۵٪ باشد، دایرکت است (بیماری کبدی یا مجاری صفراوی).</p></div>
+      </div>
+      <div class="review-item" data-search-card>
+        <div class="review-q" onclick="toggleReview(this)">چرا بیلی‌روبین غیرمستقیم در ادرار دیده نمی‌شود؟<span>+</span></div>
+        <div class="review-a"><p>چون در آب نامحلول است و به‌شدت به آلبومین سرم متصل می‌شود، بنابراین توسط کلیه‌ها دفع نمی‌شود.</p></div>
+      </div>
+      <div class="review-item" data-search-card>
+        <div class="review-q" onclick="toggleReview(this)">سندروم ژیلبرت با چه ویژگی‌هایی مشخص می‌شود؟<span>+</span></div>
+        <div class="review-a"><p>هایپربیلی‌روبینمی خفیف ایندایرکت که با استرس فیزیکی (روزه، ورزش) بروز می‌کند، در حالی‌که AST/ALT و سایر آزمایش‌ها کاملاً نرمال هستند و همولیز هم وجود ندارد.</p></div>
+      </div>
+      <div class="review-item" data-search-card>
+        <div class="review-q" onclick="toggleReview(this)">برای بررسی وجود همولیز در بیمار با هایپربیلی‌روبینمی ایندایرکت، چه آزمایش‌هایی درخواست می‌شود؟<span>+</span></div>
+        <div class="review-a"><p>CBC، شمارش رتیکولوسیت‌ها و LDH؛ اگر این موارد بالا باشند، همولیز مطرح است.</p></div>
+      </div>
+      <div class="review-item" data-search-card>
+        <div class="review-q" onclick="toggleReview(this)">چرا AST نسبت به ALT اختصاصیت کمتری برای کبد دارد؟<span>+</span></div>
+        <div class="review-a"><p>چون AST علاوه بر کبد، از قلب، عضله، کلیه، مغز، پانکراس، ریه و سلول‌های خونی نیز ترشح می‌شود، در حالی‌که ALT اختصاصیت بیشتری برای کبد دارد.</p></div>
+      </div>
+      <div class="review-item" data-search-card>
+        <div class="review-q" onclick="toggleReview(this)">چرا افت AST/ALT از ۲۰۰۰ به ۷۰ در یک بیمار با نارسایی حاد کبدی الزاماً خبر خوبی نیست؟<span>+</span></div>
+        <div class="review-a"><p>چون ممکن است این افت به‌دلیل از بین رفتن کامل سلول‌های کبدی باشد که دیگر قادر به تولید آنزیم نیستند، نه به‌دلیل بهبود بیماری.</p></div>
+      </div>
+      <div class="review-item" data-search-card>
+        <div class="review-q" onclick="toggleReview(this)">سه تشخیص افتراقی اصلی برای AST/ALT بالای ۱۰۰۰ کدامند؟<span>+</span></div>
+        <div class="review-a"><p>هپاتیت ویرال، آسیب ایسکمیک ناشی از افت فشار خون، و توکسین‌ها/داروها (مانند مسمومیت با استامینوفن).</p></div>
+      </div>
+      <div class="review-item" data-search-card>
+        <div class="review-q" onclick="toggleReview(this)">نسبت AST:ALT بالای ۲ چه چیزی را مطرح می‌کند؟<span>+</span></div>
+        <div class="review-a"><p>شک شدید به مصرف الکل؛ اگر بالای ۳ باشد، قطعاً الکل مصرف کرده و هپاتیت حاد الکلی مطرح است.</p></div>
+      </div>
+      <div class="review-item" data-search-card>
+        <div class="review-q" onclick="toggleReview(this)">چرا در مصرف الکل، AST بیشتر از ALT افزایش می‌یابد؟<span>+</span></div>
+        <div class="review-a"><p>چون الکل آنزیم پیریدوکسین (ویتامین B6) ردوکتاز را مختل می‌کند و تولید ALT بیشتر از AST دچار مشکل می‌شود.</p></div>
+      </div>
+      <div class="review-item" data-search-card>
+        <div class="review-q" onclick="toggleReview(this)">چه عواملی می‌توانند ALP را بدون وجود بیماری کبدی بالا ببرند؟<span>+</span></div>
+        <div class="review-a"><p>سن بالای ۶۰ با پوکی استخوان، کودکان در سن رشد، بارداری در ماه‌های آخر (منشأ جفتی)، و گروه خونی O یا B پس از غذای چرب.</p></div>
+      </div>
+      <div class="review-item" data-search-card>
+        <div class="review-q" onclick="toggleReview(this)">برای تأیید منشأ کبدی بودن ALP بالا، از چه آزمایش‌هایی استفاده می‌شود؟<span>+</span></div>
+        <div class="review-a"><p>5'-nucleotidase و گاما GT؛ این دو آنزیم فقط از کبد ترشح می‌شوند و اگر همراه با ALP بالا باشند، منشأ کبدی تأیید می‌شود.</p></div>
+      </div>
+      <div class="review-item" data-search-card>
+        <div class="review-q" onclick="toggleReview(this)">چگونه کلستاز اینتراهپاتیک از اکستراهپاتیک افتراق داده می‌شود؟<span>+</span></div>
+        <div class="review-a"><p>با سونوگرافی؛ اگر مجاری صفراوی گشاد باشند (مثل سنگ یا توده) اکستراهپاتیک و اگر طبیعی باشند اینتراهپاتیک مطرح است.</p></div>
+      </div>
+      <div class="review-item" data-search-card>
+        <div class="review-q" onclick="toggleReview(this)">چرا آلبومین برای ارزیابی بیماری حاد کبدی مناسب نیست؟<span>+</span></div>
+        <div class="review-a"><p>چون نیمه‌عمر آلبومین ۱۸ تا ۲۰ روز است و به‌کندی کاهش می‌یابد؛ در بیماری حاد (کمتر از ۶ هفته) هنوز فرصت افت کافی نداشته است.</p></div>
+      </div>
+      <div class="review-item" data-search-card>
+        <div class="review-q" onclick="toggleReview(this)">چرا PT برای ارزیابی بیماری حاد کبدی مناسب‌تر از آلبومین است؟<span>+</span></div>
+        <div class="review-a"><p>چون فاکتورهای انعقادی ۵ و ۷ نیمه‌عمر کوتاهی حدود ۶ ساعت دارند و به‌سرعت با کاهش عملکرد کبد، مقدارشان افت می‌کند.</p></div>
+      </div>
+      <div class="review-item" data-search-card>
+        <div class="review-q" onclick="toggleReview(this)">در بیماری مزمن کبدی، سطح گاما گلوبولین و آلفا/بتا گلوبولین چگونه تغییر می‌کند؟<span>+</span></div>
+        <div class="review-a"><p>گاما گلوبولین بالا می‌رود (به‌دلیل باکتریمی طولانی‌مدت ناشی از کاهش آپسونین‌ها) و آلفا/بتا گلوبولین که مستقیماً توسط کبد ساخته می‌شوند، پایین می‌آیند.</p></div>
+      </div>
+      <div class="review-item" data-search-card>
+        <div class="review-q" onclick="toggleReview(this)">اگر PT بیمار با تزریق ویتامین K اصلاح نشود چه معنایی دارد؟<span>+</span></div>
+        <div class="review-a"><p>نشان‌دهنده‌ی پیش‌آگهی بد و بیماری مزمن کبدی با اختلال کامل عملکرد سنتزی کبد است.</p></div>
+      </div>
+</section>
+
+<section class="chapter" id="sec9">
+  <h2>۹. آزمون تستی تعاملی</h2>
+  <div id="quizWrap">
+    <div class="qprogress-wrap"><div id="qprogressBar"></div></div>
+    <div class="qmeta"><span id="qcounter">۰ / ۲۵ پاسخ داده شده</span><span id="qpercent">۰٪</span></div>
+    <div id="qcards"></div>
+    <div id="quizFinal">
+      <div class="score" id="finalScoreText">۰ / ۲۵</div>
+      <div id="finalPercentText" style="font-size:20px;margin-top:6px;"></div>
+      <div id="finalMsg" style="margin-top:14px;font-size:16px;color:var(--ink-soft);"></div>
+      <button id="restartQuiz" onclick="restartQuiz()">شروع دوباره‌ی آزمون</button>
+    </div>
+  </div>
+</section>
+
+<section class="chapter survey" id="sec10">
+  <h2>۱۰. نظرسنجی</h2>
+  <p>این جزوه چقدر برایتان مفید بود؟</p>
+  <div class="survey-emojis" id="surveyEmojis">
+    <button class="emoji-btn" data-val="5" onclick="vote(this)">😍</button>
+    <button class="emoji-btn" data-val="4" onclick="vote(this)">😊</button>
+    <button class="emoji-btn" data-val="3" onclick="vote(this)">😐</button>
+    <button class="emoji-btn" data-val="2" onclick="vote(this)">😕</button>
+    <button class="emoji-btn" data-val="1" onclick="vote(this)">😡</button>
+  </div>
+  <div class="survey-results" id="surveyResults"></div>
+</section>
+</main>
+<footer>
+  جزوه‌ی مقدمات گوارش &mdash; جلسه‌ی دوم &mdash; ایکتر و تست‌های کبدی &mdash; دکتر قمرچهره &mdash; ۱۴۰۴/۰۷/۱۲
+</footer>
+
+<script>
+/* ============ THEME ============ */
+function applyTheme(t){
+  document.documentElement.setAttribute('data-theme', t);
+  localStorage.setItem('liver_theme', t);
+  document.querySelectorAll('[data-theme-btn]').forEach(b=>b.classList.toggle('active', b.dataset.themeBtn===t));
+}
+document.querySelectorAll('[data-theme-btn]').forEach(b=>{
+  b.addEventListener('click', ()=>applyTheme(b.dataset.themeBtn));
+});
+applyTheme(localStorage.getItem('liver_theme') || 'light');
+
+/* ============ FONT SIZE ============ */
+function applyFontSize(px){
+  document.documentElement.style.setProperty('--fs', px+'px');
+  localStorage.setItem('liver_fontsize', px);
+}
+let currentFs = parseInt(localStorage.getItem('liver_fontsize')) || 17;
+applyFontSize(currentFs);
+document.getElementById('fontPlus').addEventListener('click', ()=>{ currentFs=Math.min(currentFs+1,22); applyFontSize(currentFs); });
+document.getElementById('fontMinus').addEventListener('click', ()=>{ currentFs=Math.max(currentFs-1,13); applyFontSize(currentFs); });
+
+/* ============ CARD TOGGLE ============ */
+function toggleCard(h3){
+  h3.parentElement.classList.toggle('collapsed');
+  saveCardStates();
+}
+function saveCardStates(){
+  const states = {};
+  document.querySelectorAll('.card').forEach((c,i)=>{ states[i] = c.classList.contains('collapsed'); });
+  localStorage.setItem('liver_cardstates', JSON.stringify(states));
+}
+function restoreCardStates(){
+  try{
+    const states = JSON.parse(localStorage.getItem('liver_cardstates')||'{}');
+    document.querySelectorAll('.card').forEach((c,i)=>{ if(states[i]) c.classList.add('collapsed'); });
+  }catch(e){}
+}
+restoreCardStates();
+
+let allOpen = true;
+document.getElementById('toggleAll').addEventListener('click', ()=>{
+  allOpen = !allOpen;
+  document.querySelectorAll('.card').forEach(c=>c.classList.toggle('collapsed', !allOpen));
+  saveCardStates();
+});
+
+/* ============ REVIEW ACCORDION ============ */
+function toggleReview(el){
+  el.parentElement.classList.toggle('open');
+}
+
+/* ============ PRINT ============ */
+document.getElementById('printBtn').addEventListener('click', ()=>window.print());
+
+/* ============ HIGHLIGHTING ============ */
+const hlToolbar = document.getElementById('hlToolbar');
+let pendingRange = null;
+document.addEventListener('mouseup', (e)=>{
+  if(hlToolbar.contains(e.target)) return;
+  const sel = window.getSelection();
+  if(sel && sel.toString().trim().length > 0 && sel.rangeCount > 0){
+    const range = sel.getRangeAt(0);
+    let node = range.commonAncestorContainer;
+    if(node.nodeType===3) node = node.parentElement;
+    if(node.closest('.card-body, .review-a, .chap-summary, #sec1, #sec7')){
+      pendingRange = range.cloneRange();
+      const rect = range.getBoundingClientRect();
+      hlToolbar.style.top = (window.scrollY + rect.top - 46) + 'px';
+      hlToolbar.style.right = (window.innerWidth - window.scrollX - rect.right) + 'px';
+      hlToolbar.style.left = '';
+      hlToolbar.classList.add('show');
+      return;
+    }
+  }
+  hlToolbar.classList.remove('show');
+});
+document.querySelectorAll('.hl-swatch').forEach(sw=>{
+  sw.addEventListener('click', ()=>{
+    if(!pendingRange) return;
+    try{
+      const mark = document.createElement('mark');
+      mark.style.background = sw.dataset.pick;
+      mark.className='userhl';
+      pendingRange.surroundContents(mark);
+    }catch(e){ /* cross-element selection: ignore gracefully */ }
+    hlToolbar.classList.remove('show');
+    window.getSelection().removeAllRanges();
+  });
+});
+document.getElementById('clearHl').addEventListener('click', ()=>{
+  document.querySelectorAll('mark.userhl').forEach(m=>{
+    const parent = m.parentNode;
+    while(m.firstChild) parent.insertBefore(m.firstChild, m);
+    parent.removeChild(m);
+  });
+});
+
+/* ============ SEARCH ============ */
+const searchBox = document.getElementById('searchBox');
+const searchCount = document.getElementById('searchCount');
+let searchTimer = null;
+searchBox.addEventListener('input', ()=>{
+  clearTimeout(searchTimer);
+  searchTimer = setTimeout(doSearch, 200);
+});
+function clearMarks(){
+  document.querySelectorAll('mark.searchmark').forEach(m=>{
+    const parent = m.parentNode;
+    while(m.firstChild) parent.insertBefore(m.firstChild, m);
+    parent.removeChild(m);
+    parent.normalize();
+  });
+}
+function doSearch(){
+  clearMarks();
+  const term = searchBox.value.trim();
+  if(!term){ searchCount.textContent=''; return; }
+  const cards = document.querySelectorAll('[data-search-card]');
+  let matches = 0;
+  let firstMatch = null;
+  cards.forEach(card=>{
+    const text = card.textContent.toLowerCase();
+    if(text.includes(term.toLowerCase())){
+      matches++;
+      card.classList.remove('collapsed');
+      highlightTerm(card, term);
+      if(!firstMatch) firstMatch = card;
+    }
+  });
+  searchCount.textContent = matches + ' مورد';
+  if(firstMatch){
+    firstMatch.scrollIntoView({behavior:'smooth', block:'center'});
+    firstMatch.classList.add('blink');
+    setTimeout(()=>firstMatch.classList.remove('blink'), 1300);
+  }
+}
+function highlightTerm(root, term){
+  const walker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT, {
+    acceptNode: n => n.parentElement.closest('script,style') ? NodeFilter.FILTER_REJECT : NodeFilter.FILTER_ACCEPT
+  });
+  const nodes = [];
+  let n;
+  while(n = walker.nextNode()) nodes.push(n);
+  const lower = term.toLowerCase();
+  nodes.forEach(node=>{
+    const idx = node.textContent.toLowerCase().indexOf(lower);
+    if(idx === -1) return;
+    const range = document.createRange();
+    range.setStart(node, idx);
+    range.setEnd(node, idx+term.length);
+    const mark = document.createElement('mark');
+    mark.className = 'searchmark';
+    try{ range.surroundContents(mark); }catch(e){}
+  });
+}
+
+/* ============ QUIZ ============ */
+const questions = [
+  {q:"چرا نام Liver Function Test برای آزمایشات بیوشیمیایی کبد نام دقیقی نیست؟", tag:"متوسط", options:["چون این تست‌ها گران هستند","چون بسیاری از آن‌ها عملکرد بیوسنتزی کبد را نشان نمی‌دهند","چون فقط در بیمارستان انجام می‌شوند","چون نیاز به ناشتایی طولانی دارند"], correct:1, explain:"بسیاری از این آزمایشات مانند آنزیم‌های کبدی، عملکرد کبد را از منظر بیوسنتز ارزیابی نمی‌کنند و صرفاً آسیب سلولی را نشان می‌دهند."},
+  {q:"کدام دو تست از میان پنج تست اصلی، واقعاً بیانگر عملکرد بیوسنتزی کبد هستند؟", tag:"متوسط", options:["بیلی‌روبین و AST","ALT و ALP","آلبومین و پروترومبین تایم","بیلی‌روبین و ALP"], correct:2, explain:"آلبومین و PT بیوسنتز واقعی کبد را نشان می‌دهند؛ بیلی‌روبین، AST/ALT و ALP صرفاً آسیب کبدی را نشان می‌دهند نه عملکرد سنتزی."},
+  {q:"بیلی‌روبین از شکستن کدام ساختار تولید می‌شود؟", tag:"متوسط", options:["غشای گلبول قرمز","حلقه‌ی پورفیرینی هم","زنجیره‌ی گلوبین","میتوکندری هپاتوسیت"], correct:1, explain:"وقتی حلقه‌ی پورفیرینی موجود در هم گلبول قرمز شکسته می‌شود، بیلی‌روبین از آن ایجاد می‌شود."},
+  {q:"چرا بیلی‌روبین غیرمستقیم (ایندایرکت) در ادرار دفع نمی‌شود؟", tag:"سخت", options:["چون در کلیه تجزیه می‌شود","چون در آب نامحلول است و محکم به آلبومین متصل می‌شود","چون توسط باکتری‌های روده مصرف می‌شود","چون مولکول آن بسیار کوچک است"], correct:1, explain:"بیلی‌روبین غیرمستقیم در آب نامحلول است و به‌شدت به آلبومین سرم متصل می‌شود، به همین دلیل توسط کلیه‌ها دفع نمی‌شود."},
+  {q:"در تفسیر بیلی‌روبین بالا، مرز تشخیصی درصد دایرکت از توتال چند درصد است؟", tag:"سخت", options:["۵٪", "۱۵٪", "۳۰٪", "۵۰٪"], correct:1, explain:"اگر بیلی‌روبین دایرکت کمتر از ۱۵٪ توتال باشد، هایپربیلی‌روبینمی ایندایرکت مطرح است؛ بیش از ۱۵٪ یعنی دایرکت است."},
+  {q:"در بیمار با هایپربیلی‌روبینمی ایندایرکت، اولین گام تشخیصی چیست؟", tag:"متوسط", options:["آندوسکوپی","بررسی وجود همولیز","بیوپسی کبد","سونوگرافی مجاری صفراوی"], correct:1, explain:"در مسیر ایندایرکت، ابتدا باید همولیز را با CBC، رتیکولوسیت و LDH رد یا تأیید کرد؛ در غیاب همولیز، ژیلبرت یا کریگلر-نجار مطرح می‌شود."},
+  {q:"ویژگی اصلی سندروم ژیلبرت کدام است؟", tag:"سخت", options:["افزایش AST و ALT همراه با زردی شدید","هایپربیلی‌روبینمی خفیف ایندایرکت با AST/ALT طبیعی","بیلی‌روبینوری شدید","کاهش شدید آلبومین"], correct:1, explain:"سندروم ژیلبرت با استرس فیزیکی (روزه، ورزش) ایجاد هایپربیلی‌روبینمی خفیف ایندایرکت می‌کند در حالی‌که AST/ALT و سایر آزمایش‌ها طبیعی هستند."},
+  {q:"وجود بیلی‌روبین در ادرار (بیلی‌روبینوری) نشان‌دهنده‌ی چیست؟", tag:"متوسط", options:["همولیز","هایپربیلی‌روبینمی دایرکت و بیماری کبدی/صفراوی","کم‌آبی بدن","سندروم ژیلبرت"], correct:1, explain:"فقط بیلی‌روبین مستقیم محلول در آب است و در ادرار دفع می‌شود؛ بنابراین وجود آن در ادرار دلالت بر بیماری کبدی یا مجاری صفراوی دارد."},
+  {q:"آیا شدت افزایش بیلی‌روبین همیشه با شدت بیماری کبدی متناسب است؟", tag:"سخت", options:["بله، همیشه رابطه‌ی مستقیم دارد","خیر، رابطه‌ی الزامی وجود ندارد (به‌جز چند استثنا مثل هپاتیت ویروسی یا مسمومیت با استامینوفن)","فقط در کودکان رابطه دارد","فقط در بیماری‌های مزمن رابطه دارد"], correct:1, explain:"میزان بیلی‌روبین الزاماً نشان‌دهنده‌ی شدت بیماری نیست، هرچند در برخی بیماری‌های خاص می‌توان از آن برای تعیین شدت کمک گرفت."},
+  {q:"AST نسبت به ALT از نظر اختصاصیت برای کبد چه تفاوتی دارد؟", tag:"متوسط", options:["AST اختصاصی‌تر است","ALT اختصاصیت بیشتری برای کبد دارد","هر دو کاملاً اختصاصی کبد هستند","هیچ‌کدام اختصاصیت کبدی ندارند"], correct:1, explain:"AST از منابع متعددی مانند قلب، عضله، کلیه و مغز نیز ترشح می‌شود؛ اما ALT اختصاصیت بیشتری برای کبد دارد."},
+  {q:"چرا افزایش AST/ALT همیشه به‌معنای نکروز کامل سلول‌های کبدی نیست؟", tag:"سخت", options:["چون این آنزیم‌ها فقط با نکروز بالا می‌روند","چون صرف آسیب سلولی (بدون نکروز کامل) کافی است تا آنزیم‌ها وارد سرم شوند","چون این آنزیم‌ها فقط در خون تولید می‌شوند","چون کبد آنزیم مصرف می‌کند نه تولید"], correct:1, explain:"برای افزایش AST/ALT، صرف آسیب و تخریب جزئی سلولی کافی است؛ لازم نیست حتماً نکروز کامل رخ داده باشد."},
+  {q:"افت ناگهانی AST/ALT از ۲۰۰۰ به ۷۰ در بیمار مبتلا به نارسایی حاد کبدی چه معنایی می‌تواند داشته باشد؟", tag:"خیلی سخت", options:["حتماً نشانه‌ی بهبودی کامل است","ممکن است نشانه‌ی از بین رفتن کامل سلول‌های کبدی باشد نه بهبودی","نشانه‌ی عفونت جدید است","نشانه‌ی مصرف الکل است"], correct:1, explain:"چون دیگر سلول کبدی سالمی که بتواند آنزیم تولید کند باقی نمانده، این افت می‌تواند نشانه‌ی بدتر شدن وضعیت باشد نه بهبودی."},
+  {q:"شایع‌ترین علت افزایش آمینوترانسفرازها در جامعه چیست؟", tag:"متوسط", options:["هپاتیت ویرال","کبد چرب","مصرف الکل","سنگ کیسه‌ی صفرا"], correct:1, explain:"کبد چرب شایع‌ترین علت افزایش AST/ALT در جامعه است، هرچند نباید سایر علل را نادیده گرفت."},
+  {q:"سه تشخیص افتراقی اصلی برای AST/ALT بالای ۱۰۰۰ کدامند؟", tag:"سخت", options:["کبد چرب، دیابت، چاقی","هپاتیت ویرال، آسیب ایسکمیک، توکسین/دارو","سیروز، آسیت، واریس مری","سنگ صفرا، آپاندیسیت، پانکراتیت"], correct:1, explain:"آنزیم کبدی بالای ۱۰۰۰ معمولاً نشانه‌ی آسیب جدی است که علل اصلی آن هپاتیت ویرال، ایسکمی کبدی و توکسین‌ها/داروها هستند."},
+  {q:"نسبت AST:ALT بالاتر از ۲ بیشتر مطرح‌کننده‌ی چیست؟", tag:"سخت", options:["کبد چرب ساده","مصرف الکل","سندروم ژیلبرت","کلستاز خفیف"], correct:1, explain:"نسبت AST به ALT بالاتر از ۲ به‌شدت مطرح‌کننده‌ی مصرف الکل است و بالاتر از ۳ تقریباً قطعی است."},
+  {q:"علت افزایش نامتناسب AST نسبت به ALT در مصرف الکل چیست؟", tag:"خیلی سخت", options:["الکل مستقیماً ALT را تخریب می‌کند","الکل آنزیم پیریدوکسین (ویتامین B6) ردوکتاز را مختل کرده و تولید ALT کاهش می‌یابد","الکل باعث افزایش تولید AST در کلیه می‌شود","الکل جذب ALT در روده را کاهش می‌دهد"], correct:1, explain:"اختلال در آنزیم پیریدوکسین ردوکتاز ناشی از الکل، تولید ALT را بیشتر از AST مختل می‌کند، بنابراین نسبت AST:ALT افزایش می‌یابد."},
+  {q:"کدام مورد می‌تواند ALP را بدون وجود بیماری کبدی افزایش دهد؟", tag:"متوسط", options:["ورزش شدید روزانه","بارداری در ماه‌های آخر (منشأ جفتی)","مصرف زیاد آب","کم‌خوابی مزمن"], correct:1, explain:"در ماه‌های آخر بارداری، جفت می‌تواند ALP تولید کند و سطح آن را بدون وجود بیماری کبدی افزایش دهد؛ سن بالا با پوکی استخوان و رشد کودکان نیز از علل دیگرند."},
+  {q:"برای تأیید منشأ کبدی بودن افزایش ALP از چه آزمایش‌هایی استفاده می‌شود؟", tag:"سخت", options:["CBC و ESR","5'-nucleotidase و گاما GT","تروپونین و CK-MB","آمیلاز و لیپاز"], correct:1, explain:"5'-nucleotidase و گاما GT (γ-glutamyl transpeptidase) فقط از کبد ترشح می‌شوند؛ اگر همراه با ALP بالا باشند، منشأ کبدی تأیید می‌شود."},
+  {q:"افزایش ALP چند برابر مقدار نرمال، ارزش تشخیصی برای مشکل صفراوی دارد؟", tag:"سخت", options:["۱.۵ برابر","۲ برابر","۳ برابر", "۱۰ برابر"], correct:2, explain:"افزایش ALP کمتر از ۳ برابر نرمال معمولاً غیراختصاصی است؛ افزایش بیش از ۳ برابر ارزش تشخیصی بیشتری برای مشکل صفراوی دارد."},
+  {q:"کلستاز اینتراهپاتیک و اکستراهپاتیک چگونه از هم افتراق داده می‌شوند؟", tag:"متوسط", options:["با آزمایش خون کامل","با سونوگرافی مجاری صفراوی (گشاد یا طبیعی)","با اندازه‌گیری آلبومین","با شمارش پلاکت"], correct:1, explain:"در سونوگرافی، اگر مجاری صفراوی گشاد باشند (مثل سنگ یا توده) اکستراهپاتیک و اگر طبیعی باشند اینتراهپاتیک کولستاتیک مطرح است."},
+  {q:"بیماری PBC (Primary Biliary Cirrhosis) از چه نوعی است؟", tag:"سخت", options:["اکستراهپاتیک کولستاتیک با انسداد در سونوگرافی","اینتراهپاتیک کولستاتیک بدون انسداد در سونوگرافی","هپاتوسلولار حاد","همولیتیک مزمن"], correct:1, explain:"در PBC، سونوگرافی مجاری صفراوی طبیعی است و انسدادی دیده نمی‌شود، بنابراین یک بیماری اینتراهپاتیک کولستاتیک محسوب می‌شود."},
+  {q:"چرا آلبومین برای ارزیابی بیماری حاد کبدی مناسب نیست؟", tag:"سخت", options:["چون آلبومین فقط در بیماری مزمن ساخته می‌شود","چون نیمه‌عمر طولانی (۱۸ تا ۲۰ روز) دارد و به‌کندی افت می‌کند","چون آلبومین توسط کلیه ساخته می‌شود","چون آلبومین در بیماری حاد افزایش می‌یابد"], correct:1, explain:"به‌دلیل نیمه‌عمر طولانی آلبومین، در بیماری حاد (کمتر از ۶ هفته) هنوز فرصت کافی برای افت سطح آن وجود نداشته است."},
+  {q:"چرا PT برای ارزیابی بیماری حاد کبدی مناسب‌تر است؟", tag:"سخت", options:["چون PT وابسته به ویتامین C است","چون فاکتورهای انعقادی ۵ و ۷ نیمه‌عمر کوتاهی (حدود ۶ ساعت) دارند","چون PT نیازی به کبد ندارد","چون PT فقط در کودکان کاربرد دارد"], correct:1, explain:"فاکتورهای ۵ و ۷ که در PT اندازه‌گیری می‌شوند نیمه‌عمر کوتاهی دارند، بنابراین به‌سرعت افت عملکرد سنتزی کبد را نشان می‌دهند."},
+  {q:"در بیماری مزمن کبدی مانند سیروز، الگوی تغییر گلوبولین‌ها چگونه است؟", tag:"خیلی سخت", options:["گاما گلوبولین پایین، آلفا و بتا گلوبولین بالا","گاما گلوبولین بالا، آلفا و بتا گلوبولین پایین","هر دو گروه بالا می‌روند","هر دو گروه پایین می‌آیند"], correct:1, explain:"در سیروز، به‌دلیل باکتریمی طولانی‌مدت، گاما گلوبولین (تولیدشده توسط لنفوسیت‌ها) بالا می‌رود؛ اما آلفا و بتا گلوبولین که مستقیماً توسط هپاتوسیت‌ها ساخته می‌شوند، پایین می‌آیند."},
+  {q:"اگر PT بیمار با تزریق ویتامین K اصلاح نشود، چه نتیجه‌ای می‌گیریم؟", tag:"سخت", options:["بیمار کمبود ویتامین K ساده دارد","بیماری حاد و خودمحدودشونده کبدی دارد","پیش‌آگهی بد و بیماری مزمن کبدی با اختلال شدید عملکرد سنتزی مطرح است","نیازی به بررسی بیشتر نیست"], correct:2, explain:"عدم اصلاح PT با ویتامین K نشان می‌دهد که فانکشن سنتزی کبد به‌شدت مختل شده و پیش‌آگهی بیمار ضعیف است؛ این حالت بیشتر در بیماری مزمن کبدی دیده می‌شود."}
+];
+
+let userAnswers = new Array(questions.length).fill(null);
+
+function loadQuizState(){
+  try{
+    const saved = JSON.parse(localStorage.getItem('liver_quiz_answers'));
+    if(saved && saved.length === questions.length) userAnswers = saved;
+  }catch(e){}
+}
+function saveQuizState(){
+  localStorage.setItem('liver_quiz_answers', JSON.stringify(userAnswers));
+}
+
+function renderQuiz(){
+  const wrap = document.getElementById('qcards');
+  wrap.innerHTML = '';
+  questions.forEach((q, i)=>{
+    const tagClass = q.tag === 'متوسط' ? 'mid' : (q.tag === 'سخت' ? 'hard' : 'vhard');
+    const card = document.createElement('div');
+    card.className = 'qcard';
+    card.innerHTML = `
+      <div class="qhead">
+        <span class="qnum">سؤال ${i+1} از ${questions.length}</span>
+        <span class="qtag ${tagClass}">${q.tag}</span>
+      </div>
+      <div class="qtext">${q.q}</div>
+      <div class="qopts" id="qopts-${i}"></div>
+      <button class="qcheck-btn" id="qcheck-${i}" onclick="checkAnswer(${i})" disabled>بررسی پاسخ</button>
+      <div class="qexplain" id="qexplain-${i}"></div>
+    `;
+    const optsWrap = card.querySelector(`#qopts-${i}`);
+    q.options.forEach((opt, oi)=>{
+      const btn = document.createElement('button');
+      btn.className = 'qopt';
+      btn.textContent = opt;
+      btn.dataset.oi = oi;
+      btn.onclick = ()=>selectOption(i, oi);
+      optsWrap.appendChild(btn);
+    });
+    wrap.appendChild(card);
+    if(userAnswers[i] !== null){
+      renderAnswered(i);
+    }
+  });
+  updateProgress();
+}
+
+function selectOption(qi, oi){
+  if(userAnswers[qi] !== null) return;
+  const optsWrap = document.getElementById(`qopts-${qi}`);
+  optsWrap.querySelectorAll('.qopt').forEach(b=>b.classList.remove('selected-temp'));
+  optsWrap.querySelector(`[data-oi="${oi}"]`).style.borderColor = 'var(--primary)';
+  optsWrap.dataset.picked = oi;
+  document.getElementById(`qcheck-${qi}`).disabled = false;
+}
+
+function checkAnswer(qi){
+  const optsWrap = document.getElementById(`qopts-${qi}`);
+  const picked = parseInt(optsWrap.dataset.picked);
+  if(isNaN(picked)) return;
+  userAnswers[qi] = picked;
+  saveQuizState();
+  renderAnswered(qi);
+  updateProgress();
+  checkAllDone();
+}
+
+function renderAnswered(qi){
+  const q = questions[qi];
+  const picked = userAnswers[qi];
+  const optsWrap = document.getElementById(`qopts-${qi}`);
+  optsWrap.querySelectorAll('.qopt').forEach((b,oi)=>{
+    b.disabled = true;
+    b.style.borderColor = '';
+    if(oi === q.correct) b.classList.add('correct');
+    else if(oi === picked) b.classList.add('wrong');
+  });
+  document.getElementById(`qcheck-${qi}`).disabled = true;
+  document.getElementById(`qcheck-${qi}`).style.display = 'none';
+  const ex = document.getElementById(`qexplain-${qi}`);
+  ex.textContent = q.explain;
+  ex.classList.add('show');
+}
+
+function updateProgress(){
+  const answered = userAnswers.filter(a=>a!==null).length;
+  const pct = Math.round((answered/questions.length)*100);
+  document.getElementById('qprogressBar').style.width = pct+'%';
+  document.getElementById('qcounter').textContent = toFa(answered)+' / '+toFa(questions.length)+' پاسخ داده شده';
+  document.getElementById('qpercent').textContent = toFa(pct)+'٪';
+}
+
+function toFa(n){
+  const fa = ['۰','۱','۲','۳','۴','۵','۶','۷','۸','۹'];
+  return String(n).split('').map(d=> fa[d] !== undefined ? fa[d] : d).join('');
+}
+
+function checkAllDone(){
+  const answered = userAnswers.filter(a=>a!==null).length;
+  if(answered === questions.length){
+    let correct = 0;
+    userAnswers.forEach((a,i)=>{ if(a === questions[i].correct) correct++; });
+    const pct = Math.round((correct/questions.length)*100);
+    document.getElementById('finalScoreText').textContent = toFa(correct)+' / '+toFa(questions.length);
+    document.getElementById('finalPercentText').textContent = toFa(pct)+'٪ پاسخ صحیح';
+    let msg = '';
+    if(pct >= 90) msg = 'عالی! تسلط فوق‌العاده‌ای روی تست‌های کبدی و ایکتر دارید. 👏';
+    else if(pct >= 70) msg = 'خیلی خوب بود! فقط چند نکته را دوباره مرور کنید.';
+    else if(pct >= 50) msg = 'قابل قبول است، اما بهتر است بخش‌های مربوط به سؤالات اشتباه را دوباره بخوانید.';
+    else msg = 'پیشنهاد می‌شود جزوه را یک‌بار دیگر با دقت مرور کرده و دوباره آزمون را امتحان کنید.';
+    document.getElementById('finalMsg').textContent = msg;
+    document.getElementById('quizFinal').classList.add('show');
+  }
+}
+
+function restartQuiz(){
+  userAnswers = new Array(questions.length).fill(null);
+  saveQuizState();
+  document.getElementById('quizFinal').classList.remove('show');
+  renderQuiz();
+  document.getElementById('sec9').scrollIntoView({behavior:'smooth'});
+}
+
+loadQuizState();
+renderQuiz();
+checkAllDone();
+
+/* ============ SURVEY ============ */
+function getSurveyData(){
+  try{ return JSON.parse(localStorage.getItem('liver_survey')||'{"1":0,"2":0,"3":0,"4":0,"5":0}'); }
+  catch(e){ return {"1":0,"2":0,"3":0,"4":0,"5":0}; }
+}
+function renderSurveyResults(){
+  const data = getSurveyData();
+  const total = Object.values(data).reduce((a,b)=>a+b,0) || 1;
+  const labels = {5:'😍 عالی',4:'😊 خوب',3:'😐 معمولی',2:'😕 ضعیف',1:'😡 خیلی ضعیف'};
+  const box = document.getElementById('surveyResults');
+  box.innerHTML = '';
+  [5,4,3,2,1].forEach(k=>{
+    const count = data[k]||0;
+    const pct = Math.round((count/total)*100);
+    const row = document.createElement('div');
+    row.className='sr-row';
+    row.innerHTML = `<span style="min-width:90px;">${labels[k]}</span><div class="sr-bar-wrap"><div class="sr-bar" style="width:${pct}%"></div></div><span style="min-width:40px;">${toFa(pct)}٪</span>`;
+    box.appendChild(row);
+  });
+  box.classList.add('show');
+}
+function vote(btn){
+  if(localStorage.getItem('liver_voted')) { renderSurveyResults(); return; }
+  const val = btn.dataset.val;
+  const data = getSurveyData();
+  data[val] = (data[val]||0) + 1;
+  localStorage.setItem('liver_survey', JSON.stringify(data));
+  localStorage.setItem('liver_voted', val);
+  document.querySelectorAll('.emoji-btn').forEach(b=>b.classList.toggle('picked', b===btn));
+  renderSurveyResults();
+}
+if(localStorage.getItem('liver_voted')){
+  const votedVal = localStorage.getItem('liver_voted');
+  document.querySelectorAll('.emoji-btn').forEach(b=>{ if(b.dataset.val===votedVal) b.classList.add('picked'); });
+  renderSurveyResults();
+}
+</script>
+<script src="highlight.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="auth.js"></script>
+</body></html>

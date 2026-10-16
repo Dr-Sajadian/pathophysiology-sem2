@@ -1,0 +1,1542 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl" data-theme="light">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>مقدمات گوارش | درد شکمی، اسهال و یبوست</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#f5f0e6;
+  --surface:#ffffff;
+  --surface-2:#faf6ee;
+  --ink:#2a2420;
+  --ink-soft:#5c5348;
+  --border:#e4dbc8;
+  --primary:#215c53;
+  --primary-dark:#123e37;
+  --primary-soft:#e4efec;
+  --amber:#b9762c;
+  --amber-soft:#fbf0de;
+  --coral:#b0473d;
+  --coral-soft:#fbeae7;
+  --blue:#39628f;
+  --blue-soft:#e9f1fa;
+  --purple:#74508f;
+  --purple-soft:#f1eaf7;
+  --shadow: 0 4px 18px rgba(33,92,83,.08);
+  --radius: 14px;
+  --maxw: 920px;
+  --fs-base: 17px;
+}
+html[data-theme="dark"]{
+  --bg:#161d1c;
+  --surface:#1d2624;
+  --surface-2:#212b29;
+  --ink:#eae3d6;
+  --ink-soft:#b6ada0;
+  --border:#31403c;
+  --primary:#5fb3a3;
+  --primary-dark:#3f8c7d;
+  --primary-soft:#213531;
+  --amber:#e0a15a;
+  --amber-soft:#2c2618;
+  --coral:#e08279;
+  --coral-soft:#2f2120;
+  --blue:#7fa9d6;
+  --blue-soft:#1c2733;
+  --purple:#b79bd6;
+  --purple-soft:#291f30;
+  --shadow: 0 4px 18px rgba(0,0,0,.35);
+}
+html[data-theme="galaxy"]{
+  --bg:#0c0a1f;
+  --surface:#171335;
+  --surface-2:#1c1841;
+  --ink:#e9e4ff;
+  --ink-soft:#a79fe0;
+  --border:#332c6b;
+  --primary:#8f7bf0;
+  --primary-dark:#6b57d6;
+  --primary-soft:#241f52;
+  --amber:#f0b25f;
+  --amber-soft:#2a2140;
+  --coral:#f0708a;
+  --coral-soft:#2b1c3a;
+  --blue:#6fb8f0;
+  --blue-soft:#1c2450;
+  --purple:#d18ff0;
+  --purple-soft:#2a1f4a;
+  --shadow: 0 4px 24px rgba(111,80,240,.25);
+}
+*{box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{
+  margin:0;
+  background:var(--bg);
+  color:var(--ink);
+  font-family:'Vazirmatn',Tahoma,sans-serif;
+  font-size:var(--fs-base);
+  line-height:1.9;
+  transition:background .3s,color .3s;
+}
+html[data-theme="galaxy"] body{
+  background-image:radial-gradient(circle at 15% 20%, rgba(143,123,240,.18), transparent 40%),
+                    radial-gradient(circle at 85% 60%, rgba(240,112,138,.12), transparent 45%);
+  background-attachment:fixed;
+}
+a{color:var(--primary);}
+::selection{background:var(--amber);color:#fff;}
+
+/* ===== Toolbar ===== */
+#toolbar{
+  position:sticky;top:0;z-index:50;
+  background:var(--surface);
+  border-bottom:1px solid var(--border);
+  box-shadow:var(--shadow);
+  padding:8px 10px;
+  display:flex;flex-wrap:wrap;gap:6px;
+  align-items:center;
+  justify-content:center;
+}
+.tb-group{display:flex;gap:4px;align-items:center;background:var(--surface-2);border-radius:10px;padding:4px;}
+.tb-btn{
+  border:none;background:transparent;color:var(--ink);
+  padding:6px 9px;border-radius:8px;cursor:pointer;font-family:inherit;font-size:13px;
+  display:flex;align-items:center;gap:4px;transition:.15s;
+}
+.tb-btn:hover{background:var(--primary-soft);color:var(--primary-dark);}
+.tb-btn.active{background:var(--primary);color:#fff;}
+.hl-dot{width:16px;height:16px;border-radius:50%;display:inline-block;border:2px solid var(--surface);cursor:pointer;box-shadow:0 0 0 1px var(--border);}
+#searchBox{
+  border:1px solid var(--border);background:var(--surface);color:var(--ink);
+  border-radius:8px;padding:7px 12px;font-family:inherit;font-size:13px;width:160px;
+}
+#searchBox:focus{outline:2px solid var(--primary);width:200px;}
+#searchCount{font-size:11px;color:var(--ink-soft);min-width:34px;text-align:center;}
+
+/* ===== Floating highlight toolbar ===== */
+#hlToolbar{
+  position:absolute;display:none;z-index:200;
+  background:var(--ink);color:#fff;border-radius:10px;padding:6px 8px;
+  box-shadow:0 6px 20px rgba(0,0,0,.3);gap:6px;
+}
+#hlToolbar.show{display:flex;}
+.hl-opt{width:18px;height:18px;border-radius:50%;cursor:pointer;border:2px solid rgba(255,255,255,.6);}
+
+/* ===== Cover ===== */
+.cover{
+  max-width:var(--maxw);margin:26px auto 10px;padding:38px 30px;
+  background:linear-gradient(135deg,var(--primary-dark),var(--primary));
+  color:#fff;border-radius:20px;position:relative;overflow:hidden;
+  box-shadow:var(--shadow);
+}
+.cover::after{
+  content:"";position:absolute;inset:0;
+  background-image:radial-gradient(circle at 90% 10%, rgba(255,255,255,.12), transparent 40%),
+                    radial-gradient(circle at 10% 100%, rgba(255,255,255,.08), transparent 40%);
+}
+.cover-eyebrow{position:relative;font-size:13px;letter-spacing:.3px;opacity:.85;margin-bottom:10px;}
+.cover h1{position:relative;font-size:clamp(28px,5vw,42px);margin:0 0 10px;font-weight:800;line-height:1.35;}
+.cover p.subtitle{position:relative;font-size:16px;opacity:.92;max-width:620px;margin:0 0 18px;}
+.cover-tags{position:relative;display:flex;flex-wrap:wrap;gap:8px;}
+.tag{background:rgba(255,255,255,.16);border:1px solid rgba(255,255,255,.3);padding:5px 13px;border-radius:999px;font-size:12.5px;}
+
+/* ===== TOC ===== */
+.toc{
+  max-width:var(--maxw);margin:0 auto 24px;background:var(--surface);
+  border:1px solid var(--border);border-radius:var(--radius);padding:22px 26px;
+  box-shadow:var(--shadow);
+}
+.toc h2{margin:0 0 14px;font-size:18px;color:var(--primary-dark);}
+html[data-theme="dark"] .toc h2, html[data-theme="galaxy"] .toc h2{color:var(--primary);}
+.toc ol{margin:0;padding-inline-start:20px;display:grid;grid-template-columns:1fr 1fr;gap:6px 20px;}
+.toc a{text-decoration:none;color:var(--ink);font-size:14.5px;display:block;padding:4px 0;border-bottom:1px dashed transparent;}
+.toc a:hover{color:var(--primary);border-bottom-color:var(--primary);}
+@media (max-width:640px){.toc ol{grid-template-columns:1fr;}}
+
+/* ===== Main container ===== */
+main{max-width:var(--maxw);margin:0 auto;padding:0 14px 60px;}
+
+.chapter{margin-bottom:34px;}
+.chapter-head{
+  display:flex;align-items:center;gap:12px;margin:38px 0 16px;
+  scroll-margin-top:70px;
+}
+.chapter-num{
+  background:var(--primary);color:#fff;font-weight:700;font-size:15px;
+  width:38px;height:38px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex:none;
+}
+.chapter-head h2{margin:0;font-size:23px;color:var(--ink);}
+
+.card{
+  background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);
+  padding:20px 22px;margin-bottom:16px;box-shadow:var(--shadow);
+  scroll-margin-top:70px;
+}
+.card > summary{list-style:none;cursor:pointer;display:flex;align-items:center;justify-content:space-between;gap:10px;}
+.card > summary::-webkit-details-marker{display:none;}
+.card summary h3{margin:0;font-size:17.5px;color:var(--primary-dark);}
+html[data-theme="dark"] .card summary h3, html[data-theme="galaxy"] .card summary h3{color:var(--primary);}
+.chev{transition:transform .25s;color:var(--ink-soft);flex:none;}
+.card[open] .chev{transform:rotate(180deg);}
+.card-body{padding-top:14px;}
+.card-body p{margin:0 0 12px;}
+.card-body h4{color:var(--amber);font-size:15px;margin:16px 0 8px;}
+
+/* highlight-hit blink */
+.blink-hit{animation:blinkHit 1.4s ease 2;}
+@keyframes blinkHit{0%,100%{background:transparent;}50%{background:var(--amber-soft);}}
+
+/* ===== info boxes ===== */
+.box{border-radius:12px;padding:14px 16px;margin:14px 0;border-inline-start:4px solid;}
+.box-title{font-weight:700;font-size:13.5px;margin-bottom:6px;display:flex;align-items:center;gap:6px;}
+.box.def{background:var(--blue-soft);border-color:var(--blue);}
+.box.def .box-title{color:var(--blue);}
+.box.key{background:var(--primary-soft);border-color:var(--primary);}
+.box.key .box-title{color:var(--primary-dark);}
+html[data-theme="dark"] .box.key .box-title, html[data-theme="galaxy"] .box.key .box-title{color:var(--primary);}
+.box.clin{background:var(--coral-soft);border-color:var(--coral);}
+.box.clin .box-title{color:var(--coral);}
+.box.mem{background:var(--amber-soft);border-color:var(--amber);}
+.box.mem .box-title{color:var(--amber);}
+.box ul{margin:6px 0 0;padding-inline-start:20px;}
+.box li{margin-bottom:4px;}
+
+.en{font-family:Tahoma,Arial,sans-serif;font-size:.88em;color:var(--ink-soft);direction:ltr;display:inline-block;}
+
+/* ===== tables ===== */
+.tbl-wrap{overflow-x:auto;margin:14px 0;border-radius:10px;border:1px solid var(--border);}
+table{border-collapse:collapse;width:100%;min-width:480px;font-size:14px;}
+table caption{text-align:start;font-weight:700;padding:10px 12px;background:var(--primary);color:#fff;font-size:13.5px;}
+th,td{padding:9px 12px;border-bottom:1px solid var(--border);text-align:start;vertical-align:top;}
+thead th{background:var(--surface-2);color:var(--primary-dark);font-size:13px;}
+html[data-theme="dark"] thead th, html[data-theme="galaxy"] thead th{color:var(--primary);}
+tbody tr:hover{background:var(--surface-2);}
+tbody tr.section-row td{background:var(--amber-soft);font-weight:700;color:var(--amber);}
+
+/* ===== flow diagram ===== */
+.flow{display:flex;flex-direction:column;align-items:center;gap:6px;margin:16px 0;}
+.flow-row{display:flex;flex-wrap:wrap;justify-content:center;gap:10px;width:100%;}
+.flow-box{
+  background:var(--surface-2);border:1.5px solid var(--primary);color:var(--ink);
+  padding:8px 14px;border-radius:9px;font-size:13.5px;text-align:center;min-width:110px;
+}
+.flow-box.alt{border-style:dashed;border-color:var(--amber);}
+.flow-box.end{background:var(--primary);color:#fff;font-weight:700;}
+.flow-arrow{color:var(--primary);font-size:18px;line-height:1;}
+.flow-arrow.down{transform:none;}
+
+/* ===== grid2 (comparison) ===== */
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:14px 0;}
+@media (max-width:600px){.grid2{grid-template-columns:1fr;}}
+.grid2 .col{background:var(--surface-2);border:1px solid var(--border);border-radius:10px;padding:12px 14px;}
+.grid2 .col h5{margin:0 0 8px;color:var(--primary-dark);font-size:14.5px;}
+html[data-theme="dark"] .grid2 .col h5, html[data-theme="galaxy"] .grid2 .col h5{color:var(--primary);}
+.grid2 .col ul{margin:0;padding-inline-start:18px;font-size:13.8px;}
+
+/* ===== chapter summary ===== */
+.chap-summary{
+  background:linear-gradient(135deg,var(--primary-soft),var(--surface));
+  border:1px solid var(--primary);border-radius:var(--radius);
+  padding:18px 22px;margin:20px 0 0;
+}
+.chap-summary h4{margin:0 0 10px;color:var(--primary-dark);font-size:15.5px;}
+html[data-theme="dark"] .chap-summary h4, html[data-theme="galaxy"] .chap-summary h4{color:var(--primary);}
+.chap-summary ul{margin:0;padding-inline-start:20px;}
+.chap-summary li{margin-bottom:6px;}
+
+/* ===== final review ===== */
+.final-review{max-width:var(--maxw);margin:40px auto;}
+.fr-item{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:14px 18px;margin-bottom:10px;}
+.fr-q{font-weight:700;color:var(--coral);cursor:pointer;display:flex;justify-content:space-between;gap:10px;}
+.fr-a{margin-top:8px;padding-top:8px;border-top:1px dashed var(--border);display:none;font-size:14.5px;color:var(--ink-soft);}
+.fr-item.open .fr-a{display:block;}
+.fr-item.open .fr-q{color:var(--primary);}
+
+/* ===== quiz ===== */
+.quiz-wrap{max-width:var(--maxw);margin:40px auto;}
+.quiz-head{text-align:center;margin-bottom:18px;}
+.quiz-head h2{font-size:23px;margin:0 0 6px;}
+.quiz-stats{display:flex;justify-content:center;gap:18px;align-items:center;margin:14px 0;flex-wrap:wrap;}
+.progress-outer{background:var(--border);border-radius:999px;height:10px;width:260px;overflow:hidden;}
+.progress-inner{background:linear-gradient(90deg,var(--primary),var(--amber));height:100%;width:0%;transition:width .35s;}
+#qCounter{font-size:13.5px;color:var(--ink-soft);font-weight:600;}
+.q-card{
+  background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);
+  padding:18px 20px;margin-bottom:16px;box-shadow:var(--shadow);position:relative;
+}
+.q-top{display:flex;justify-content:space-between;align-items:flex-start;gap:10px;margin-bottom:10px;}
+.q-num{font-weight:700;color:var(--primary-dark);}
+html[data-theme="dark"] .q-num, html[data-theme="galaxy"] .q-num{color:var(--primary);}
+.q-tag{font-size:11px;padding:3px 10px;border-radius:999px;font-weight:600;flex:none;}
+.q-tag.lvl-mid{background:var(--blue-soft);color:var(--blue);}
+.q-tag.lvl-hard{background:var(--amber-soft);color:var(--amber);}
+.q-tag.lvl-vhard{background:var(--coral-soft);color:var(--coral);}
+.q-text{font-size:15.5px;margin-bottom:12px;font-weight:500;}
+.opt-list{display:flex;flex-direction:column;gap:8px;}
+.opt{
+  border:1px solid var(--border);background:var(--surface-2);border-radius:10px;
+  padding:10px 14px;cursor:pointer;font-size:14.5px;transition:.15s;display:flex;gap:8px;
+}
+.opt:hover{border-color:var(--primary);}
+.opt.correct{background:#dbf2df;border-color:#3a9a52;color:#1e5b2c;font-weight:600;}
+.opt.wrong{background:var(--coral-soft);border-color:var(--coral);color:var(--coral);font-weight:600;}
+.opt.disabled{cursor:default;pointer-events:none;opacity:.85;}
+.check-btn{
+  margin-top:12px;background:var(--primary);color:#fff;border:none;border-radius:9px;
+  padding:9px 18px;font-family:inherit;cursor:pointer;font-size:13.5px;
+}
+.check-btn:disabled{opacity:.5;cursor:default;}
+.explain{
+  display:none;margin-top:12px;background:var(--amber-soft);border-inline-start:4px solid var(--amber);
+  padding:10px 14px;border-radius:9px;font-size:13.8px;line-height:1.85;
+}
+.explain.show{display:block;}
+.final-panel{
+  text-align:center;background:linear-gradient(135deg,var(--primary-dark),var(--primary));
+  color:#fff;border-radius:18px;padding:30px 24px;display:none;
+}
+.final-panel.show{display:block;}
+.final-panel .score{font-size:44px;font-weight:800;margin:6px 0;}
+.final-panel .pct{font-size:16px;opacity:.9;margin-bottom:12px;}
+.final-panel .msg{font-size:14.5px;opacity:.95;max-width:480px;margin:0 auto 16px;}
+.restart-btn{
+  background:#fff;color:var(--primary-dark);border:none;border-radius:9px;padding:10px 22px;
+  font-family:inherit;cursor:pointer;font-weight:700;font-size:13.5px;
+}
+
+/* ===== survey ===== */
+.survey{max-width:var(--maxw);margin:40px auto;background:var(--surface);border:1px solid var(--border);
+  border-radius:var(--radius);padding:24px 26px;box-shadow:var(--shadow);text-align:center;}
+.survey h2{margin:0 0 6px;font-size:19px;}
+.survey p{color:var(--ink-soft);font-size:13.5px;margin:0 0 18px;}
+.emoji-row{display:flex;justify-content:center;gap:14px;flex-wrap:wrap;margin-bottom:18px;}
+.emoji-btn{
+  font-size:30px;background:var(--surface-2);border:2px solid transparent;border-radius:14px;
+  padding:10px 14px;cursor:pointer;transition:.15s;
+}
+.emoji-btn:hover{transform:translateY(-3px);}
+.emoji-btn.voted{border-color:var(--primary);}
+.survey-results{max-width:420px;margin:0 auto;display:none;text-align:right;}
+.survey-results.show{display:block;}
+.sr-row{display:flex;align-items:center;gap:8px;margin-bottom:8px;font-size:13.5px;}
+.sr-bar-outer{flex:1;background:var(--border);border-radius:999px;height:10px;overflow:hidden;}
+.sr-bar-inner{height:100%;background:var(--primary);width:0%;transition:width .5s;}
+.sr-pct{width:36px;text-align:left;font-size:12px;color:var(--ink-soft);}
+
+footer{text-align:center;padding:26px;color:var(--ink-soft);font-size:12.5px;}
+
+@media print{
+  #toolbar,#hlToolbar,.survey,.quiz-wrap{display:none !important;}
+  .card{break-inside:avoid;box-shadow:none;}
+  body{background:#fff;}
+}
+</style>
+</head>
+<body>
+
+<div id="toolbar">
+  <div class="tb-group" role="group" aria-label="تم">
+    <button class="tb-btn" data-theme-btn="light" title="روشن">☀️ روشن</button>
+    <button class="tb-btn" data-theme-btn="dark" title="تیره">🌙 تیره</button>
+    <button class="tb-btn" data-theme-btn="galaxy" title="کهکشانی">🌌 کهکشانی</button>
+  </div>
+  <div class="tb-group">
+    <button class="tb-btn" id="fontMinus" title="کوچک‌تر">A-</button>
+    <button class="tb-btn" id="fontPlus" title="بزرگ‌تر">A+</button>
+  </div>
+  <div class="tb-group" id="hlColorGroup">
+    <span style="font-size:12px;color:var(--ink-soft);padding-inline-start:4px;">هایلایت:</span>
+    <span class="hl-dot" data-color="#fff29b" style="background:#fff29b" title="زرد"></span>
+    <span class="hl-dot" data-color="#b6f2c1" style="background:#b6f2c1" title="سبز"></span>
+    <span class="hl-dot" data-color="#ffc2e0" style="background:#ffc2e0" title="صورتی"></span>
+    <span class="hl-dot" data-color="#bcdcff" style="background:#bcdcff" title="آبی"></span>
+    <button class="tb-btn" id="clearHl" title="پاک کردن هایلایت‌ها">🧹 پاک‌کن</button>
+  </div>
+  <div class="tb-group">
+    <button class="tb-btn" id="toggleAll">📂 باز/بستن همه</button>
+    <button class="tb-btn" id="printBtn">🖨️ چاپ/PDF</button>
+  </div>
+  <div class="tb-group">
+    <input type="text" id="searchBox" placeholder="جستجو در متن...">
+    <span id="searchCount"></span>
+  </div>
+</div>
+
+<div id="hlToolbar">
+  <span class="hl-opt" data-color="#fff29b" style="background:#fff29b"></span>
+  <span class="hl-opt" data-color="#b6f2c1" style="background:#b6f2c1"></span>
+  <span class="hl-opt" data-color="#ffc2e0" style="background:#ffc2e0"></span>
+  <span class="hl-opt" data-color="#bcdcff" style="background:#bcdcff"></span>
+</div>
+
+<header class="cover">
+  <div class="cover-eyebrow">مقدمات بیماری‌های گوارش · دکتر خنچه · پزشکی ۹۶</div>
+  <h1>درد شکمی، اسهال و یبوست</h1>
+  <p class="subtitle">جزوه مروری کامل و تعاملی — رویکرد بالینی به <span class="en">Abdominal Pain</span>، تشخیص افتراقی <span class="en">Acute &amp; Chronic Diarrhea</span> و بررسی سیستماتیک <span class="en">Constipation</span>، همراه با آزمون تستی و ابزارهای مرور.</p>
+  <div class="cover-tags">
+    <span class="tag">Abdominal Pain</span>
+    <span class="tag">Acute / Chronic Diarrhea</span>
+    <span class="tag">Constipation</span>
+    <span class="tag">Anorectal Testing</span>
+    <span class="tag">۲۵ سوال تستی</span>
+  </div>
+</header>
+
+<nav class="toc">
+  <h2>فهرست مطالب</h2>
+  <ol>
+    <li><a href="#ch1">فصل ۱ — درد شکمی (Abdominal Pain)</a></li>
+    <li><a href="#s1-1">مکانیسم‌های ایجاد درد شکم</a></li>
+    <li><a href="#s1-2">درد ارجاعی، متابولیک و فانکشنال</a></li>
+    <li><a href="#s1-3">رویکرد بالینی و تشخیص بر اساس محل درد</a></li>
+    <li><a href="#s1-4">آزمایش‌ها و نکات کلیدی</a></li>
+    <li><a href="#ch2">فصل ۲ — اسهال حاد و مزمن (Diarrhea)</a></li>
+    <li><a href="#s2-1">فیزیولوژی حرکات روده و تعریف اسهال</a></li>
+    <li><a href="#s2-2">اسهال حاد: علل، گروه‌های پرخطر و رویکرد</a></li>
+    <li><a href="#s2-3">اسهال مزمن: طبقه‌بندی و انواع</a></li>
+    <li><a href="#s2-4">Approach به اسهال مزمن</a></li>
+    <li><a href="#ch3">فصل ۳ — یبوست (Constipation)</a></li>
+    <li><a href="#s3-1">تعریف و علل یبوست</a></li>
+    <li><a href="#s3-2">یبوست شدید و تست‌های تخصصی</a></li>
+    <li><a href="#final-review">مرور نهایی</a></li>
+    <li><a href="#quiz">آزمون تستی تعاملی (۲۵ سوال)</a></li>
+  </ol>
+</nav>
+
+<main id="mainContent">
+
+<!-- ============ CHAPTER 1 : ABDOMINAL PAIN ============ -->
+<section class="chapter" id="ch1">
+  <div class="chapter-head">
+    <div class="chapter-num">۱</div>
+    <h2>درد شکمی <span class="en">(Abdominal Pain)</span></h2>
+  </div>
+
+  <details class="card" open id="s1-1">
+    <summary><h3>مکانیسم‌های ایجاد درد شکم</h3><span class="chev">▾</span></summary>
+    <div class="card-body">
+      <p>گرفتن شرح حال و معاینه فیزیکی دقیق، نقش تعیین‌کننده‌ای در تشخیص و افتراق درد شکمی دارد. در هر بیمار با درد شکمی تازه‌آغاز، ارزیابی سریع و کامل، تشخیص دقیق و درمان به‌موقع ضروری است.</p>
+
+      <div class="box def">
+        <div class="box-title">🔹 شایع‌ترین علل درد شکم</div>
+        <ul>
+          <li>آپاندیسیت حاد <span class="en">(Acute Appendicitis)</span></li>
+          <li>دردهای غیراختصاصی شکم</li>
+          <li>مسائل کلیوی</li>
+          <li>انسداد روده</li>
+        </ul>
+      </div>
+
+      <p>مکانیسم‌های اصلی ایجاد درد شکم عبارت‌اند از: التهاب پریتوئن جداری، انسداد در احشاء توخالی، اختلالات عروقی، درد با منشأ دیواره شکمی <span class="en">(abdominal wall)</span>، درد ارجاعی از نقاط دیگر بدن، بیماری‌های متابولیک، مسائل نورولوژیک (مانند هرپس)، توکسین‌ها (مثل مسمومیت با سرب)، گرمازدگی و قطع مصرف مخدر <span class="en">(narcotic withdrawal)</span> که علت آن‌ها ناشناخته باقی می‌ماند.</p>
+
+      <h4>التهاب صفاق جداری</h4>
+      <p>این درد با حساسیت رتروند <span class="en">(Rebound Tenderness)</span> همراه است و شدت آن به نوع ماده تحریک‌کننده و سرعت بروز آن بستگی دارد؛ برای نمونه اسید بیش از صفرا ایجاد درد می‌کند، ادرار یا خون به‌ندرت تحریک‌کننده هستند و مواد مدفوعی با وجود آلودگی بیشتر، نسبت به سایر مواد تحریک‌کنندگی کمتری دارند. درد ابتدا خفیف است و با تکثیر باکتری‌ها تشدید می‌شود.</p>
+
+      <div class="box clin">
+        <div class="box-title">⚕️ ویژگی‌های بالینی التهاب صفاق</div>
+        <ul>
+          <li>محل درد مشخص و ممتد است و با تغییر وضعیت بدن تغییر می‌کند.</li>
+          <li>بیمار کاملاً آرام دراز می‌کشد؛ برخلاف بیماری‌های اورولوژیک که بیمار مضطرب و بی‌قرار است.</li>
+          <li><span class="en">Rebound Tenderness</span> در لمس شکم وجود دارد و با سرفه، عطسه و حرکت تشدید می‌شود و دارای درجه‌بندی <span class="en">(Grading)</span> است.</li>
+          <li>در بیمار با کاهش سطح هوشیاری، نقص ایمنی <span class="en">(Immune Suppressive)</span>، سن بالا یا اختلالات روانی، تشخیص <span class="en">Rebound Tenderness</span> دشوارتر است و نیاز به دقت بیشتری دارد.</li>
+        </ul>
+      </div>
+
+      <h4>انسداد در احشاء توخالی</h4>
+      <p>انسداد می‌تواند در روده باریک، روده بزرگ، سیستم صفراوی <span class="en">(Biliary)</span> یا سیستم ادراری رخ دهد. درد معمولاً متناوب است و بسته به عضو درگیر متفاوت خواهد بود:</p>
+      <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>محل انسداد</th><th>ویژگی درد</th></tr></thead>
+        <tbody>
+          <tr><td>روده باریک</td><td>درد ناحیه <span class="en">Periumbilical</span></td></tr>
+          <tr><td>روده بزرگ</td><td>درد ناحیه تحتانی شکم با انتشار به کمر</td></tr>
+          <tr><td>مجاری صفراوی / کوله‌سیستیت</td><td>درد <span class="en">RUQ</span> یا اپی‌گاستر، طول ۰.۵ تا ۱ ساعت، انتشار به بین دو کتف و شانه راست، همراه تهوع و استفراغ که با آن‌ها بهبود <b>نمی‌یابد</b> (برخلاف انسداد روده که تهوع/استفراغ باعث بهبود درد می‌شود)</td></tr>
+          <tr><td>مثانه</td><td>درد سوپراپوبیک مبهم؛ انتشار وابسته به محل سنگ یا ضایعه</td></tr>
+        </tbody>
+      </table>
+      </div>
+      <div class="box clin">
+        <div class="box-title">⚕️ نکته تکمیلی</div>
+        <p style="margin:0;">درد ناشی از انسداد احشاء توخالی عموماً متناوب <span class="en">(colicky)</span> و بدمکان <span class="en">(poorly localized)</span> است؛ مثال‌ها شامل انسداد روده باریک و سنگ‌های کیسه صفرا هستند. نکته گمراه‌کننده: با وجود نامش، «کولیک صفراوی» <span class="en">(biliary colic)</span> می‌تواند با دردی ممتد و ثابت (نه لزوماً متناوب) بروز کند.</p>
+      </div>
+
+      <h4>اختلالات عروقی</h4>
+      <p>تصور رایج ولی نادرست این است که انسداد عروقی (مانند ترومبوز مزانتریک فوقانی، آمبولی یا دایسکشن آنوریسم آئورت) همیشه با درد شدید و ناگهانی همراه است؛ در حالی که کمتر از ۵۰٪ موارد این‌گونه‌اند. معمولاً دردی مبهم در اطراف ناف وجود دارد که با تغییر وضعیت و حرکت ارتباطی ندارد.</p>
+      <div class="box clin">
+        <div class="box-title">⚕️ نکته بالینی مهم</div>
+        <p style="margin:0;">عدم وجود <span class="en">Rebound Tenderness</span> با وجود درد شدید، به نفع ضایعات عروقی است (عدم تطابق شدت درد با یافته‌های معاینه). در صورت انتشار درد به ساکروم، پهلو یا ژنیتالیا، حتماً باید به آنوریسم آئورت در حال پارگی شک کرد.</p>
+      </div>
+
+      <h4>درد با منشأ دیواره شکمی <span class="en">(Abdominal Wall)</span></h4>
+      <p>دردی پیوسته که با حرکت، ایستادن و فشار تشدید می‌شود و معمولاً شدید است؛ مثال بالینی آن هماتوم غلاف رکتوس <span class="en">(Rectus Sheath Hematoma)</span> است که به‌دنبال مصرف داروهای ضدانعقاد ایجاد می‌شود.</p>
+
+      <h4>درد با منشأ عصبی <span class="en">(Nerve Problems)</span></h4>
+      <p>درد ناشی از عصب نخاعی یا ریشه‌های آن، به‌صورت ناگهانی می‌آید و می‌رود <span class="en">(comes and goes suddenly)</span> و ماهیتی تیرکشنده <span class="en">(lacinating)</span> دارد. علل متعدد آن عبارت‌اند از: هرپس زوستر، تحت‌فشار قرارگرفتن عصب به‌دنبال آرتریت، تومورها، دیسک بین‌مهره‌ای هرنیه‌شده <span class="en">(herniated nucleus pulposus)</span>، دیابت یا سیفلیس.</p>
+
+      <h4>طبقه‌بندی پریتونیت <span class="en">(Peritonitis)</span></h4>
+      <p>پریتونیت (التهاب حاد پریتوئن) بر اساس منشأ به دو گروه اصلی تقسیم می‌شود:</p>
+      <div class="grid2">
+        <div class="col">
+          <h5>پریتونیت باکتریال خودبه‌خودی <span class="en">(Spontaneous)</span></h5>
+          <ul>
+            <li>معمولاً عارضه نارسایی کبد یا کلیه، همراه با آسیت</li>
+            <li>گاهی بدون منبع عفونی قابل‌شناسایی <span class="en">(no identifiable source)</span></li>
+          </ul>
+        </div>
+        <div class="col">
+          <h5>پریتونیت ثانویه <span class="en">(Secondary)</span></h5>
+          <ul>
+            <li>پارگی یک ارگان داخل شکمی</li>
+            <li>تروما به شکم</li>
+            <li>پارگی دیورتیکول</li>
+          </ul>
+        </div>
+      </div>
+      <div class="box def">
+        <div class="box-title">🔹 علائم شایع پریتونیت</div>
+        <p style="margin:0;">تهوع و استفراغ، تب، اسهال یا یبوست، ناراحتی و درد شکمی، بی‌اشتهایی.</p>
+      </div>
+      <div class="box clin">
+        <div class="box-title">⚕️ پریتونیت مرتبط با دیالیز صفاقی</div>
+        <p style="margin:0;">در دیالیز صفاقی <span class="en">(Peritoneal Dialysis)</span> از پریتوئن به‌عنوان فیلتر طبیعی خون استفاده می‌شود (مایع دیالیز از طریق کاتتر وارد شکم شده و مواد زائد و مایع اضافی خون را جذب می‌کند). بهداشت ضعیف یا تجهیزات آلوده می‌تواند مستقیماً به عفونت و پریتونیت منجر شود.</p>
+      </div>
+    </div>
+  </details>
+
+  <details class="card" id="s1-2">
+    <summary><h3>درد ارجاعی، متابولیک و فانکشنال</h3><span class="chev">▾</span></summary>
+    <div class="card-body">
+      <div class="grid2">
+        <div class="col">
+          <h5>درد ارجاعی <span class="en">(Referred Pain)</span></h5>
+          <ul>
+            <li>از کمر، در رادیکولوپاتی</li>
+            <li>از قفسه سینه: در هر درد فوقانی شکم باید <span class="en">MI</span>، آمبولی ریه، پنومونی، پریکاردیت و پلوریت مدنظر باشد</li>
+            <li>بیماری‌های مری: اسپاسم دیفیوز ازوفاژیال، ازوفاژیت، پرفوراسیون</li>
+            <li>از ژنیتالیا: درد تحتانی شکم می‌تواند ناشی از <span class="en">Torsion of Testis</span> باشد</li>
+          </ul>
+        </div>
+        <div class="col">
+          <h5>بیماری متابولیک</h5>
+          <p style="margin:0 0 8px;font-size:13.8px;">هرگاه درد شکمی علتی ناشناخته داشته باشد، باید بیماری‌های متابولیک را مدنظر قرار داد؛ مانند تب مدیترانه‌ای فامیلیال <span class="en">(FMF)</span> که با درد شکم و تب تظاهر می‌کند، و نیز <span class="en">DKA</span>، اورمی، پورفیری و مسمومیت با سرب.</p>
+        </div>
+      </div>
+
+      <div class="box def">
+        <div class="box-title">🔹 نقشه توزیع درد ارجاعی (بر اساس عضو)</div>
+        <div class="grid2" style="margin:8px 0 0;">
+          <div class="col">
+            <h5 style="font-size:13.5px;">قدام <span class="en">(Anterior)</span></h5>
+            <ul style="font-size:13px;margin:0;padding-inline-start:18px;">
+              <li>کبد و کیسه صفرا → قفسه سینه، ناحیه راست</li>
+              <li>قلب → مرکز قفسه سینه</li>
+              <li>معده، پانکراس → اپی‌گاستر</li>
+              <li>روده باریک، تخمدان، آپاندیس، کولون → اطراف ناف و لگن</li>
+            </ul>
+          </div>
+          <div class="col">
+            <h5 style="font-size:13.5px;">خلف <span class="en">(Posterior)</span></h5>
+            <ul style="font-size:13px;margin:0;padding-inline-start:18px;">
+              <li>ریه و دیافراگم → شانه</li>
+              <li>معده → میان‌کتف</li>
+              <li>کبد و کیسه صفرا → کتف راست</li>
+              <li>کلیه → پهلو و کمر دو طرف</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <div class="box mem">
+        <div class="box-title">💡 بیماری‌های فانکشنال</div>
+        <p style="margin:0;">از هیچ الگوی مشخصی تبعیت نمی‌کنند و تشخیص آن‌ها معمولاً بر پایه رد سایر علل است. در این بیماران تهوع و استفراغ نادر است و حساسیت به لمس <span class="en">(Tenderness)</span> و اسپاسم عضلانی وجود ندارد.</p>
+      </div>
+    </div>
+  </details>
+
+  <details class="card" id="s1-3">
+    <summary><h3>رویکرد بالینی و تشخیص بر اساس محل درد</h3><span class="chev">▾</span></summary>
+    <div class="card-body">
+      <p>در برخورد <span class="en">(Approach)</span> با بیمار دارای درد شکم، رعایت اخلاق پزشکی و ادب اهمیت زیادی دارد. در شرح حال باید به این موارد توجه شود: <b>۱)</b> سن بیمار — در کودک احتمال واسکولیت و <span class="en">Torsion of Testis</span>، در سالمند احتمال <span class="en">MI</span> و ایسکمی قلبی مطرح است؛ <b>۲)</b> مدت زمان درد؛ <b>۳)</b> محل انتشار؛ <b>۴)</b> علائم همراه.</p>
+
+      <div class="box def">
+        <div class="box-title">🔹 اجزای کلیدی شرح‌حال بیمار</div>
+        <p style="margin:0;">سن، زمان و نحوه شروع درد، ویژگی‌های درد، مدت علائم، محل درد و نواحی انتشار آن، علائم همراه و ارتباط آن‌ها با درد، تهوع/استفراغ/بی‌اشتهایی، اسهال/یبوست یا هر تغییر در عادت دفعی، و سابقه قاعدگی.</p>
+      </div>
+
+      <div class="grid2">
+        <div class="col">
+          <h5>نکات تکمیلی شرح‌حال</h5>
+          <ul>
+            <li>سیر و انتشار درد</li>
+            <li>عوامل تشدید یا بهبوددهنده علائم</li>
+            <li>علائم همراه: تب، لرز، کاهش وزن</li>
+            <li>سابقه پزشکی و جراحی قبلی؛ سابقه خانوادگی بیماری‌های روده</li>
+            <li>مصرف الکل و داروها</li>
+            <li>سابقه قاعدگی و روش‌های پیشگیری از بارداری</li>
+          </ul>
+        </div>
+        <div class="col">
+          <h5>معاینه فیزیکی <span class="en">(PH/EX)</span></h5>
+          <ul>
+            <li>فشار خون، نبض و دما</li>
+            <li>معاینه چشم و پوست برای ایکتروس</li>
+            <li>سمع و دق قفسه سینه؛ سمع شکم برای صداهای روده‌ای</li>
+            <li>لمس شکم برای توده، حساسیت و علائم پریتوئنی</li>
+            <li>معاینه رکتال شامل بررسی خون مخفی</li>
+            <li>معاینه لگنی در خانم‌ها با درد تحتانی شکم</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="box mem">
+        <div class="box-title">💡 نکات فنی معاینه</div>
+        <ul>
+          <li>توجه به فاسیه بیمار، نحوه قرارگیری در تخت و الگوی تنفس، اهمیت زیادی دارد؛ معاینه باید ملایم و دقیق باشد.</li>
+          <li><b>نباید</b> با رهاکردن ناگهانی دست از عمق شکم، <span class="en">Rebound Tenderness</span> بررسی شود — این روش برای بیمار بسیار دردناک و غیرضروری است.</li>
+          <li>به‌جای آن می‌توان با دق ملایم (نوعی رتروند تندرنس در مقیاس کوچک) یا با درخواست سرفه از بیمار (بدون قراردادن دست روی شکم)، رتروند تندرنس واقعی را بدون درد اضافی بررسی کرد.</li>
+          <li>گاهی اسپاسم محافظتی واکنشی <span class="en">(reactionary protective spasm)</span> می‌تواند سایر یافته‌های معاینه را دچار اختلال یا پنهان کند.</li>
+        </ul>
+      </div>
+
+      <div class="box def">
+        <div class="box-title">🔹 علائم همراه و تشخیص افتراقی سریع</div>
+        <ul>
+          <li>تب، لرز و ایکتروس → کلانژیت</li>
+          <li>عدم دفع گاز و مدفوع → انسداد</li>
+          <li>تعریق همراه سابقه هایپرتانسیون، هایپرلیپیدمی، دیابت → فئوکروموسیتوم</li>
+          <li>جراحی <span class="en">hip drop</span> + درد فوقانی شکم و قفسه سینه → آمبولی ریه <span class="en">(PTE)</span></li>
+          <li>تهوع، استفراغ، بی‌اشتهایی، یبوست، اسهال و تغییر عادت دفعی → احتمال انسداد</li>
+          <li>اختلال قاعدگی در خانم‌ها → احتمال حاملگی خارج‌رحمی</li>
+          <li>درد ربع تحتانی چپ همراه تب و <span class="en">Tenderness</span> → دیورتیکولیت</li>
+        </ul>
+      </div>
+
+      <h4>تشخیص بر اساس ربع (<span class="en">Quadrant</span>) شکم</h4>
+      <div class="tbl-wrap">
+      <table>
+        <caption>تشخیص افتراقی درد شکم بر اساس محل (<span class="en" style="color:inherit">Table 13-2</span>)</caption>
+        <thead><tr><th>ربع فوقانی راست <span class="en">RUQ</span></th><th>اپی‌گاستر</th><th>ربع فوقانی چپ <span class="en">LUQ</span></th></tr></thead>
+        <tbody>
+          <tr><td>کوله‌سیستیت، کلانژیت، پانکراتیت، پنومونی/آمپیم، پلوریت، آبسه ساب‌دیافراگماتیک، هپاتیت، سندرم بود-کیاری، هرپس زوستر، ایسکمی میوکارد، پنومونی لوب تحتانی راست، آپاندیسیت رتروسکال</td>
+              <td>پپتیک اولسر، گاستریت، <span class="en">GERD</span>، پانکراتیت، <span class="en">MI</span>، پریکاردیت، پارگی آنوریسم آئورت، ازوفاژیت</td>
+              <td>انفارکتوس/رپچر/آبسه طحال، گاستریت، گاستریک اولسر، پانکراتیت، آبسه ساب‌دیافراگماتیک، ایسکمی میوکارد، پنومونی لوب تحتانی چپ</td></tr>
+        </tbody>
+        <thead><tr><th>ربع تحتانی راست <span class="en">RLQ</span></th><th>اطراف ناف <span class="en">Periumbilical</span></th><th>ربع تحتانی چپ <span class="en">LLQ</span></th></tr></thead>
+        <tbody>
+          <tr><td>آپاندیسیت، سالپنژیت، فتق اینگوئینال، حاملگی اکتوپیک، نفرولیتیازیس، <span class="en">IBD</span>، لنفادنیت مزانتریک، تیفلیت، دیورتیکول مکل، دیورتیکولیت سکوم، آنوریسم نشتی، هماتوم دیواره شکم، میتلشمرتز، اندومتریوز، سنگ حالب، وزیکولیت سمینال، آبسه پسواس، فتق کشاله‌ران خفه‌شده</td>
+              <td>آپاندیسیت زودرس، گاستروانتریت، انسداد روده، پارگی آنوریسم آئورت</td>
+              <td>دیورتیکولیت، سالپنژیت، فتق اینگوئینال، حاملگی اکتوپیک، نفرولیتیازیس، <span class="en">IBS</span>، <span class="en">IBD</span>، آنوریسم نشتی، میتلشمرتز، اندومتریوز، سنگ حالب، وزیکولیت سمینال، آبسه پسواس، فتق کشاله‌ران خفه‌شده</td></tr>
+        </tbody>
+        <tbody>
+          <tr class="section-row"><td colspan="3">درد کل شکم (منتشر)</td></tr>
+          <tr><td colspan="3">گاستروانتریت، ایسکمی مزانتر، انسداد روده، <span class="en">IBS</span>، پریتونیت، دیابت، مالاریا، <span class="en">FMF</span>، بیماری متابولیک، بیماری روان‌پزشکی، کرایسیس سلول داسی‌شکل، دایسکشن/پارگی آنوریسم آئورت</td></tr>
+        </tbody>
+      </table>
+      </div>
+      <p style="font-size:12.5px;color:var(--ink-soft);margin-top:-6px;">فهرست فوق تلفیقی از منابع درسی مختلف است و طیف گسترده‌تری از تشخیص‌های افتراقی هر ربع را پوشش می‌دهد.</p>
+
+      <div class="box clin">
+        <div class="box-title">⚕️ نکات کلیدی تشخیصی هر ربع</div>
+        <ul>
+          <li><b>کوله‌سیستیت:</b> درد اپی‌گاستر هم دارد، بیش از ۵ ساعت طول می‌کشد، با مسکن معمولی بهبود نمی‌یابد و علامت <span class="en">Murphy</span> مثبت است.</li>
+          <li><b>کلانژیت:</b> تریاد شارکو (تب و لرز، درد شکم، ایکتروس) در ۷۰٪ موارد دیده می‌شود.</li>
+          <li><b>آپاندیسیت:</b> شروع در دهه دوم و سوم زندگی؛ بی‌اشتهایی در ۹۰٪ موارد وجود دارد و عدم وجود آن تشخیص را زیر سؤال می‌برد. درد اولیه اطراف ناف است که پس از حدود ۶ ساعت در نقطه مک‌بورنی تثبیت می‌شود.</li>
+          <li><b>دیورتیکولیت</b> بیشتر در سنین بالا و در <span class="en">LLQ</span> دیده می‌شود؛ در صورت تب و <span class="en">Tenderness</span>، نیاز به <span class="en">CT-scan</span> است.</li>
+          <li>در پریتونیت لگنی، معاینه شکم می‌تواند طبیعی باشد. در صورت وجود <span class="en">Tenderness</span> در معاینه لگنی/رکتال، اندیکاسیون‌های جراحی فوری عبارت‌اند از: آپاندیس پرفوره، دیورتیکولیت و پیچ‌خوردگی کیست تخمدان <span class="en">(Twisted Ovarian Cyst)</span>.</li>
+        </ul>
+      </div>
+
+      <h4>الگوهای زمانی شروع و سیر درد شکمی</h4>
+      <p>درد شکمی بر اساس نحوه شروع و روند تغییر شدت آن در طول زمان، به چهار الگوی کلی تقسیم می‌شود:</p>
+      <svg viewBox="0 0 420 220" style="width:100%;max-width:440px;display:block;margin:10px auto;background:var(--surface-2);border-radius:12px;" xmlns="http://www.w3.org/2000/svg">
+        <line x1="40" y1="18" x2="40" y2="190" stroke="currentColor" stroke-width="1.2" opacity="0.4"/>
+        <line x1="40" y1="190" x2="405" y2="190" stroke="currentColor" stroke-width="1.2" opacity="0.4"/>
+        <text x="8" y="110" font-size="11" fill="currentColor" opacity="0.6" transform="rotate(-90 12,110)">شدت</text>
+        <text x="378" y="207" font-size="11" fill="currentColor" opacity="0.6">زمان</text>
+        <path d="M40,185 C90,75 130,65 170,140 C220,198 300,203 400,205" fill="none" stroke="var(--blue)" stroke-width="2.5"/>
+        <path d="M40,185 Q70,55 100,185 Q130,45 160,185 Q190,50 220,183 Q250,60 280,178" fill="none" stroke="var(--coral)" stroke-width="2.5"/>
+        <path d="M40,185 C150,173 300,95 402,42" fill="none" stroke="var(--amber)" stroke-width="2.5"/>
+        <path d="M40,185 L58,32 L402,27" fill="none" stroke="var(--primary)" stroke-width="2.5"/>
+        <text x="46" y="78" font-size="13" fill="var(--blue)" font-weight="700">A</text>
+        <text x="96" y="42" font-size="13" fill="var(--coral)" font-weight="700">B</text>
+        <text x="388" y="40" font-size="13" fill="var(--amber)" font-weight="700">C</text>
+        <text x="63" y="27" font-size="13" fill="var(--primary)" font-weight="700">D</text>
+      </svg>
+      <div class="box def">
+        <ul>
+          <li><b>A (خودمحدودشونده):</b> بسیاری از علل درد شکم خودبه‌خود و به‌مرور زمان فروکش می‌کنند؛ مثال: گاستروانتریت.</li>
+          <li><b>B (کولیکی):</b> درد به‌صورت موج‌دار، پیشرفت و فروکش می‌کند؛ مثال: کولیک روده‌ای، کلیوی و صفراوی. بازه زمانی آن از چند دقیقه (روده و کلیه) تا چند هفته یا حتی ماه (صفراوی) متغیر است.</li>
+          <li><b>C (پیشرونده):</b> درد به‌تدریج و مداوم شدت می‌یابد، مانند در حال «بالغ‌شدن»؛ مثال: آپاندیسیت و دیورتیکولیت.</li>
+          <li><b>D (فاجعه‌بار):</b> برخی شرایط با شروعی ناگهانی و بسیار شدید بروز می‌کنند؛ مثال: پارگی آنوریسم آئورت.</li>
+        </ul>
+      </div>
+
+      <h4>سرنخ‌های شروع درد برای تشخیص افتراقی سریع</h4>
+      <div class="tbl-wrap">
+      <table>
+        <caption>الگوهای شروع درد و پاتولوژی مرتبط</caption>
+        <thead><tr><th>شروع ناگهانی (درد کامل طی چند ثانیه)</th><th>شروع سریع (اوج‌گیری طی چند دقیقه تا ساعت)</th><th>شروع تدریجی (طی چند ساعت)</th></tr></thead>
+        <tbody>
+          <tr>
+            <td>پرفوراسیون اولسر، انفارکتوس مزانتریک، پارگی آنوریسم آئورت شکمی، پارگی حاملگی اکتوپیک، پیچ‌خوردگی یا پارگی کیست تخمدان، آمبولی ریه، انفارکتوس حاد میوکارد</td>
+            <td>فتق خفه‌شده، ولوولوس، اینتوساسپشن، پانکراتیت حاد، کولیک صفراوی، دیورتیکولیت، کولیک حالب و کلیه</td>
+            <td>آپاندیسیت، فتق خفه‌شده، پانکراتیت مزمن، بیماری پپتیک اولسر، بیماری التهابی روده، لنفادنیت مزانتریک، سیستیت و احتباس ادراری، سالپنژیت و پروستاتیت</td>
+          </tr>
+        </tbody>
+      </table>
+      </div>
+    </div>
+  </details>
+
+  <details class="card" id="s1-4">
+    <summary><h3>آزمایش‌ها و نکات کلیدی</h3><span class="chev">▾</span></summary>
+    <div class="card-body">
+      <div class="box def">
+        <div class="box-title">🔹 آزمایش‌های پایه در درد شکمی</div>
+        <ul>
+          <li><b>CBC:</b> محدوده نرمال <span class="en">WBC</span> بین ۴۰۰۰ تا ۱۰۰۰۰ است. لکوسیتوز به‌تنهایی دال یا عدم دلالت بر نیاز به جراحی نیست؛ از علل آن می‌توان به پرفوراسیون احشاء، پانکراتیت، کوله‌سیستیت، <span class="en">PIE</span>، انسداد روده و آنمی اشاره کرد.</li>
+          <li><b><span class="en">UA (Urinalysis)</span>:</b> وجود <span class="en">RBC</span> (در بیماری رنال)، دهیدراتاسیون، گلوکز (در دیابت)، عفونت سیستم ادراری، بیلی‌روبین مستقیم در ادرار (در هایپربیلی‌روبینمی مستقیم).</li>
+          <li><b>آمیلاز سرم:</b> افزایش بیش از سه‌برابر، دلالت بر پانکراتیت دارد؛ به‌شرط رد کردن پرفوراسیون اولسر، انسداد استرنگوله روده و کوله‌سیستیت حاد.</li>
+          <li>ایزوآنزیم بزاقی پانکراس اهمیت بالینی چندانی ندارد.</li>
+        </ul>
+      </div>
+
+      <p>در قدیم برای بیماران ترومایی لاواژ پریتوئن انجام می‌شد، اما امروزه برای تشخیص خونریزی حفره پریتوئن از <span class="en">CT-scan</span> یا سونوگرافی استفاده می‌شود؛ سونوگرافی می‌تواند مایع آزاد، سنگ صفراوی، مجاری کلیوی، التهاب پانکراس و حاملگی اکتوپیک را نشان دهد.</p>
+
+      <div class="box mem">
+        <div class="box-title">💡 نکات حفظی</div>
+        <ul>
+          <li>خونریزی داخل شکمی، منع مطلقی <span class="en">(Contraindication)</span> برای جراحی ندارد، به‌جز خونریزی گوارشی ناشی از پپتیک اولسر، مالوری‌ویس و واریس که به روش‌های درمانی جدید نیاز دارند.</li>
+          <li>در دردهای مزمن شکمی، همیشه باید <span class="en">IBS</span> در تشخیص افتراقی مدنظر باشد.</li>
+          <li>تزریق مسکن، مخدر و آنالژزیک نباید باعث تأخیر در تشخیص قطعی شود و نمی‌تواند باعث سردرگمی تشخیصی گردد.</li>
+          <li>در پریتونیت لگنی، معاینه شکم می‌تواند کاملاً طبیعی باشد؛ انجام معاینه رکتال و لگنی <span class="en">(Rectal and Pelvic examination)</span> ضروری است.</li>
+          <li>غذاهایی که موجب تشدید رفلاکس می‌شوند (با شل‌کردن <span class="en">LES</span>): چربی‌ها، کربوهیدرات، نعنا، شکلات، چای، قهوه، نسکافه، دارچین و گوجه‌فرنگی. علل رفلاکس شامل چاقی، شلی اسفنکتر تحتانی مری و فتق هیاتال (ارتباط کمتر) است.</li>
+        </ul>
+      </div>
+    </div>
+  </details>
+
+  <div class="chap-summary">
+    <h4>📌 جمع‌بندی فصل ۱ — درد شکمی</h4>
+    <ul>
+      <li>شایع‌ترین علل درد شکم: آپاندیسیت، دردهای غیراختصاصی، مسائل کلیوی، انسداد روده.</li>
+      <li>مکانیسم‌های اصلی: التهاب صفاق، انسداد احشاء توخالی، اختلال عروقی، دیواره شکمی، درد ارجاعی، متابولیک، فانکشنال.</li>
+      <li>در اختلالات عروقی، شدت درد اغلب با یافته‌های معاینه تطابق ندارد و <span class="en">Rebound Tenderness</span> معمولاً منفی است.</li>
+      <li>تشخیص بر اساس محل (<span class="en">Quadrant</span>) راهنمای اصلی تشخیص افتراقی بالینی است.</li>
+      <li>لکوسیتوز به‌تنهایی معیار تصمیم‌گیری جراحی نیست؛ تزریق مسکن نباید تأخیر تشخیصی ایجاد کند.</li>
+      <li>درد شکمی می‌تواند منشأ عصبی نیز داشته باشد (هرپس زوستر، فشردگی ریشه عصب نخاعی) و به‌صورت ناگهانی و تیرکشنده بروز کند.</li>
+      <li>پریتونیت به خودبه‌خودی (عارضه نارسایی کبد/کلیه) و ثانویه (پارگی ارگان، تروما، دیورتیکول) تقسیم می‌شود.</li>
+      <li>الگوی زمانی شروع درد (خودمحدودشونده، کولیکی، پیشرونده، فاجعه‌بار) سرنخ تشخیصی مهمی است.</li>
+      <li><span class="en">Rebound Tenderness</span> را باید با دق ملایم یا سرفه بررسی کرد، نه با رهاکردن ناگهانی دست از عمق شکم.</li>
+    </ul>
+  </div>
+</section>
+
+<!-- ============ CHAPTER 2 : DIARRHEA ============ -->
+<section class="chapter" id="ch2">
+  <div class="chapter-head">
+    <div class="chapter-num">۲</div>
+    <h2>اسهال حاد و مزمن <span class="en">(Diarrhea)</span></h2>
+  </div>
+
+  <details class="card" open id="s2-1">
+    <summary><h3>فیزیولوژی حرکات روده و تعریف اسهال</h3><span class="chev">▾</span></summary>
+    <div class="card-body">
+      <p>اگرچه وظیفه اصلی روده باریک هضم غذا و جذب مواد مغذی است، روده باریک و کولون وظایف مهم دیگری نیز دارند: تنظیم ترشح و جذب آب و الکترولیت‌ها، ذخیره‌سازی و انتقال محتویات لومن، و جذب اسیدهای چرب زنجیره‌کوتاه حاصل از متابولیسم باکتریایی کربوهیدرات‌ها.</p>
+
+      <div class="flow">
+        <div class="flow-box">۹ لیتر مایع روزانه وارد دستگاه گوارش می‌شود</div>
+        <div class="flow-arrow">↓</div>
+        <div class="flow-box">۱ لیتر به کولون می‌رسد</div>
+        <div class="flow-arrow">↓</div>
+        <div class="flow-box end">۰.۲ لیتر به‌صورت مدفوع دفع می‌شود</div>
+      </div>
+
+      <div class="grid2">
+        <div class="col">
+          <h5><span class="en">MMC (Migrating Motor Complex)</span></h5>
+          <ul>
+            <li>حرکات روده باریک در حالت ناشتا؛ «<span class="en">House-Keeper</span>» نامیده می‌شود</li>
+            <li>سازمان‌یافته، حدود ۴ دقیقه طول می‌کشد</li>
+            <li>هر ۶۰ تا ۹۰ دقیقه تکرار می‌شود و کل روده کوچک را در بر می‌گیرد</li>
+            <li>به‌ندرت به کولون منتقل می‌شود</li>
+          </ul>
+        </div>
+        <div class="col">
+          <h5><span class="en">HAPC</span> (انقباضات فازیک کولون)</h5>
+          <ul>
+            <li>انقباضات کوتاه‌مدت با دامنه بلند که محتویات کولون را می‌کس می‌کنند</li>
+            <li>حدود ۵ بار در روز، معمولاً هنگام بیدارشدن، صبحانه و پس از غذا</li>
+            <li>افزایش فرکانس آن می‌تواند موجب اسهال یا احساس نیاز اورژانسی به دفع شود</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="box def">
+        <div class="box-title">🔹 تعریف علمی اسهال <span class="en">(Diarrhea)</span></div>
+        <p style="margin:0 0 8px;">دفع مدفوع بیشتر از <b>۲۰۰ گرم در روز</b>. تعریف عامیانه: دفع مدفوع شل و آبکی با افزایش دفعات دفع.</p>
+        <ul>
+          <li>اسهال حاد: کمتر از ۲ هفته</li>
+          <li>اسهال تحت‌حاد <span class="en">(Persistent)</span>: بین ۲ تا ۴ هفته</li>
+          <li>اسهال مزمن: بیشتر از ۴ هفته</li>
+        </ul>
+      </div>
+
+      <div class="box clin">
+        <div class="box-title">⚕️ تمایز از حالات مشابه</div>
+        <ul>
+          <li><b>اسهال کاذب:</b> خروج مکرر حجم‌های کم مدفوع؛ در <span class="en">IBS</span> و پروکتیت دیده می‌شود.</li>
+          <li><b>بی‌اختیاری مدفوع <span class="en">(Fecal Incontinence)</span>:</b> تخلیه غیرارادی محتویات رکتوم؛ در اختلالات نوروماسکولار یا ساختاری آنورکتال.</li>
+          <li><b>اسهال سرریزی <span class="en">(Overflow)</span>:</b> در افراد بستری طولانی‌مدت یا مقیم آسایشگاه؛ علت آن <span class="en">fecal impaction</span> (گیرکردن توده سفت مدفوع در رکتوم) است که بیمار آن را به‌صورت اسهال ابراز می‌کند.</li>
+        </ul>
+      </div>
+    </div>
+  </details>
+
+  <details class="card" id="s2-2">
+    <summary><h3>اسهال حاد: علل، گروه‌های پرخطر و رویکرد</h3><span class="chev">▾</span></summary>
+    <div class="card-body">
+      <p>بیش از ۹۰٪ علل اسهال حاد، عفونی هستند و می‌توانند با استفراغ، تب و درد شکم همراه باشند. کمتر از ۱۰٪ موارد ناشی از داروها، سموم، ایسکمی، مصرف مواد غذایی خاص یا سایر علل است.</p>
+
+      <h4>گروه‌های در معرض خطر اسهال</h4>
+      <div class="box def">
+        <ul>
+          <li><b>مسافران:</b> شایع‌ترین عامل — <span class="en">enterotoxigenic E. coli</span>، کمپیلوباکتر، شیگلا، نوروویروس، سالمونلا</li>
+          <li><b>مصرف مواد غذایی خاص:</b> همبرگر نیمه‌پز → <span class="en">E. coli</span> انتروهموراژیک؛ برنج/غذای گرم‌شده مجدد → باسیلوس سرئوس؛ مایونز → استاف اورئوس/سالمونلا؛ تخم‌مرغ → سالمونلا؛ غذای دریایی خام → ویبریو، سالمونلا، هپاتیت <span class="en">A</span>؛ لبنیات خام → لیستریا</li>
+          <li><b>نقص سیستم ایمنی:</b> اولیه (هایپوگاماگلوبولینمی) یا ثانویه (سالمندی، دارو، ایدز) — مستعد شیگلا، ژیاردیا، کریپتوسپوریدیوم، روتاویروس</li>
+          <li><b>کودکان مهدکودک‌ها و خانواده آن‌ها</b></li>
+          <li><b>مقیمان آسایشگاه:</b> شایع‌ترین عامل — <span class="en">Clostridium difficile</span></li>
+        </ul>
+      </div>
+      <p>شایع‌ترین عامل غیرعفونی اسهال حاد، عوارض جانبی داروهاست: آنتی‌بیوتیک‌ها، ضدآریتمی، ضدفشارخون، <span class="en">NSAID</span>، ضدافسردگی، آنتی‌اسید، برونکودیلاتور و ملین‌ها.</p>
+
+      <div class="tbl-wrap">
+      <table>
+        <caption>ارتباط پاتوبیولوژی عوامل با تظاهرات بالینی اسهال عفونی حاد</caption>
+        <thead><tr><th>پاتوبیولوژی / عامل</th><th>دوره کمون</th><th>استفراغ</th><th>درد شکم</th><th>تب</th><th>اسهال</th></tr></thead>
+        <tbody>
+          <tr><td>تولیدکننده توکسین از‌پیش‌ساخته: استاف اورئوس، باسیلوس سرئوس</td><td>۱–۸ ساعت</td><td>۳–۴+</td><td>۱–۲+</td><td>۰–۱+</td><td>۳–۴+، آبکی</td></tr>
+          <tr><td>انتروتوکسین: ویبریو کلرا، <span class="en">E. coli</span> انتروتوکسیژنیک</td><td>۸–۷۲ ساعت</td><td>۲–۴+</td><td>۱–۲+</td><td>۰–۱+</td><td>۳–۴+، آبکی</td></tr>
+          <tr><td>انتروادهرنت: <span class="en">E. coli</span> انتروپاتوژنیک، ژیاردیا</td><td>۱–۸ روز</td><td>۰–۱+</td><td>۱–۳+</td><td>۰–۲+</td><td>۱–۲+، آبکی و لزج</td></tr>
+          <tr><td>سیتوتوکسین: کلستریدیوم دیفیسیل، <span class="en">E. coli</span> هموراژیک</td><td>۱–۳ روز / ۱۲–۷۲ ساعت</td><td>۰–۱+</td><td>۳–۴+</td><td>۱–۲+</td><td>معمولاً آبکی، گاه خونی</td></tr>
+          <tr><td>ارگانیسم‌های مهاجم (التهاب خفیف): روتاویروس، نوروویروس</td><td>۱–۳ روز</td><td>۱–۳+</td><td>۲–۳+</td><td>۳–۴+</td><td>۱–۳+، آبکی</td></tr>
+          <tr><td>التهاب شدید: شیگلا، <span class="en">E. coli</span> انتروانویزیو، آنتاموبا هیستولیتیکا</td><td>۱۲ ساعت–۸ روز</td><td>۰–۱+</td><td>۳–۴+</td><td>۳–۴+</td><td>۱–۲+، خونی</td></tr>
+        </tbody>
+      </table>
+      </div>
+
+      <div class="box clin">
+        <div class="box-title">⚕️ اندیکاسیون‌های ارزیابی جدی در اسهال حاد</div>
+        <p style="margin:0;">اسهال شدید همراه دهیدراتاسیون، مدفوع خونی آشکار، تب بیش از ۳۸.۵ درجه، تداوم بیش از ۴۸ ساعت بدون بهبودی، مصرف اخیر آنتی‌بیوتیک، سن بالای ۵۰ سال، درد شدید شکمی، و ضعف سیستم ایمنی.</p>
+      </div>
+
+      <p>روش اصلی تشخیص در عفونت شدید و حاد، بررسی میکروبیولوژی مدفوع (تخم‌ها و انگل‌ها، و در صورت نیاز کشت برای عوامل ویروسی و باکتریایی) است.</p>
+
+      <h4>رویکرد به اسهال حاد</h4>
+      <div class="flow">
+        <div class="flow-box end">اسهال حاد</div>
+        <div class="flow-arrow">↓</div>
+        <div class="flow-box">شرح حال و معاینه فیزیکی</div>
+        <div class="flow-arrow">↓</div>
+        <div class="flow-row">
+          <div class="flow-box">خفیف</div>
+          <div class="flow-box">متوسط</div>
+          <div class="flow-box">شدید</div>
+        </div>
+        <div class="flow-arrow">↓</div>
+        <div class="flow-box">اصلاح آب و الکترولیت</div>
+        <div class="flow-arrow">↓</div>
+        <div class="flow-box alt">در صورت تب ≥۳۸.۵، مدفوع خونی، نقص ایمنی یا سالمندی → بررسی میکروبیولوژی مدفوع</div>
+        <div class="flow-arrow">↓</div>
+        <div class="flow-box end">درمان اختصاصی یا تجربی</div>
+      </div>
+
+      <div class="box mem">
+        <div class="box-title">💡 نکات درمانی حیاتی</div>
+        <ul>
+          <li>اصلاح آب و الکترولیت، اصل اولیه درمان است — دهیدراتاسیون علت اصلی مرگ در این بیماران است.</li>
+          <li>در اسهال غیرخونی و بدون تب، می‌توان از لوپرامید استفاده کرد.</li>
+          <li><b>هشدار:</b> در دیسانتری تب‌دار، هرگز نباید از داروهای ضدحرکت و ضدترشح مانند لوپرامید و دیفنوکسیلات استفاده کرد، زیرا باعث تشدید علائم، تداوم بیماری و مگاکولون توکسیک می‌شود.</li>
+        </ul>
+      </div>
+
+      <h4>اسهال پایا و ایسکمی روده</h4>
+      <p><b>اسهال پایا <span class="en">(Persistent)</span></b> بین ۲ تا ۴ هفته طول می‌کشد؛ شایع‌ترین علت آن <b>ژیاردیا</b> است و پس از آن کلستریدیوم دیفیسیل (متعاقب آنتی‌بیوتیک)، آمیب و کمپیلوباکتر. قدم اول تشخیص، تکرار تست میکروبیولوژیک مدفوع است؛ بسته به شرایط می‌توان از سیگموئیدوسکوپی، بیوپسی، آسپیراسیون و بیوپسی دوازدهه استفاده کرد.</p>
+      <p><b><span class="en">Brainerd diarrhea</span>:</b> حداقل ۴ هفته طول می‌کشد و می‌تواند ۱ تا ۳ سال باقی بماند؛ منشأ عفونی دارد و با التهاب دیستال روده باریک یا پروگزیمال کولون همراه است.</p>
+      <p><b>ایسکمی روده (کولیت ایسکمیک):</b> به دو شکل <span class="en">occlusive</span> و <span class="en">non-occlusive</span> بروز می‌کند و بیشتر در سن بالای ۵۰ سال دیده می‌شود. بیمار با درد حاد بخش تحتانی شکم مراجعه می‌کند؛ اسهال ابتدا آبکی و سپس خونی می‌شود. در کولون سیگموئید و نزولی، التهاب حاد ایجاد می‌کند؛ مشخصه مهم آن این است که <b>رکتوم درگیر نیست</b>.</p>
+    </div>
+  </details>
+
+  <details class="card" id="s2-3">
+    <summary><h3>اسهال مزمن: طبقه‌بندی و انواع</h3><span class="chev">▾</span></summary>
+    <div class="card-body">
+      <div class="box def">
+        <div class="box-title">🔹 تعریف</div>
+        <p style="margin:0;">اسهالی است که بیش از ۴ هفته طول می‌کشد. برخلاف اسهال حاد که شایع‌ترین علل آن عفونت و داروها بودند، در اسهال مزمن عوامل <b>غیرعفونی</b> شایع‌ترند.</p>
+      </div>
+
+      <div class="tbl-wrap">
+      <table>
+        <caption>شش گروه علت اسهال مزمن</caption>
+        <thead><tr><th>نوع</th><th>مکانیسم / ویژگی</th></tr></thead>
+        <tbody>
+          <tr><td><b>۱. ترشحی <span class="en">(Secretory)</span></b></td><td>اختلال انتقال مایع و الکترولیت از مخاط غیرنرمال؛ آبکی، حجیم، بدون درد، با ناشتایی تداوم می‌یابد (فاقد <span class="en">fecal osmotic gap</span>). علل: داروها و سموم (کاسکارا، بیزاکودیل، روغن کرچک، اتانول، آرسنیک)، رزکسیون روده، فیستول انتروکولیک، تومورهای هورمون‌ساز (کارسینوئید، گاسترینوما). برخلاف سایرین، با غذا خوردن تشدید می‌شود.</td></tr>
+          <tr><td><b>۲. اسمزی <span class="en">(Osmotic)</span></b></td><td>با روزه‌داری و قطع عامل مسبب، قطع می‌شود. علل: آنتی‌اسید حاوی منیزیم، کمبود لاکتاز (شایع‌ترین علت در بزرگسالان)، کربوهیدرات‌های ضعیف‌جذب (سوربیتول، لاکتولوز).</td></tr>
+          <tr><td><b>۳. استئاتوره <span class="en">(Steatorrhea)</span></b></td><td>چربی مدفوع بیش از ۷ گرم در روز (تا ۱۴ گرم در عبور سریع، ۱۵–۲۵ گرم در نارسایی روده باریک، تا ۳۲ گرم در نارسایی برون‌ریز پانکراس). اسهال چرب، بدبو و چسبنده به کاسه توالت؛ همراه سوءجذب و کاهش وزن.</td></tr>
+          <tr><td><b>۴. التهابی <span class="en">(Inflammatory)</span></b></td><td>همراه درد، تب، خونریزی. لکوسیت‌ها و کالپروتکتین مدفوع مثبت. شامل <span class="en">IBD</span> (کرون، کولیت اولسراتیو، کولیت میکروسکوپیک). کولیت میکروسکوپیک معمولاً در زنان میانسال پس از مصرف استاتین، <span class="en">PPI</span> یا <span class="en">SSRI</span> با کولونوسکوپی طبیعی دیده می‌شود.</td></tr>
+          <tr><td><b>۵. حرکتی <span class="en">(Dysmotility)</span></b></td><td>مشابه ترشحی؛ استئاتوره خفیف (حداکثر ۱۴ گرم). هایپرتیروئیدی و <span class="en">IBS</span> در این گروه قرار می‌گیرند.</td></tr>
+          <tr><td><b>۶. ساختگی <span class="en">(Factitial)</span></b></td><td>تا ۱۵٪ موارد اسهال؛ در افراد با اختلال خوردن یا مسائل روانی (<span class="en">Munchausen syndrome</span>)، معمولاً خانم و شاغل در حوزه بهداشت‌ودرمان. با مصرف پنهانی ملین یا دیورتیک ایجاد می‌شود. کاهش فشار خون و هیپوکالمی از علائم شایع است.</td></tr>
+        </tbody>
+      </table>
+      </div>
+    </div>
+  </details>
+
+  <details class="card" id="s2-4">
+    <summary><h3>Approach به اسهال مزمن</h3><span class="chev">▾</span></summary>
+    <div class="card-body">
+      <div class="box key">
+        <div class="box-title">🔑 نکات کلیدی در شرح حال و معاینه</div>
+        <ul>
+          <li>زمان شروع، مدت، الگوی بیماری و عوامل تشدیدکننده (به‌ویژه رژیم غذایی، برای افتراق اسمزی از ترشحی) بررسی شود.</li>
+          <li>بی‌اختیاری مدفوع، تب، کاهش وزن، درد، سابقه مسافرت، مصرف دارو، تماس با فرد مبتلا و تغییرات پوستی (نشانه سلیاک) مدنظر باشد. به درد مفاصل و آفت دهانی نیز توجه شود.</li>
+          <li>در معاینه فیزیکی: توده تیروئید، <span class="en">wheezing</span>، سوفل قلبی، ادم، هپاتومگالی، توده شکمی، لنفادنوپاتی، فیستول‌های پوستی/آنال و اختلال اسفنکتری بررسی شود.</li>
+        </ul>
+      </div>
+
+      <p><b>یافته‌های آزمایشگاهی:</b> لکوسیتوز، افزایش <span class="en">ESR/CRP</span> نشانه التهاب است. آنمی نشان‌دهنده اختلال تغذیه‌ای یا خونریزی مزمن است. ائوزینوفیلی محیطی می‌تواند نشانه انگل، بدخیمی، بیماری عروقی-کلاژنی، آلرژی یا گاستروانتریت ائوزینوفیلیک باشد.</p>
+
+      <div class="box clin">
+        <div class="box-title">⚕️ کار تشخیصی اختصاصی</div>
+        <ul>
+          <li>در هر اسهال مزمن باید به <b>سلیاک</b> شک کرد: درخواست آنتی‌بادی <span class="en">IgA ضد TTG</span> و <span class="en">IgA ضد EMA</span> (آنتی‌بادی ضد اندومیزیال).</li>
+          <li>در هر بیمار با اسهال و هماتوشزی، آزمایش مدفوع و کولونوسکوپی الزامی است.</li>
+          <li>در فردی که ادعای حساسیت به شیر دارد، می‌توان یک رژیم فاقد لاکتوز پیشنهاد کرد.</li>
+        </ul>
+      </div>
+
+      <div class="box mem">
+        <div class="box-title">💡 نکته مهم</div>
+        <p style="margin:0;">در حدود ۲ از ۳ مراجعات اولیه به‌علت اسهال مزمن، نمی‌توان تشخیص خاصی مطرح کرد و باید ارزیابی‌های بیشتری انجام شود.</p>
+      </div>
+
+      <h4>نقشه راه تشخیصی اسهال مزمن</h4>
+      <p style="font-size:13.8px;">پس از رد علل دارویی/جراحی (<span class="en">iatrogenic</span>)، مسیر ارزیابی بر اساس علامت غالب انتخاب می‌شود:</p>
+      <div class="flow">
+        <div class="flow-box end">اسهال مزمن</div>
+        <div class="flow-arrow">↓</div>
+        <div class="flow-box alt">ابتدا رد علل دارویی و جراحی <span class="en">(iatrogenic)</span></div>
+        <div class="flow-arrow">↓</div>
+        <div class="flow-row">
+          <div class="flow-box">خون در مدفوع</div>
+          <div class="flow-box">اسهال چرب</div>
+          <div class="flow-box">درد قبل از اجابت که با دفع بهتر می‌شود + احساس دفع ناقص</div>
+          <div class="flow-box">بدون خون + ویژگی سوءجذب</div>
+        </div>
+        <div class="flow-arrow">↓</div>
+        <div class="flow-row">
+          <div class="flow-box">کولونوسکوپی + بیوپسی</div>
+          <div class="flow-box">بررسی روده باریک: تصویربرداری، بیوپسی، آسپیره</div>
+          <div class="flow-box">شک به <span class="en">IBS</span></div>
+          <div class="flow-box">شک به اسهال فانکشنال → حذف غذایی (لاکتوز، سوربیتول)</div>
+        </div>
+        <div class="flow-arrow">↓</div>
+        <div class="flow-box">غربالگری محدود بیماری ارگانیک: هماتولوژی، بیوشیمی، <span class="en">CRP، ESR</span>، آهن، فولات، <span class="en">B12</span>، <span class="en">TTG-IgA</span>، <span class="en">C4</span>، چربی مدفوع، کالپروتکتین</div>
+        <div class="flow-arrow">↓</div>
+        <div class="flow-row">
+          <div class="flow-box">Hb/آلبومین پایین، <span class="en">MCV/MCH</span> غیرطبیعی، چربی مدفوع بالا</div>
+          <div class="flow-box">پتاسیم سرم پایین</div>
+          <div class="flow-box">همه تست‌های غربالگری طبیعی</div>
+        </div>
+        <div class="flow-arrow">↓</div>
+        <div class="flow-row">
+          <div class="flow-box">کولونوسکوپی+بیوپسی یا بررسی روده باریک (رادیوگرافی، بیوپسی، آسپیره، چربی مدفوع ۴۸ساعته)</div>
+          <div class="flow-box">حجم/اسمولالیته/<span class="en">pH</span> مدفوع، غربالگری ملین، غربالگری هورمونی</div>
+          <div class="flow-box">درمان تجربی اوپیوئیدی + پیگیری</div>
+        </div>
+        <div class="flow-arrow">↓</div>
+        <div class="flow-box alt">اسهال مزمن پایدار (<span class="en">Persistent</span>)</div>
+        <div class="flow-arrow">↓</div>
+        <div class="flow-row">
+          <div class="flow-box">بررسی زمان عبور کامل گوارشی <span class="en">(Full gut transit)</span> → تنظیم درمان متناسب با سرعت عبور</div>
+          <div class="flow-box">اسید صفراوی مدفوع ۴۸ ساعته → در صورت افزایش، مصرف رزین جاذب اسید صفراوی <span class="en">(BA sequestrant)</span></div>
+        </div>
+      </div>
+      <div class="box def">
+        <div class="box-title">🔹 تفسیر چربی مدفوع ۴۸ ساعته</div>
+        <ul>
+          <li>بیش از ۲۰ گرم در روز → مطرح‌کننده نارسایی عملکرد پانکراس</li>
+          <li>بین ۱۴ تا ۲۰ گرم در روز → جستجو برای علت روده باریک</li>
+          <li>کمتر از ۱۴ گرم در روز (طبیعی) → تیتره کردن درمان متناسب با سرعت عبور روده</li>
+        </ul>
+      </div>
+    </div>
+  </details>
+
+  <div class="chap-summary">
+    <h4>📌 جمع‌بندی فصل ۲ — اسهال</h4>
+    <ul>
+      <li>تعریف علمی اسهال: دفع مدفوع بیش از ۲۰۰ گرم در روز؛ حاد &lt;۲ هفته، پایا ۲–۴ هفته، مزمن &gt;۴ هفته.</li>
+      <li>اسهال حاد: &gt;۹۰٪ عفونی؛ درمان اصلی جبران آب و الکترولیت است؛ ضدحرکتی‌ها در دیسانتری تب‌دار ممنوع‌اند.</li>
+      <li>اسهال مزمن: عوامل غیرعفونی شایع‌تر؛ شش گروه — ترشحی، اسمزی، استئاتوره، التهابی، حرکتی، ساختگی.</li>
+      <li>در هر اسهال مزمن باید به سلیاک شک کرد (آنتی‌بادی ضد <span class="en">TTG</span> و <span class="en">EMA</span>).</li>
+      <li>کلید افتراق اسمزی از ترشحی: اثر ناشتایی بر تداوم اسهال.</li>
+    </ul>
+  </div>
+</section>
+
+<!-- ============ CHAPTER 3 : CONSTIPATION ============ -->
+<section class="chapter" id="ch3">
+  <div class="chapter-head">
+    <div class="chapter-num">۳</div>
+    <h2>یبوست <span class="en">(Constipation)</span></h2>
+  </div>
+
+  <details class="card" open id="s3-1">
+    <summary><h3>تعریف و علل یبوست</h3><span class="chev">▾</span></summary>
+    <div class="card-body">
+      <div class="box def">
+        <div class="box-title">🔹 تعریف</div>
+        <p style="margin:0;">یبوست یکی از شکایات رایج بالینی است که معمولاً به اجابت مزاج دشوار، سخت، نامنظم یا دفع ناکامل اطلاق می‌شود. دفع طبیعی بین سه بار در روز تا سه بار در هفته است. دفع کمتر از سه بار در هفته به‌عنوان <span class="en">constipation</span> قلمداد می‌شود، اما کم‌بودن تعداد دفع به‌تنهایی کافی نیست — زور زدن بیش از حد، مدفوع سفت، احساس پُری تحتانی شکم و احساس دفع ناکامل نیز مطرح‌کننده یبوست‌اند.</p>
+      </div>
+      <p>ارزیابی عینی <span class="en">(Objective)</span> شامل زور زدن بیش از حد یا دفع مدفوع سفت واقعاً دشوار است؛ انجام آنما یا معاینه رکتال <span class="en">(Rectal Exam)</span> به این ارزیابی کمک می‌کند.</p>
+
+      <div class="tbl-wrap">
+      <table>
+        <caption>علل یبوست در بالغین</caption>
+        <thead><tr><th>نوع</th><th>مثال‌ها</th></tr></thead>
+        <tbody>
+          <tr class="section-row"><td colspan="2">تازه‌آغاز <span class="en">(Recent Onset)</span></td></tr>
+          <tr><td>انسداد کولون</td><td>نئوپلاسم، تنگی ایسکمیک/دیورتیکولی/التهابی</td></tr>
+          <tr><td>اسپاسم اسفنکتر آنال</td><td>شقاق مقعدی، هموروئید دردناک</td></tr>
+          <tr><td>داروها</td><td>—</td></tr>
+          <tr class="section-row"><td colspan="2">مزمن <span class="en">(Chronic)</span></td></tr>
+          <tr><td><span class="en">IBS</span></td><td>غالب با یبوست یا نوع متناوب</td></tr>
+          <tr><td>داروها</td><td>بلوکرهای کلسیمی، ضدافسردگی‌ها</td></tr>
+          <tr><td>سودوابستراکشن کولونی</td><td>یبوست با عبور آهسته، مگاکولون (هیرشپرونگ، شاگاس — نادر)</td></tr>
+          <tr><td>اختلالات تخلیه رکتال</td><td>اختلال کف لگن، آنیسموس، سندرم پرینه نزولی، پرولاپس مخاطی رکتوم، رکتوسل</td></tr>
+          <tr><td>اندوکرینوپاتی</td><td>هیپوتیروئیدی، هایپرکلسمی، حاملگی</td></tr>
+          <tr><td>اختلالات روان‌پزشکی</td><td>افسردگی، اختلالات خوردن، دارو</td></tr>
+          <tr><td>بیماری نورولوژیک</td><td>پارکینسونیسم، <span class="en">MS</span>، آسیب نخاعی</td></tr>
+          <tr><td>بیماری عضلانی منتشر</td><td>اسکلروز سیستمیک پیشرونده</td></tr>
+        </tbody>
+      </table>
+      </div>
+
+      <p>علل بسته به اینکه یبوست اخیراً ایجاد شده یا مزمن باشد، متفاوت‌اند. در یبوست جدید، توجه به تنگی‌ها، ایسکمی، بیماری‌های التهابی و تنگی‌های ناشی از دیورتیکول ضروری است. مسئله دیگر، مشکلات آنورکتال <span class="en">(Anorectal Problem)</span> در یبوست حاد است؛ مانند شقاق مقعدی یا هموروئید ترومبوزه که ایجاد درد می‌کنند. مصرف دارو نیز از علل شایع یبوست حاد است.</p>
+
+      <div class="box clin">
+        <div class="box-title">⚕️ نکته تشخیصی</div>
+        <p style="margin:0;"><span class="en">Recent Constipation</span> می‌تواند علامت مهمی از بیماری‌های عضوی مانند تومور یا اختلالات آنورکتال باشد و نباید نادیده گرفته شود.</p>
+      </div>
+    </div>
+  </details>
+
+  <details class="card" id="s3-2">
+    <summary><h3>یبوست شدید و تست‌های تخصصی</h3><span class="chev">▾</span></summary>
+    <div class="card-body">
+      <p>کمتر از ۵٪ بیماران تحت عنوان <span class="en">severe / intractable constipation</span> (یبوست مقاوم) طبقه‌بندی می‌شوند که از این میان ۲۵٪ دچار اختلالات دفعی <span class="en">(evacuation disorders)</span> هستند. در این بیماران، بررسی فیزیولوژیک کولون، اختلالات کف لگن و ارزیابی وضعیت سایکوسوماتیک به انتخاب منطقی تشخیص و درمان کمک می‌کند.</p>
+
+      <h4>تست زمان عبور کولونی <span class="en">(Colonic Transit Time – CTT)</span></h4>
+      <div class="flow">
+        <div class="flow-box end">یبوست مزمن</div>
+        <div class="flow-arrow">↓</div>
+        <div class="flow-box">تست‌های بالینی و آزمایشگاهی پایه؛ رد انسداد مکانیکی (کولونوسکوپی)</div>
+        <div class="flow-arrow">↓</div>
+        <div class="flow-row">
+          <div class="flow-box">عبور کولونی طبیعی → بررسی بیماری‌های فانکشنال</div>
+          <div class="flow-box alt">عبور کولونی غیرطبیعی (کند)</div>
+        </div>
+        <div class="flow-arrow">↓</div>
+        <div class="flow-row">
+          <div class="flow-box">اختلال شناخته‌شده → درمان</div>
+          <div class="flow-box alt">علت ناشناخته → مانومتری آنورکتال و تست دفع بالون</div>
+        </div>
+      </div>
+      <p style="font-size:13.8px;">در این آزمون، پس از خوراندن مارکرهای حاجب، انتظار می‌رود پس از ۵ روز، ۸۰٪ ماده از کولون خارج شده باشد (بدون مصرف ملین یا انما). این تست فقط عبور از کولون را می‌سنجد، نه عبور از معده یا روده باریک.</p>
+
+      <h4>تست‌های آنورکتال و کف لگن</h4>
+      <div class="box def">
+        <ul>
+          <li>این تست‌ها اختلال کارکرد کف لگن را در بیمارانی با ناتوانی تخلیه رکتوم، احساس پُری همیشگی، درد رکتوم، نیاز به خروج مدفوع با انگشت، یا زور زدن بیش‌از‌حد بررسی می‌کنند.</li>
+          <li>شایع‌ترین علت انسداد خروجی مدفوع، اختلال عضله پوبورکتالیس است که با <b>دفکوگرافی</b> قابل شناسایی است.</li>
+          <li><b>دفکوگرافی</b> نقایص آناتومیک رکتوم مانند اینترنال پرولاپس، انتروسل و رکتوسل را نشان می‌دهد.</li>
+        </ul>
+      </div>
+      <div class="box clin">
+        <div class="box-title">⚕️ مانومتری آنورکتال</div>
+        <ul>
+          <li>اگر تونیسیته اسفنکتر مقعدی در حالت استراحت بیش از <b>۸۰ میلی‌متر جیوه</b> باشد، مطرح‌کننده <span class="en">anismus</span> (اسپاسم اسفنکتر مقعدی) است.</li>
+          <li>در تشخیص بیماری هیرشپرونگ بزرگسالان نیز کمک‌کننده است.</li>
+        </ul>
+      </div>
+      <p><span class="en">Balloon Expulsion Test</span> یک روش غربالگری مهم برای شناخت اختلال کارکرد آنورکتال است.</p>
+    </div>
+  </details>
+
+  <div class="chap-summary">
+    <h4>📌 جمع‌بندی فصل ۳ — یبوست</h4>
+    <ul>
+      <li>یبوست: دفع کمتر از ۳ بار در هفته یا زور زدن/مدفوع سفت/احساس دفع ناکامل.</li>
+      <li>یبوست تازه‌آغاز باید هوشیاری بالایی برای رد علل عضوی (تومور، تنگی) ایجاد کند.</li>
+      <li><span class="en">CTT</span> عبور کولونی را می‌سنجد؛ اختلال شود یا نشود، مسیر تشخیصی را تعیین می‌کند.</li>
+      <li>مانومتری آنورکتال: فشار استراحت &gt;۸۰ میلی‌متر جیوه → <span class="en">anismus</span>.</li>
+      <li>دفکوگرافی نقایص آناتومیک رکتوم (رکتوسل، انتروسل، پرولاپس) را نشان می‌دهد.</li>
+    </ul>
+  </div>
+</section>
+
+</main>
+
+<!-- ============ FINAL REVIEW ============ -->
+<section class="final-review" id="final-review">
+  <div class="chapter-head">
+    <div class="chapter-num">✓</div>
+    <h2>مرور نهایی — سؤال و پاسخ کلیدی</h2>
+  </div>
+  <div id="frList"></div>
+</section>
+
+<!-- ============ QUIZ ============ -->
+<section class="quiz-wrap" id="quiz">
+  <div class="quiz-head">
+    <h2>🧪 آزمون تستی تعاملی</h2>
+    <p style="color:var(--ink-soft);font-size:13.8px;">۲۵ سوال چهارگزینه‌ای بر اساس مباحث درد شکمی، اسهال و یبوست</p>
+    <div class="quiz-stats">
+      <div class="progress-outer"><div class="progress-inner" id="progressBar"></div></div>
+      <span id="qCounter">۰ / ۲۵</span>
+    </div>
+  </div>
+  <div id="quizList"></div>
+  <div class="final-panel" id="finalPanel">
+    <div style="font-size:15px;opacity:.9;">نتیجه آزمون شما</div>
+    <div class="score" id="scoreText">۰ / ۲۵</div>
+    <div class="pct" id="pctText">۰٪</div>
+    <div class="msg" id="msgText"></div>
+    <button class="restart-btn" id="restartBtn">🔄 شروع دوباره آزمون</button>
+  </div>
+</section>
+
+<!-- ============ SURVEY ============ -->
+<section class="survey" id="survey">
+  <h2>نظر شما درباره این جزوه چیست؟</h2>
+  <p>با کلیک روی یکی از ایموجی‌ها رأی دهید</p>
+  <div class="emoji-row" id="emojiRow">
+    <button class="emoji-btn" data-emoji="love">😍</button>
+    <button class="emoji-btn" data-emoji="happy">😊</button>
+    <button class="emoji-btn" data-emoji="neutral">😐</button>
+    <button class="emoji-btn" data-emoji="unhappy">😕</button>
+    <button class="emoji-btn" data-emoji="angry">😡</button>
+  </div>
+  <div class="survey-results" id="surveyResults"></div>
+</section>
+
+<footer>ساخته‌شده برای مرور بهتر — بر اساس جزوه مقدمات گوارش، دکتر خنچه، پزشکی ۹۶</footer>
+
+<script>
+(function(){
+"use strict";
+var LS_KEY = "gi_notes_state_v1";
+var state = {};
+try{ state = JSON.parse(localStorage.getItem(LS_KEY)) || {}; }catch(e){ state = {}; }
+function save(){ try{ localStorage.setItem(LS_KEY, JSON.stringify(state)); }catch(e){} }
+
+/* ---------- THEME ---------- */
+function applyTheme(t){
+  document.documentElement.setAttribute('data-theme', t);
+  document.querySelectorAll('[data-theme-btn]').forEach(function(b){
+    b.classList.toggle('active', b.getAttribute('data-theme-btn')===t);
+  });
+  state.theme = t; save();
+}
+document.querySelectorAll('[data-theme-btn]').forEach(function(b){
+  b.addEventListener('click', function(){ applyTheme(b.getAttribute('data-theme-btn')); });
+});
+applyTheme(state.theme || 'light');
+
+/* ---------- FONT SIZE ---------- */
+function applyFont(px){
+  px = Math.max(14, Math.min(22, px));
+  document.documentElement.style.setProperty('--fs-base', px+'px');
+  state.fontSize = px; save();
+}
+applyFont(state.fontSize || 17);
+document.getElementById('fontPlus').addEventListener('click', function(){ applyFont((state.fontSize||17)+1); });
+document.getElementById('fontMinus').addEventListener('click', function(){ applyFont((state.fontSize||17)-1); });
+
+/* ---------- EXPAND / COLLAPSE ALL ---------- */
+var allOpen = true;
+document.getElementById('toggleAll').addEventListener('click', function(){
+  allOpen = !allOpen;
+  document.querySelectorAll('main details.card').forEach(function(d){ d.open = allOpen; });
+});
+
+/* ---------- PRINT ---------- */
+document.getElementById('printBtn').addEventListener('click', function(){ window.print(); });
+
+/* ---------- HIGHLIGHTING ---------- */
+var hlToolbar = document.getElementById('hlToolbar');
+var currentSelectionRange = null;
+
+function wrapRangeWithMark(range, color){
+  var mark = document.createElement('mark');
+  mark.style.background = color;
+  mark.style.borderRadius = '3px';
+  mark.className = 'user-hl';
+  try{
+    range.surroundContents(mark);
+  }catch(e){
+    // fallback: extract & wrap
+    var content = range.extractContents();
+    mark.appendChild(content);
+    range.insertNode(mark);
+  }
+}
+
+document.addEventListener('mouseup', function(e){
+  if(e.target.closest('#hlToolbar') || e.target.closest('#toolbar')) return;
+  var sel = window.getSelection();
+  if(!sel || sel.isCollapsed || sel.rangeCount===0){ hlToolbar.classList.remove('show'); return; }
+  var anchorNode = sel.anchorNode;
+  var container = anchorNode && anchorNode.nodeType===3 ? anchorNode.parentElement : anchorNode;
+  if(!container || !container.closest('.card-body')){ hlToolbar.classList.remove('show'); return; }
+  var range = sel.getRangeAt(0);
+  if(range.collapsed){ hlToolbar.classList.remove('show'); return; }
+  currentSelectionRange = range;
+  var rect = range.getBoundingClientRect();
+  hlToolbar.style.top = (window.scrollY + rect.top - 44) + 'px';
+  hlToolbar.style.left = (window.scrollX + rect.left + rect.width/2 - 60) + 'px';
+  hlToolbar.classList.add('show');
+});
+
+document.querySelectorAll('.hl-opt').forEach(function(opt){
+  opt.addEventListener('click', function(){
+    if(currentSelectionRange){
+      wrapRangeWithMark(currentSelectionRange.cloneRange(), opt.getAttribute('data-color'));
+      window.getSelection().removeAllRanges();
+      persistHighlights();
+    }
+    hlToolbar.classList.remove('show');
+  });
+});
+document.addEventListener('mousedown', function(e){
+  if(!e.target.closest('#hlToolbar')) hlToolbar.classList.remove('show');
+});
+
+function persistHighlights(){
+  var marks = [];
+  document.querySelectorAll('mark.user-hl').forEach(function(m){
+    marks.push({text: m.textContent, color: m.style.background});
+  });
+  state.highlights = marks; save();
+}
+document.getElementById('clearHl').addEventListener('click', function(){
+  document.querySelectorAll('mark.user-hl').forEach(function(m){
+    var parent = m.parentNode;
+    while(m.firstChild) parent.insertBefore(m.firstChild, m);
+    parent.removeChild(m);
+  });
+  state.highlights = []; save();
+});
+/* restore highlights (best-effort: re-find & wrap first textual occurrence per saved entry) */
+(function restoreHighlights(){
+  if(!state.highlights || !state.highlights.length) return;
+  state.highlights.forEach(function(h){
+    if(!h.text || h.text.length<2) return;
+    var walker = document.createTreeWalker(document.getElementById('mainContent'), NodeFilter.SHOW_TEXT, null);
+    var node;
+    while(node = walker.nextNode()){
+      var idx = node.nodeValue.indexOf(h.text);
+      if(idx>-1){
+        var range = document.createRange();
+        range.setStart(node, idx);
+        range.setEnd(node, idx + h.text.length);
+        wrapRangeWithMark(range, h.color);
+        break;
+      }
+    }
+  });
+})();
+
+/* ---------- SEARCH ---------- */
+var searchBox = document.getElementById('searchBox');
+var searchCount = document.getElementById('searchCount');
+var searchMatches = [];
+var searchIdx = -1;
+
+function clearSearchMarks(){
+  document.querySelectorAll('mark.search-hit').forEach(function(m){
+    var parent = m.parentNode;
+    while(m.firstChild) parent.insertBefore(m.firstChild, m);
+    parent.removeChild(m);
+    parent.normalize();
+  });
+}
+searchBox.addEventListener('input', function(){
+  clearSearchMarks();
+  document.querySelectorAll('.blink-hit').forEach(function(el){ el.classList.remove('blink-hit'); });
+  var q = searchBox.value.trim();
+  if(q.length<2){ searchCount.textContent=''; return; }
+  var cards = document.querySelectorAll('main details.card');
+  var foundCards = [];
+  cards.forEach(function(card){
+    var body = card.querySelector('.card-body');
+    var text = body.textContent;
+    if(text.toLowerCase().indexOf(q.toLowerCase())>-1 || text.indexOf(q)>-1){
+      card.open = true;
+      foundCards.push(card);
+      // highlight occurrences in text nodes
+      var walker = document.createTreeWalker(body, NodeFilter.SHOW_TEXT, null);
+      var nodes = [];
+      var n;
+      while(n = walker.nextNode()) nodes.push(n);
+      nodes.forEach(function(node){
+        var val = node.nodeValue;
+        var lowVal = val.toLowerCase();
+        var lowQ = q.toLowerCase();
+        var pos = lowVal.indexOf(lowQ);
+        if(pos>-1 && node.parentNode && node.parentNode.tagName!=='MARK'){
+          var range = document.createRange();
+          range.setStart(node,pos);
+          range.setEnd(node,pos+q.length);
+          var mark = document.createElement('mark');
+          mark.className='search-hit';
+          mark.style.background='var(--amber)';
+          mark.style.color='#fff';
+          mark.style.borderRadius='3px';
+          try{ range.surroundContents(mark); }catch(e){}
+        }
+      });
+    }
+  });
+  searchCount.textContent = foundCards.length + ' مورد';
+  if(foundCards.length){
+    foundCards[0].classList.add('blink-hit');
+    foundCards[0].scrollIntoView({behavior:'smooth', block:'center'});
+  }
+});
+
+/* ---------- QUIZ ---------- */
+var questions = [
+{q:"در بیمار با درد ناحیه RUQ همراه اپی‌گاستر، طول درد بیش از ۵ ساعت، عدم پاسخ به مسکن معمولی و علامت Murphy مثبت، محتمل‌ترین تشخیص کدام است؟", tag:"متوسط", options:["کوله‌سیستیت حاد","پانکراتیت حاد","آپاندیسیت حاد","دیورتیکولیت"], correct:0, explain:"کوله‌سیستیت با درد RUQ/اپی‌گاستر بیش از ۵ ساعت، عدم پاسخ به مسکن ساده و علامت Murphy مثبت مشخص می‌شود. پانکراتیت معمولاً به کمر تیر می‌کشد و آپاندیسیت در RLQ است."},
+{q:"کدام ویژگی به نفع منشأ عروقی (مانند ترومبوز مزانتریک) درد شکمی است تا التهاب پریتوئن؟", tag:"سخت", options:["Rebound Tenderness واضح","تطابق کامل شدت درد با یافته معاینه","درد شدید مبهم دور ناف با عدم تطابق شدت درد با معاینه فیزیکی","تشدید درد با سرفه"], correct:2, explain:"در اختلالات عروقی، درد اغلب شدید و ناگهانی نیست (کمتر از ۵۰٪ موارد) و مشخصه مهم آن عدم تطابق شدت درد با یافته‌های معاینه فیزیکی و معمولاً منفی‌بودن Rebound Tenderness است."},
+{q:"در کدام بیماری متابولیک، درد شکم به‌همراه تب از تظاهرات اصلی است و باید در درد شکمی با علت ناشناخته مدنظر باشد؟", tag:"متوسط", options:["دیابت شیرین","تب مدیترانه‌ای فامیلیال (FMF)","کم‌کاری تیروئید","نقرس"], correct:1, explain:"FMF با تب، درد شکم (شبیه پریتونیت) و گاه درد قفسه سینه یا مفاصل تظاهر می‌کند و در درد شکمی با علت نامشخص باید مدنظر قرار گیرد."},
+{q:"درد ناشی از انسداد مجاری صفراوی با کدام ویژگی از انسداد روده افتراق داده می‌شود؟", tag:"سخت", options:["در انسداد صفراوی، تهوع و استفراغ باعث بهبود درد می‌شود", "در انسداد صفراوی، تهوع و استفراغ باعث بهبود درد نمی‌شود؛ برخلاف انسداد روده","در هر دو حالت استفراغ باعث بهبودی می‌شود","درد صفراوی هیچ‌گاه به شانه راست تیر نمی‌کشد"], correct:1, explain:"در انسداد صفراوی، برخلاف انسداد روده، تهوع و استفراغ باعث تسکین درد نمی‌شود؛ در حالی‌که در انسداد روده، استفراغ می‌تواند درد را کمی بهبود بخشد."},
+{q:"بیمار مسنی با درد حاد ربع تحتانی چپ شکم و تب مراجعه کرده است. محتمل‌ترین تشخیص و اقدام بعدی کدام است؟", tag:"متوسط", options:["آپاندیسیت؛ سونوگرافی","دیورتیکولیت؛ CT اسکن","سنگ کلیه؛ رادیوگرافی ساده","IBS؛ کولونوسکوپی الکتیو"], correct:1, explain:"دیورتیکولیت در سنین بالا و در LLQ شایع است؛ در صورت وجود تب و Tenderness، انجام CT اسکن برای تشخیص و ارزیابی عوارض ضروری است."},
+{q:"در ارزیابی بیمار مبتلا به درد شکمی، کدام گزاره درباره لکوسیتوز درست است؟", tag:"متوسط", options:["لکوسیتوز طبیعی به معنای عدم نیاز به جراحی است","محدوده نرمال WBC ۴۰۰۰ تا ۱۰۰۰۰ است و لکوسیتوز به‌تنهایی دال بر نیاز به جراحی نیست","لکوسیتوز همیشه نشانه پرفوراسیون احشاست","افزایش WBC هیچ ارزش تشخیصی ندارد"], correct:1, explain:"WBC نرمال ۴۰۰۰ تا ۱۰۰۰۰ است. لکوسیتوز می‌تواند از علل مختلفی مانند پرفوراسیون، پانکراتیت، کوله‌سیستیت یا آنمی ناشی شود ولی به‌تنهایی معیار تصمیم به جراحی نیست."},
+{q:"طبق تعریف علمی، اسهال به چه میزان دفع مدفوع در روز اطلاق می‌شود؟", tag:"متوسط", options:["بیش از ۱۰۰ گرم در روز","بیش از ۲۰۰ گرم در روز","بیش از ۳۰۰ گرم در روز","بیش از ۵۰۰ گرم در روز"], correct:1, explain:"تعریف علمی اسهال، دفع مدفوع بیش از ۲۰۰ گرم در روز است؛ تعریف عامیانه بر شل و آبکی‌بودن و افزایش دفعات دفع تأکید دارد."},
+{q:"اسهالی که ۳ هفته طول کشیده باشد، در کدام دسته قرار می‌گیرد؟", tag:"متوسط", options:["اسهال حاد","اسهال پایا (تحت‌حاد / Persistent)","اسهال مزمن","اسهال کاذب"], correct:1, explain:"اسهال حاد کمتر از ۲ هفته، پایا (تحت‌حاد) بین ۲ تا ۴ هفته، و مزمن بیش از ۴ هفته طول می‌کشد؛ بنابراین ۳ هفته در دسته پایا قرار می‌گیرد."},
+{q:"شایع‌ترین علت اسهال پایا (Persistent) کدام است؟", tag:"سخت", options:["کلستریدیوم دیفیسیل","ژیاردیا","کمپیلوباکتر","آنتاموبا هیستولیتیکا"], correct:1, explain:"شایع‌ترین علت اسهال پایا، ژیاردیا است؛ پس از آن کلستریدیوم دیفیسیل (متعاقب آنتی‌بیوتیک)، آمیب و کمپیلوباکتر قرار دارند."},
+{q:"در بیماری با اسهال آبکی شدید، استفراغ زیاد، دوره کمون ۱ تا ۸ ساعت و تب خفیف که پس از مصرف برنج مانده رخ داده، کدام عامل محتمل‌تر است؟", tag:"سخت", options:["Vibrio cholerae","Shigella species","Bacillus cereus","Entamoeba histolytica"], correct:2, explain:"باسیلوس سرئوس با توکسین از‌پیش‌ساخته، دوره کمون کوتاه (۱–۸ ساعت)، استفراغ شدید و تب خفیف/بدون تب مشخص می‌شود و کلاسیک با مصرف برنج یا غذای گرم‌شده مجدد مرتبط است."},
+{q:"در بیمار مبتلا به دیسانتری تب‌دار (اسهال خونی + تب بالا)، کدام اقدام درمانی ممنوع و خطرناک است؟", tag:"سخت", options:["اصلاح آب و الکترولیت","تجویز آنتی‌بیوتیک اختصاصی پس از کشت","استفاده از داروهای ضدحرکت مانند لوپرامید","بستری و مشاهده"], correct:2, explain:"در دیسانتری تب‌دار، مصرف داروهای ضدحرکت و ضدترشح مانند لوپرامید و دیفنوکسیلات ممنوع است، زیرا می‌تواند باعث تشدید علائم، تداوم بیماری و مگاکولون توکسیک شود."},
+{q:"کدام گروه از بیماران بیشترین ارتباط را با اسهال ناشی از کلستریدیوم دیفیسیل دارد؟", tag:"متوسط", options:["مسافران بین‌المللی","کودکان مهدکودک","مقیمان آسایشگاه‌ها و مراکز نگهداری","ورزشکاران حرفه‌ای"], correct:2, explain:"در افراد مقیم آسایشگاه‌ها و مراکز نگهداری طولانی‌مدت، شایع‌ترین عامل اسهال کلستریدیوم دیفیسیل است."},
+{q:"کولیت ایسکمیک در اسهال مزمن/تحت‌حاد با کدام ویژگی خاص مشخص می‌شود؟", tag:"سخت", options:["همیشه رکتوم را درگیر می‌کند","رکتوم معمولاً درگیر نیست","فقط در سنین زیر ۳۰ سال رخ می‌دهد","با اسهال خونی از ابتدا شروع می‌شود"], correct:1, explain:"در کولیت ایسکمیک، اسهال ابتدا آبکی و سپس خونی می‌شود و در کولون سیگموئید/نزولی التهاب ایجاد می‌کند؛ ویژگی مشخصه آن این است که رکتوم درگیر نمی‌شود."},
+{q:"کدام نوع اسهال مزمن، برخلاف سایر انواع، با مصرف غذا تشدید می‌شود و با ناشتایی قطع نمی‌شود؟", tag:"سخت", options:["اسهال اسمزی","اسهال ترشحی","اسهال استئاتوره","اسهال حرکتی"], correct:1, explain:"اسهال ترشحی برخلاف سایر انواع اسهال مزمن با ناشتایی قطع نمی‌شود و در واقع با مصرف غذا تشدید می‌شود؛ این ویژگی افتراقی مهمی نسبت به اسهال اسمزی است که با روزه‌داری قطع می‌شود."},
+{q:"اسهال استئاتوره با چربی مدفوع بیش از چند گرم در روز تعریف می‌شود؟", tag:"متوسط", options:["۳ گرم در روز","۵ گرم در روز","۷ گرم در روز","۱۰ گرم در روز"], correct:2, explain:"استئاتوره به چربی مدفوع بیش از ۷ گرم در روز اطلاق می‌شود؛ این مقدار در نارسایی برون‌ریز پانکراس می‌تواند تا ۳۲ گرم در روز هم برسد."},
+{q:"کولیت میکروسکوپیک (لنفوسیتیک/کلاژنوس) با کدام یک از داروهای زیر ارتباط شناخته‌شده‌ای دارد؟", tag:"خیلی سخت", options:["آنتی‌بیوتیک‌های بتالاکتام","استاتین‌ها، PPI و SSRI","بلوکرهای کانال کلسیم","داروهای ضدصرع"], correct:1, explain:"کولیت میکروسکوپیک معمولاً در زنان میانسال و به‌دنبال مصرف استاتین، PPI یا SSRI دیده می‌شود؛ کولونوسکوپی این بیماران معمولاً طبیعی است و تشخیص با بیوپسی مطرح می‌شود."},
+{q:"در بیمار مبتلا به اسهال مزمن ساختگی (Factitial / Munchausen)، کدام یافته آزمایشگاهی شایع است؟", tag:"سخت", options:["هایپرکالمی و فشار خون بالا","هیپوکالمی و افت فشار خون","هایپرناترمی شدید","هایپرگلیسمی"], correct:1, explain:"در اسهال ساختگی ناشی از مصرف پنهانی ملین یا دیورتیک، افت فشار خون و هیپوکالمی از یافته‌های شایع هستند."},
+{q:"در هر بیمار با اسهال مزمن که مشکوک به سلیاک است، کدام آزمایش‌های آنتی‌بادی باید درخواست شود؟", tag:"متوسط", options:["ANA و anti-dsDNA","IgA ضد TTG و IgA ضد EMA","ANCA و ASCA","Anti-CCP و RF"], correct:1, explain:"در هر بیمار با اسهال مزمن، برای بررسی بیماری سلیاک باید IgA ضد TTG (ترانس‌گلوتامیناز بافتی) و IgA ضد EMA (آنتی‌بادی ضد اندومیزیال) درخواست شود."},
+{q:"دفع مدفوع کمتر از چند بار در هفته، معیار اصلی تعریف یبوست محسوب می‌شود؟", tag:"متوسط", options:["۲ بار در هفته","۳ بار در هفته","۴ بار در هفته","۵ بار در هفته"], correct:1, explain:"دفع کمتر از سه بار در هفته به‌عنوان constipation قلمداد می‌شود، هرچند تنها معیار کافی نیست و علائم دیگری مثل زور زدن یا دفع ناکامل نیز مهم‌اند."},
+{q:"کدام‌یک از موارد زیر جزو علل یبوست تازه‌آغاز (Recent Onset) محسوب می‌شود؟", tag:"متوسط", options:["IBS با غلبه یبوست","اسپاسم اسفنکتر آنال ناشی از شقاق مقعدی","هیپوتیروئیدی","اختلال کف لگن (Anismus)"], correct:1, explain:"اسپاسم اسفنکتر آنال (مثلاً به‌دنبال شقاق مقعدی یا هموروئید دردناک) از علل یبوست تازه‌آغاز است. IBS، هیپوتیروئیدی و آنیسموس در گروه علل یبوست مزمن قرار می‌گیرند."},
+{q:"در ارزیابی یبوست مزمن مقاوم، اگر تست زمان عبور کولونی (CTT) غیرطبیعی و کند باشد و علت شناخته‌شده‌ای نیز یافت نشود، مرحله بعدی چیست؟", tag:"سخت", options:["شروع بی‌درنگ جراحی کولون","مانومتری آنورکتال و تست دفع بالون","تجویز ملین‌های تحریکی طولانی‌مدت","کولونوسکوپی مجدد بدون بررسی بیشتر"], correct:1, explain:"در صورت کند بودن عبور کولونی بدون علت شناخته‌شده، گام بعدی مانومتری آنورکتال و تست دفع بالون (Balloon Expulsion Test) برای بررسی اختلالات تخلیه رکتال است."},
+{q:"در مانومتری آنورکتال، فشار استراحت اسفنکتر بیش از چند میلی‌متر جیوه به نفع anismus (اسپاسم اسفنکتر مقعدی) است؟", tag:"خیلی سخت", options:["۴۰ میلی‌متر جیوه","۶۰ میلی‌متر جیوه","۸۰ میلی‌متر جیوه","۱۲۰ میلی‌متر جیوه"], correct:2, explain:"فشار استراحت اسفنکتر مقعدی بیش از ۸۰ میلی‌متر جیوه در مانومتری آنورکتال، مطرح‌کننده anismus (اسپاسم اسفنکتر مقعدی) است."},
+{q:"کدام یافته تصویربرداری، نقایص آناتومیک رکتوم مانند رکتوسل و انتروسل را در ارزیابی یبوست مزمن نشان می‌دهد؟", tag:"سخت", options:["سونوگرافی شکم","دفکوگرافی","سی‌تی‌اسکن بدون کنتراست","رادیوگرافی ساده شکم"], correct:1, explain:"دفکوگرافی، نقایص آناتومیک رکتوم شامل اینترنال پرولاپس، انتروسل و رکتوسل را نشان می‌دهد و برای بررسی اختلالات تخلیه رکتال کاربرد دارد."},
+{q:"در بیمار با اسهال سرریزی (Overflow diarrhea) که در آسایشگاه بستری است، علت اصلی این وضعیت چیست؟", tag:"سخت", options:["عفونت ویروسی حاد","گیرکردن توده سفت مدفوع در رکتوم (Fecal Impaction)","سوءجذب چربی","کولیت ایسکمیک"], correct:1, explain:"اسهال سرریزی در افراد بستری طولانی‌مدت یا مقیم آسایشگاه دیده می‌شود و علت آن fecal impaction (گیرکردن توده سفت مدفوع در رکتوم) است که بیمار آن را به‌اشتباه به‌صورت اسهال ابراز می‌کند."},
+{q:"کدام گزینه درباره ارتباط استفراغ و بهبود درد در انسداد روده باریک صحیح است؟", tag:"متوسط", options:["استفراغ در انسداد روده باعث تشدید درد می‌شود","استفراغ در انسداد روده معمولاً باعث بهبود نسبی درد می‌شود","استفراغ هیچ ارتباطی با درد انسداد روده ندارد","درد انسداد روده هرگز با استفراغ همراه نیست"], correct:1, explain:"برخلاف انسداد مجاری صفراوی که استفراغ اثری بر بهبود درد ندارد، در انسداد روده باریک، تهوع و استفراغ می‌توانند باعث بهبود نسبی درد شوند."}
+];
+
+var quizState = state.quiz || {answers:{}, done:{}};
+var quizList = document.getElementById('quizList');
+var progressBar = document.getElementById('progressBar');
+var qCounter = document.getElementById('qCounter');
+var finalPanel = document.getElementById('finalPanel');
+
+function saveQuizState(){ state.quiz = quizState; save(); }
+
+function renderQuiz(){
+  quizList.innerHTML = '';
+  questions.forEach(function(item, i){
+    var card = document.createElement('div');
+    card.className = 'q-card';
+    card.id = 'q'+i;
+    var tagClassMap = {'متوسط':'lvl-mid','سخت':'lvl-hard','خیلی سخت':'lvl-vhard'};
+    var tagClass = tagClassMap[item.tag] || 'lvl-mid';
+    var html = '<div class="q-top"><div class="q-num">سؤال '+(i+1)+' از '+questions.length+'</div><div class="q-tag '+tagClass+'">'+item.tag+'</div></div>';
+    html += '<div class="q-text">'+item.q+'</div>';
+    html += '<div class="opt-list" data-qi="'+i+'">';
+    item.options.forEach(function(opt, oi){
+      html += '<div class="opt" data-oi="'+oi+'"></div>';
+    });
+    html += '</div>';
+    html += '<button class="check-btn" data-qi="'+i+'" disabled>بررسی پاسخ</button>';
+    html += '<div class="explain" id="exp'+i+'"></div>';
+    card.innerHTML = html;
+    quizList.appendChild(card);
+
+    var optDivs = card.querySelectorAll('.opt');
+    var letters = ['الف','ب','ج','د'];
+    optDivs.forEach(function(od, oi){
+      od.textContent = letters[oi] + ') ' + item.options[oi];
+      od.addEventListener('click', function(){
+        if(od.classList.contains('disabled-group')) return;
+        optDivs.forEach(function(x){ x.classList.remove('selected'); });
+        od.classList.add('selected');
+        card.querySelector('.check-btn').disabled = false;
+        card.querySelector('.check-btn').dataset.chosen = oi;
+      });
+    });
+
+    card.querySelector('.check-btn').addEventListener('click', function(){
+      var chosen = parseInt(this.dataset.chosen);
+      if(isNaN(chosen)) return;
+      optDivs.forEach(function(od, oi){
+        od.classList.add('disabled');
+        if(oi===item.correct) od.classList.add('correct');
+        else if(oi===chosen) od.classList.add('wrong');
+      });
+      this.disabled = true;
+      document.getElementById('exp'+i).innerHTML = '<b>توضیح:</b> ' + item.explain;
+      document.getElementById('exp'+i).classList.add('show');
+      quizState.answers[i] = chosen;
+      quizState.done[i] = true;
+      saveQuizState();
+      updateProgress();
+    });
+  });
+  restoreQuizAnswers();
+  updateProgress();
+}
+
+function restoreQuizAnswers(){
+  Object.keys(quizState.done||{}).forEach(function(iStr){
+    var i = parseInt(iStr);
+    var item = questions[i];
+    var card = document.getElementById('q'+i);
+    if(!card) return;
+    var chosen = quizState.answers[i];
+    var optDivs = card.querySelectorAll('.opt');
+    optDivs.forEach(function(od, oi){
+      od.classList.add('disabled');
+      if(oi===item.correct) od.classList.add('correct');
+      else if(oi===chosen) od.classList.add('wrong');
+    });
+    card.querySelector('.check-btn').disabled = true;
+    document.getElementById('exp'+i).innerHTML = '<b>توضیح:</b> ' + item.explain;
+    document.getElementById('exp'+i).classList.add('show');
+  });
+}
+
+function toPersianDigits(n){
+  var map = {'0':'۰','1':'۱','2':'۲','3':'۳','4':'۴','5':'۵','6':'۶','7':'۷','8':'۸','9':'۹'};
+  return String(n).replace(/[0-9]/g, function(d){ return map[d]; });
+}
+
+function updateProgress(){
+  var doneCount = Object.keys(quizState.done||{}).length;
+  var pct = Math.round((doneCount/questions.length)*100);
+  progressBar.style.width = pct+'%';
+  qCounter.textContent = toPersianDigits(doneCount) + ' / ' + toPersianDigits(questions.length);
+  if(doneCount===questions.length){
+    var correctCount = 0;
+    questions.forEach(function(item,i){ if(quizState.answers[i]===item.correct) correctCount++; });
+    var scorePct = Math.round((correctCount/questions.length)*100);
+    document.getElementById('scoreText').textContent = toPersianDigits(correctCount)+' / '+toPersianDigits(questions.length);
+    document.getElementById('pctText').textContent = toPersianDigits(scorePct)+'٪';
+    var msg;
+    if(scorePct>=90) msg='عالی! تسلط بسیار خوبی روی این مبحث دارید. 🌟';
+    else if(scorePct>=70) msg='خوب بود! فقط چند نکته را دوباره مرور کنید. 👍';
+    else if(scorePct>=50) msg='قابل قبول، اما بهتر است بخش‌های ضعیف را دوباره بخوانید. 📖';
+    else msg='پیشنهاد می‌شود جزوه را دوباره با دقت مرور کنید و دوباره امتحان کنید. 💪';
+    document.getElementById('msgText').textContent = msg;
+    finalPanel.classList.add('show');
+  } else {
+    finalPanel.classList.remove('show');
+  }
+}
+
+document.getElementById('restartBtn').addEventListener('click', function(){
+  quizState = {answers:{}, done:{}};
+  saveQuizState();
+  renderQuiz();
+  document.getElementById('quiz').scrollIntoView({behavior:'smooth'});
+});
+
+renderQuiz();
+
+/* ---------- FINAL REVIEW ---------- */
+var frItems = [
+  {q:"مرد ۶۵ ساله با درد اپی‌گاستر، آروغ زدن و سیری زودرس؛ اقدام تشخیصی مناسب چیست؟", a:"اندوسکوپی — برای رد پپتیک اولسر، گاستریت و بدخیمی در بیمار مسن با علائم آلارم گوارش فوقانی."},
+  {q:"مرد ۲۵ ساله با تابلوی نارسایی قلبی (HF) و رگورژیتاسیون از ۲۰ روز پیش؛ برخورد مناسب چیست؟", a:"یک دوره درمان تجربی با PPI — قبل از اقدامات تهاجمی‌تر، پاسخ به درمان ضدرفلاکس ارزیابی می‌شود."},
+  {q:"شایع‌ترین علل درد شکم کدام‌اند؟", a:"آپاندیسیت حاد، دردهای غیراختصاصی شکم، مسائل کلیوی و انسداد روده."},
+  {q:"چرا Rebound Tenderness در بیماری‌های عروقی شکم اغلب منفی است؟", a:"چون در این بیماری‌ها معمولاً درد شدید و مبهم دور ناف وجود دارد بدون التهاب مستقیم صفاق؛ عدم Rebound Tenderness با وجود درد شدید، به نفع علت عروقی است."},
+  {q:"تعریف علمی اسهال چیست؟", a:"دفع مدفوع بیش از ۲۰۰ گرم در روز."},
+  {q:"چرا در دیسانتری تب‌دار نباید از لوپرامید استفاده کرد؟", a:"چون می‌تواند باعث تشدید علائم، تداوم عفونت و ایجاد مگاکولون توکسیک شود."},
+  {q:"چگونه اسهال ترشحی از اسمزی افتراق داده می‌شود؟", a:"اسهال ترشحی با ناشتایی قطع نمی‌شود و حتی با غذا تشدید می‌شود؛ اسهال اسمزی با روزه‌داری و قطع عامل مسبب متوقف می‌شود."},
+  {q:"در هر اسهال مزمن، برای رد بیماری سلیاک چه آزمایش‌هایی درخواست می‌شود؟", a:"IgA ضد TTG و IgA ضد EMA (آنتی‌بادی ضد اندومیزیال)."},
+  {q:"معیار دفع در تعریف یبوست چیست؟", a:"دفع کمتر از سه بار در هفته، همراه با زور زدن بیش از حد، مدفوع سفت یا احساس دفع ناکامل."},
+  {q:"در مانومتری آنورکتال، چه فشاری مطرح‌کننده anismus است؟", a:"فشار استراحت اسفنکتر بیش از ۸۰ میلی‌متر جیوه."}
+];
+var frList = document.getElementById('frList');
+frItems.forEach(function(item, i){
+  var div = document.createElement('div');
+  div.className='fr-item';
+  div.innerHTML = '<div class="fr-q">'+(i+1)+'. '+item.q+'<span>▾</span></div><div class="fr-a">'+item.a+'</div>';
+  div.querySelector('.fr-q').addEventListener('click', function(){ div.classList.toggle('open'); });
+  frList.appendChild(div);
+});
+
+/* ---------- SURVEY ---------- */
+var surveyKey = 'gi_notes_survey_v1';
+var surveyData = {};
+try{ surveyData = JSON.parse(localStorage.getItem(surveyKey)) || {love:0,happy:0,neutral:0,unhappy:0,angry:0}; }
+catch(e){ surveyData = {love:0,happy:0,neutral:0,unhappy:0,angry:0}; }
+var votedKey = 'gi_notes_voted_v1';
+var alreadyVoted = localStorage.getItem(votedKey);
+var emojiLabels = {love:'😍 عالی',happy:'😊 خوب',neutral:'😐 معمولی',unhappy:'😕 ضعیف',angry:'😡 بد'};
+
+function renderSurvey(){
+  var total = Object.values(surveyData).reduce(function(a,b){return a+b;},0);
+  var results = document.getElementById('surveyResults');
+  results.innerHTML = '';
+  Object.keys(emojiLabels).forEach(function(k){
+    var count = surveyData[k]||0;
+    var pct = total ? Math.round((count/total)*100) : 0;
+    var row = document.createElement('div');
+    row.className='sr-row';
+    row.innerHTML = '<span style="width:70px;">'+emojiLabels[k]+'</span><div class="sr-bar-outer"><div class="sr-bar-inner" style="width:'+pct+'%"></div></div><span class="sr-pct">'+pct+'%</span>';
+    results.appendChild(row);
+  });
+  if(alreadyVoted){
+    results.classList.add('show');
+    document.querySelectorAll('.emoji-btn').forEach(function(b){
+      if(b.getAttribute('data-emoji')===alreadyVoted) b.classList.add('voted');
+      b.style.pointerEvents='none';
+      b.style.opacity = b.getAttribute('data-emoji')===alreadyVoted ? '1':'.5';
+    });
+  }
+}
+document.querySelectorAll('.emoji-btn').forEach(function(btn){
+  btn.addEventListener('click', function(){
+    if(alreadyVoted) return;
+    var key = btn.getAttribute('data-emoji');
+    surveyData[key] = (surveyData[key]||0)+1;
+    try{
+      localStorage.setItem(surveyKey, JSON.stringify(surveyData));
+      localStorage.setItem(votedKey, key);
+    }catch(e){}
+    alreadyVoted = key;
+    renderSurvey();
+  });
+});
+renderSurvey();
+
+})();
+</script>
+<script src="highlight.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="auth.js"></script>
+</body>
+</html>
