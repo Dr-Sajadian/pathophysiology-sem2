@@ -193,21 +193,27 @@
     });
 
     // ============ ۴. نمایش وضعیت سینک ============
-    function updateSyncStatus(status) {
-        const el = document.getElementById('sync-status');
-        if (!el) return;
-        
-        const statuses = {
-            syncing: { text: '⏳ سینک...', class: 'syncing' },
-            synced: { text: '✅ فعال', class: 'synced' },
-            local: { text: '📱 محلی', class: 'local' },
-            offline: { text: '⚠️ آفلاین', class: 'offline' },
-            pending: { text: '⏳ در انتظار', class: 'syncing' }
-        };
-        
-        const s = statuses[status] || statuses.local;
-        el.textContent = s.text;
-        el.className = s.class;
+    function updateSyncStatus(status, debugInfo) {
+    const el = document.getElementById('sync-status');
+    if (!el) return;
+    
+    const statuses = {
+        syncing: { text: '⏳ سینک...', class: 'syncing' },
+        synced: { text: '✅ فعال', class: 'synced' },
+        local: { text: '📱 محلی', class: 'local' },
+        offline: { text: '⚠️ آفلاین', class: 'offline' },
+        pending: { text: '⏳ در انتظار', class: 'syncing' }
+    };
+    
+    const s = statuses[status] || statuses.local;
+    el.textContent = s.text;
+    el.className = s.class;
+    
+    // 🐛 نمایش اطلاعات دیباگ
+    if (debugInfo) {
+        el.title = debugInfo;
+        console.log('🔍 وضعیت:', status, '|', debugInfo);
+    }
     }
 
     // ============ ۵. شروع ============
