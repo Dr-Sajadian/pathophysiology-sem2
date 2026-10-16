@@ -178,45 +178,69 @@
     }
 
     // ============ ۵. شروع ============
-    async function init() {
-        // گوش دادن به وضعیت آنلاین/آفلاین
-        window.addEventListener('online', handleOnline);
-        window.addEventListener('offline', handleOffline);
+async function init() {
+    // گوش دادن به وضعیت آنلاین/آفلاین
+    window.addEventListener('online', handleOnline);
+    window.addEventListener('offline', handleOffline);
 
-        // اگه اینترنت قطع باشه
-        if (!isOnline) {
-            updateSyncStatus('offline');
-            loadFromLocalStorage();
-            return;
-        }
-
-        if (!db) {
-            updateSyncStatus('local');
-            loadFromLocalStorage();
-            return;
-        }
-
-        const { data: { session } } = await db.auth.getSession();
-        currentUser = session?.user || null;
-
-        if (currentUser) {
-            updateSyncStatus('syncing');
-            
-            // ۱. انتقال هایلایت‌های محلی به Supabase (اگه وجود داشته باشن)
-            await migrateLocalToSupabase();
-            
-            // ۲. سینک هایلایت‌های در انتظار
-            await syncPendingHighlights();
-            
-            // ۳. بارگذاری از Supabase
-            await loadFromSupabase();
-            
-            updateSyncStatus('synced');
-        } else {
-            updateSyncStatus('local');
-            loadFromLocalStorage();
-        }
+    // اگه اینترنت قطع باشه
+    if (!isOnline) {
+        updateSyncStatus('offline');
+        loadFromLocalStorage();
+        return;
     }
+
+    if (!db) {
+        updateSyncStatus('local');
+        loadFromLocalStorage();
+        return;
+    }
+
+    // 🔥 صبر کن تا session لود بشه (تا ۳ ثانیه)
+    let session = null;
+    for (let i = 0; i < 10; i++) {
+        try {
+            const result = await db.auth.getSession();
+            session = result?.data?.session;
+            if (session) break;
+        } catch (e) {}
+        await new Promise(r => setTimeout(r, 300));
+    }
+
+    currentUser = session?.user || null;
+
+    if (currentUser) {
+        console.log('✅ کاربر لاگین کرده:', currentUser.email);
+        updateSyncStatus('syncing');
+        
+        await migrateLocalToSupabase();
+        await syncPendingHighlights();
+        await loadFromSupabase();
+        
+        updateSyncStatus('synced');
+    } else {
+        console.log('📱 کاربر مهمان');
+        updateSyncStatus('local');
+        loadFromLocalStorage();
+    }
+
+    // 🔥 گوش دادن به تغییر وضعیت لاگین
+    db.auth.onAuthStateChange(async (event, session) => {
+        console.log('🔄 تغییر وضعیت auth:', event);
+        
+        if (event === 'SIGNED_IN' && session) {
+            currentUser = session.user;
+            updateSyncStatus('syncing');
+            await migrateLocalToSupabase();
+            await syncPendingHighlights();
+            await loadFromSupabase();
+            updateSyncStatus('synced');
+        } else if (event === 'SIGNED_OUT') {
+            currentUser = null;
+            updateSyncStatus('local');
+        }
+    });
+}
 
     // ============ ۶. مدیریت آنلاین/آفلاین ============
     async function handleOnline() {
