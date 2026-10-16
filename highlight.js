@@ -4,10 +4,11 @@
 
 (function() {
     // ============ ۱. متغیرهای عمومی ============
-    const db = window.supabase ? window.supabase.createClient(
+    // 🔥 اول از کلاینت موجود استفاده کن (که menu.js ساخته)، در غیر این صورت یکی بساز
+    const db = window.appDb || (window.supabase ? window.supabase.createClient(
         'https://ddbcwyuoghdyrfqyvnab.supabase.co',
         'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRkYmN3eXVvZ2hkeXJmcXl2bmFiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTE2NzUyOTMsImV4cCI6MjEwNzI1MTI5M30.QID2XFnkYFs-afjAbhZ_e7QSzaBrLbDWXFRWl0BHnbo'
-    ) : null;
+    ) : null);
 
     const PAGE_URL = window.location.pathname;
     const STORAGE_KEY = 'myHighlights_v3';
