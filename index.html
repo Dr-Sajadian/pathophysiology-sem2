@@ -59,6 +59,7 @@
             display: flex; justify-content: center; align-items: center;
             font-size: 28px; flex-shrink: 0;
             box-shadow: 0 6px 15px rgba(0, 0, 0, 0.12); overflow: hidden;
+            background: #f0f0f0;
         }
         .icon-circle img { width: 100%; height: 100%; object-fit: cover; display: block; }
         .icon-ghodad    { background: linear-gradient(135deg, #38bdf8, #0284c7); }
@@ -95,39 +96,57 @@
     </div>
 
     <div class="cards-container">
+
+        <!-- کورس غدد -->
         <a href="ghodad.html" class="main-card">
-            <div class="icon-circle icon-ghodad"><img src="images/ghodad.jpg" alt="کورس غدد"></div>
+            <div class="icon-circle icon-ghodad">
+                <img src="images/ghodad.jpg" alt="کورس غدد">
+            </div>
             <div class="card-content">
                 <div class="card-title">کورس غدد</div>
                 <div class="card-desc">مقدمات، فارماکولوژی و پاتولوژی غدد</div>
             </div>
             <div class="card-arrow">‹</div>
         </a>
+
+        <!-- کورس گوارش -->
         <a href="gooaresh.html" class="main-card">
-            <div class="icon-circle icon-gooaresh"><img src="images/gooaresh.jpg" alt="کورس گوارش"></div>
+            <div class="icon-circle icon-gooaresh">
+                <img src="images/gooaresh.jpg" alt="کورس گوارش">
+            </div>
             <div class="card-content">
                 <div class="card-title">کورس گوارش</div>
                 <div class="card-desc">مقدمات، پاتولوژی، فارماکولوژی گوارش</div>
             </div>
             <div class="card-arrow">‹</div>
         </a>
-        <div class="main-card disabled">
-            <div class="icon-circle icon-rheum">🦴</div>
+
+        <!-- کورس روماتولوژی -->
+        <a href="rheum.html" class="main-card">
+            <div class="icon-circle icon-rheum">
+                <img src="images/rheum.jpg" alt="کورس روماتولوژی">
+            </div>
             <div class="card-content">
-                <div class="card-title">کورس روماتولوژی <span class="badge badge-soon">به زودی</span></div>
+                <div class="card-title">کورس روماتولوژی</div>
                 <div class="card-desc">بیماری‌های روماتیسمی و خودایمنی</div>
             </div>
-        </div>
-        <div class="main-card disabled">
-            <div class="icon-circle icon-hema">🩸</div>
+            <div class="card-arrow">‹</div>
+        </a>
+
+        <!-- کورس هماتولوژی -->
+        <a href="hema.html" class="main-card">
+            <div class="icon-circle icon-hema">
+                <img src="images/hema.jpg" alt="کورس هماتولوژی">
+            </div>
             <div class="card-content">
-                <div class="card-title">کورس هماتولوژی <span class="badge badge-soon">به زودی</span></div>
+                <div class="card-title">کورس هماتولوژی</div>
                 <div class="card-desc">بیماری‌های خونی و انعقاد</div>
             </div>
-        </div>
+            <div class="card-arrow">‹</div>
+        </a>
+
     </div>
 
-    <!-- اسکریپت‌های مشترک -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="menu.js"></script>
 
