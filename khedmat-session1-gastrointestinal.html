@@ -2,7 +2,7 @@
 <html lang="fa" dir="rtl" data-theme="light">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <title>مقدمات گوارش | تظاهرات بیماری‌های گوارشی - جلسه ۱</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -246,6 +246,61 @@ footer{text-align:center; padding:30px 20px; color:var(--ink-soft); font-size:13
 mark.searchmark{background:#FFEB8A; color:#3a2c00; padding:0 2px; border-radius:3px;}
 @keyframes blinkCard{0%,100%{box-shadow:var(--shadow);} 50%{box-shadow:0 0 0 4px var(--primary);}}
 .blink{animation:blinkCard .6s ease 2;}
+
+
+/* ---------- Mobile fit-to-screen ---------- */
+html,body{max-width:100%; overflow-x:hidden; -webkit-text-size-adjust:100%;}
+.card-body,.box,.g2-col,.chap-summary,.review-q,.review-a,.qtext,.qopt{overflow-wrap:anywhere; word-break:normal;}
+@media(max-width:640px){
+  body{font-size:min(var(--fs,17px),16px); line-height:1.8; padding-left:env(safe-area-inset-left); padding-right:env(safe-area-inset-right);}
+  .wrap{padding:0 12px;}
+  #toolbar{position:sticky;}
+  .tb-row{flex-wrap:nowrap; overflow-x:auto; gap:6px; padding:6px 10px; -webkit-overflow-scrolling:touch; scrollbar-width:none;}
+  .tb-row::-webkit-scrollbar{display:none;}
+  .tb-group{flex:0 0 auto; padding:3px 4px;}
+  .tb-btn{font-size:13px; padding:5px 7px; white-space:nowrap;}
+  #searchBox{flex:0 0 150px; min-width:150px; padding:6px 10px; font-size:16px;}
+  .searchCount{flex:0 0 auto; min-width:44px;}
+  .cover{padding:28px 14px 56px;}
+  .cover-img{width:min(170px,55vw); margin-bottom:12px;}
+  .cover .sub{font-size:15px;}
+  .tag{font-size:12px; padding:4px 10px;}
+  .toc{margin:-30px 10px 20px; padding:14px 16px; width:auto;}
+  .toc h2{font-size:17px;}
+  .toc ol{columns:1; padding-inline-start:18px;}
+  .toc a{font-size:14px;}
+  main{padding-top:0;}
+  .chapter{margin:28px 0;}
+  .chapter > h2{font-size:20px; padding-inline-start:10px;}
+  .card{padding:14px 14px; margin-bottom:12px; scroll-margin-top:70px;}
+  .card > h3{font-size:16px; line-height:1.6;}
+  .box{padding:10px 12px; font-size:14.5px; margin:10px 0;}
+  .tbl-wrap{margin:10px 0;}
+  table{min-width:0; font-size:13px;}
+  th,td{padding:7px 8px;}
+  .grid2{grid-template-columns:1fr; gap:10px;}
+  .g2-col{padding:10px 12px;}
+  .flow{flex-direction:column; gap:4px;}
+  .flow .fbox{min-width:0; width:100%; font-size:13px; padding:8px 10px;}
+  .flow .arrow{transform:rotate(90deg); font-size:16px;}
+  figure img{max-width:100%;}
+  .chap-summary{padding:14px 14px;}
+  .review-q{padding:12px 14px; font-size:14.5px; gap:8px;}
+  .qcard{padding:14px;}
+  .qhead{flex-wrap:wrap;}
+  .qopt{padding:10px 12px; font-size:14.5px; line-height:1.7;}
+  .qcheck-btn{width:100%; padding:11px;}
+  #quizFinal .score{font-size:32px;}
+  .emoji-btn{width:54px; height:54px; font-size:28px;}
+  .survey-emojis{gap:8px;}
+  .sr-row{font-size:13px;}
+  #hlToolbar{max-width:calc(100vw - 16px);}
+  .hl-swatch{width:30px; height:30px;}
+}
+@media(max-width:380px){
+  .tb-btn{font-size:12px; padding:4px 6px;}
+  .cover h1{font-size:26px;}
+}
 
 @media print{
   #toolbar, #hlToolbar, .qcheck-btn, #restartQuiz, .survey{display:none !important;}
@@ -684,11 +739,11 @@ mark.searchmark{background:#FFEB8A; color:#3a2c00; padding:0 2px; border-radius:
         <div class="box-title">⚠️ نکته‌ی بالینی</div>
         دیسپپسی می‌تواند نشانه‌ی سرطان معده باشد، اما در رفلاکس خطر سرطان کمتر است. افتراق این دو مهم است چون درمانشان متفاوت است؛ رفلاکس معمولاً به دارو پاسخ می‌دهد.
       </div>
-      <table>
+      <div class="tbl-wrap"><table>
         <tr><th>سن بیمار</th><th>رویکرد بالینی</th></tr>
         <tr><td>زیر ۴۵ سال</td><td>ابتدا درمان دارویی رفلاکس؛ اگر طی ۴ تا ۶ هفته پاسخ نداد → تشخیص دیسپپسی، نیاز به بررسی بیشتر</td></tr>
         <tr><td>بالای ۴۵ سال</td><td>از همان ابتدا بررسی‌های لازم (مثل آندوسکوپی) انجام می‌شود، نه صرفاً درمان دارویی</td></tr>
-      </table>
+      </table></div>
       <div class="box key"><div class="box-title">💡 نکته‌ی کلیدی</div>شیوع دیسپپسی ۲۰ تا ۳۰٪ و شیوع رفلاکس ۱۰ تا ۲۰٪ است.</div>
     </div>
   </div>
@@ -979,7 +1034,7 @@ document.getElementById('printBtn').addEventListener('click', ()=>window.print()
 /* ============ HIGHLIGHTING ============ */
 const hlToolbar = document.getElementById('hlToolbar');
 let pendingRange = null;
-document.addEventListener('mouseup', (e)=>{
+function handleSelectionEvent(e){
   if(hlToolbar.contains(e.target)) return;
   const sel = window.getSelection();
   if(sel && sel.toString().trim().length > 0 && sel.rangeCount > 0){
@@ -989,15 +1044,18 @@ document.addEventListener('mouseup', (e)=>{
     if(node.closest('.card-body, .review-a, .chap-summary, #sec1, #sec6')){
       pendingRange = range.cloneRange();
       const rect = range.getBoundingClientRect();
-      hlToolbar.style.top = (window.scrollY + rect.top - 46) + 'px';
-      hlToolbar.style.right = (window.innerWidth - window.scrollX - rect.right) + 'px';
+      hlToolbar.style.top = (window.scrollY + Math.max(rect.top - 46, 60)) + 'px';
+      const rr = Math.min(Math.max(window.innerWidth - rect.right, 8), Math.max(window.innerWidth - 190, 8));
+      hlToolbar.style.right = rr + 'px';
       hlToolbar.style.left = '';
       hlToolbar.classList.add('show');
       return;
     }
   }
   hlToolbar.classList.remove('show');
-});
+}
+document.addEventListener('mouseup', handleSelectionEvent);
+document.addEventListener('touchend', (e)=>setTimeout(()=>handleSelectionEvent(e), 350));
 document.querySelectorAll('.hl-swatch').forEach(sw=>{
   sw.addEventListener('click', ()=>{
     if(!pendingRange) return;
@@ -1283,9 +1341,6 @@ if(localStorage.getItem('gi_voted')){
   renderSurveyResults();
 }
 </script>
-<script src="highlight.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<script src="auth.js"></script>
 <script src="highlight.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="auth.js"></script>
