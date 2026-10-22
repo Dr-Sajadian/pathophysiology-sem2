@@ -149,6 +149,10 @@
 
         .card:hover .card-arrow { transform: translateX(-5px); }
 
+        /* رنگ آیکون کارت‌های جدید */
+        .icon-summary   { background: linear-gradient(135deg, #34d399, #047857); }
+        .icon-questions { background: linear-gradient(135deg, #f472b6, #be185d); }
+
         .nav-buttons {
             display: flex;
             gap: 12px;
@@ -202,7 +206,7 @@
         <h1 class="header-title">جزوات ۱۴۰۲</h1>
     </div>
 
-    <p class="subtitle">استاد مورد نظر را انتخاب کنید</p>
+    <p class="subtitle">استاد مورد نظر یا بخش مورد نظر را انتخاب کنید</p>
 
     <div class="container">
 
@@ -242,6 +246,26 @@
             <div class="card-arrow">‹</div>
         </a>
 
+        <!-- خلاصه جامع و فشرده (جدید) -->
+        <a href="moghaddamat-1402-summary.html" class="card">
+            <div class="card-icon icon-summary">📝</div>
+            <div class="card-content">
+                <div class="card-title">خلاصه جامع و فشرده</div>
+                <div class="card-desc">جمع‌بندی کل مباحث مقدمات غدد ۱۴۰۲</div>
+            </div>
+            <div class="card-arrow">‹</div>
+        </a>
+
+        <!-- درسنامه مبتنی بر نمونه سوالات (جدید) -->
+        <a href="moghaddamat-1402-question-bank.html" class="card">
+            <div class="card-icon icon-questions">📚</div>
+            <div class="card-content">
+                <div class="card-title">درسنامه مبتنی بر نمونه سوالات</div>
+                <div class="card-desc">آموزش نکات کلیدی از دل نمونه سوالات</div>
+            </div>
+            <div class="card-arrow">‹</div>
+        </a>
+
     </div>
 
     <div class="nav-buttons">
@@ -249,11 +273,7 @@
         <a href="index.html" class="back-btn">🏠 خانه</a>
     </div>
 
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<script src="auth.js"></script>
-
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<script src="menu.js"></script>
-
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="menu.js"></script>
 </body>
 </html>
