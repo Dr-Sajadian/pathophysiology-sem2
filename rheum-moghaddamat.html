@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>مقدمات روماتو</title>
+    <link href="https://cdn.jsdelivr.net/gh/rastikerdar/vazirmatn@v33.003/Vazirmatn-font-face.css" rel="stylesheet" type="text/css" />
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            background: linear-gradient(135deg, #e0f2fe 0%, #bae6fd 50%, #7dd3fc 100%);
+            background-attachment: fixed;
+            font-family: Vazirmatn, Tahoma, sans-serif;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 30px 20px;
+            overflow-x: hidden;
+        }
+
+        body::before, body::after {
+            content: '';
+            position: fixed;
+            border-radius: 50%;
+            filter: blur(80px);
+            z-index: 0;
+        }
+        body::before {
+            width: 300px; height: 300px;
+            background: rgba(255, 255, 255, 0.6);
+            top: -50px; right: -50px;
+        }
+        body::after {
+            width: 400px; height: 400px;
+            background: rgba(56, 189, 248, 0.4);
+            bottom: -100px; left: -100px;
+        }
+
+        .header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 8px;
+            z-index: 1;
+        }
+
+        .header-icon {
+            width: 55px; height: 55px;
+            border-radius: 50%;
+            /* تم صورتی/زرشکی روماتو */
+            background: linear-gradient(135deg, #f472b6, #be185d);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 26px;
+            box-shadow: 0 6px 15px rgba(190, 24, 93, 0.3);
+        }
+
+        .header-title {
+            font-size: 24px;
+            font-weight: 900;
+            color: #0c4a6e;
+            text-shadow: 0 2px 5px rgba(255,255,255,0.8);
+        }
+
+        .subtitle {
+            font-size: 14px;
+            color: #0369a1;
+            margin-bottom: 30px;
+            text-align: center;
+            z-index: 1;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 500px;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            z-index: 1;
+        }
+
+        .card {
+            background: rgba(255, 255, 255, 0.5);
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+            border: 1.5px solid rgba(255, 255, 255, 0.85);
+            border-radius: 20px;
+            padding: 20px;
+            text-decoration: none;
+            color: inherit;
+            display: flex;
+            align-items: center;
+            gap: 18px;
+            transition: all 0.35s ease;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
+        }
+
+        .card:hover {
+            background: rgba(255, 255, 255, 0.75);
+            transform: translateY(-4px);
+            box-shadow: 0 15px 35px rgba(190, 24, 93, 0.15);
+            border-color: #ffffff;
+        }
+
+        .card-icon {
+            width: 55px; height: 55px;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 26px;
+            flex-shrink: 0;
+            box-shadow: 0 5px 12px rgba(0, 0, 0, 0.12);
+        }
+
+        /* رنگ‌بندی آیکون‌های داخلی */
+        .icon-1402      { background: linear-gradient(135deg, #f472b6, #be185d); }
+        .icon-1401      { background: linear-gradient(135deg, #c084fc, #9333ea); }
+        .icon-questions { background: linear-gradient(135deg, #fbbf24, #d97706); }
+        .icon-summary   { background: linear-gradient(135deg, #34d399, #059669); }
+
+        .card-content { flex: 1; text-align: right; }
+
+        .card-title {
+            font-size: 17px;
+            font-weight: 900;
+            color: #0c4a6e;
+            margin-bottom: 4px;
+        }
+
+        .card-desc {
+            font-size: 12px;
+            color: #475569;
+            line-height: 1.6;
+        }
+
+        .card-arrow {
+            color: #be185d; /* رنگ فلش هماهنگ با روماتو */
+            font-size: 20px;
+            font-weight: bold;
+            transition: transform 0.3s;
+        }
+
+        .card:hover .card-arrow { transform: translateX(-5px); }
+
+        /* استایل دکمه‌های پایین صفحه (مشابه عکس گوارش) */
+        .buttons-container {
+            display: flex;
+            gap: 15px;
+            margin-top: 35px;
+            z-index: 1;
+            width: 100%;
+            max-width: 500px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            padding: 12px 20px;
+            border-radius: 25px;
+            font-weight: bold;
+            font-size: 14px;
+            text-decoration: none;
+            transition: all 0.3s;
+        }
+
+        .btn-course {
+            background: linear-gradient(135deg, #f472b6, #be185d);
+            color: white;
+            box-shadow: 0 4px 15px rgba(190, 24, 93, 0.3);
+            flex: 1;
+        }
+
+        .btn-course:hover {
+            background: linear-gradient(135deg, #ec4899, #9d174d);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(190, 24, 93, 0.4);
+        }
+
+        .btn-home {
+            background: rgba(255, 255, 255, 0.6);
+            backdrop-filter: blur(10px);
+            color: #0c4a6e;
+            border: 1.5px solid rgba(255, 255, 255, 0.9);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+        }
+
+        .btn-home:hover {
+            background: rgba(255, 255, 255, 0.85);
+            transform: translateY(-2px);
+        }
+
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: rgba(14, 165, 233, 0.4); border-radius: 4px; }
+    </style>
+</head>
+<body>
+
+    <div class="header">
+        <div class="header-icon">
+            📖
+        </div>
+        <h1 class="header-title">مقدمات روماتو</h1>
+    </div>
+
+    <p class="subtitle">یک بخش را انتخاب کنید</p>
+
+    <div class="container">
+
+        <!-- جزوات ۱۴۰۲ -->
+        <a href="rheum-moghaddamat-1402.html" class="card">
+            <div class="card-icon icon-1402">📘</div>
+            <div class="card-content">
+                <div class="card-title">جزوات ۱۴۰۲</div>
+                <div class="card-desc">جزوات مقدمات روماتو - سال ۱۴۰۲</div>
+            </div>
+            <div class="card-arrow">‹</div>
+        </a>
+
+        <!-- جزوات ۱۴۰۱ -->
+        <a href="rheum-moghaddamat-1401.html" class="card">
+            <div class="card-icon icon-1401">📗</div>
+            <div class="card-content">
+                <div class="card-title">جزوات ۱۴۰۱</div>
+                <div class="card-desc">جزوات اساتید مقدمات روماتو - سال ۱۴۰۱</div>
+            </div>
+            <div class="card-arrow">‹</div>
+        </a>
+
+        <!-- نمونه سوالات همراه با پاسخ -->
+        <a href="rheum-moghaddamat-questions.html" class="card">
+            <div class="card-icon icon-questions">📝</div>
+            <div class="card-content">
+                <div class="card-title">نمونه سوالات همراه با پاسخ</div>
+                <div class="card-desc">بانک سوالات مقدمات روماتو با پاسخ تشریحی</div>
+            </div>
+            <div class="card-arrow">‹</div>
+        </a>
+
+        <!-- خلاصه ها و مرور -->
+        <a href="rheum-moghaddamat-summary.html" class="card">
+            <div class="card-icon icon-summary">📚</div>
+            <div class="card-content">
+                <div class="card-title">خلاصه ها و مرور</div>
+                <div class="card-desc">جزوات خلاصه و نکات کلیدی برای مرور سریع</div>
+            </div>
+            <div class="card-arrow">‹</div>
+        </a>
+
+    </div>
+
+    <!-- دکمه‌های پایین صفحه -->
+    <div class="buttons-container">
+        <a href="rheum.html" class="btn btn-course">↩ بازگشت به کورس روماتولوژی</a>
+        <a href="index.html" class="btn btn-home">خانه 🏠</a>
+    </div>
+
+    <!-- اسکریپت‌ها -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="auth.js"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="menu.js"></script>
+</body>
+</html>
