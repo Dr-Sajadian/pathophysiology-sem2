@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>کورس روماتولوژی</title>
+    <link href="https://cdn.jsdelivr.net/gh/rastikerdar/vazirmatn@v33.003/Vazirmatn-font-face.css" rel="stylesheet" type="text/css" />
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            background: linear-gradient(135deg, #e0f2fe 0%, #bae6fd 50%, #7dd3fc 100%);
+            background-attachment: fixed;
+            font-family: Vazirmatn, Tahoma, sans-serif;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 30px 20px;
+            overflow-x: hidden;
+        }
+
+        body::before, body::after {
+            content: '';
+            position: fixed;
+            border-radius: 50%;
+            filter: blur(80px);
+            z-index: 0;
+        }
+        body::before {
+            width: 300px; height: 300px;
+            background: rgba(255, 255, 255, 0.6);
+            top: -50px; right: -50px;
+        }
+        body::after {
+            width: 400px; height: 400px;
+            background: rgba(56, 189, 248, 0.4);
+            bottom: -100px; left: -100px;
+        }
+
+        .header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 8px;
+            z-index: 1;
+        }
+
+        .header-icon {
+            width: 55px; height: 55px;
+            border-radius: 50%;
+            /* رنگ‌بندی هماهنگ با کارت روماتولوژی در صفحه اصلی */
+            background: linear-gradient(135deg, #f472b6, #be185d);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 28px;
+            box-shadow: 0 6px 15px rgba(190, 24, 93, 0.3);
+            overflow: hidden;
+        }
+
+        /* تنظیمات عکس داخل آیکون هدر */
+        .header-icon img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+
+        .header-title {
+            font-size: 24px;
+            font-weight: 900;
+            color: #0c4a6e;
+            text-shadow: 0 2px 5px rgba(255,255,255,0.8);
+        }
+
+        .subtitle {
+            font-size: 14px;
+            color: #0369a1;
+            margin-bottom: 30px;
+            text-align: center;
+            z-index: 1;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 500px;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            z-index: 1;
+        }
+
+        .card {
+            background: rgba(255, 255, 255, 0.5);
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+            border: 1.5px solid rgba(255, 255, 255, 0.85);
+            border-radius: 20px;
+            padding: 20px;
+            text-decoration: none;
+            color: inherit;
+            display: flex;
+            align-items: center;
+            gap: 18px;
+            transition: all 0.35s ease;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
+        }
+
+        .card:hover {
+            background: rgba(255, 255, 255, 0.75);
+            transform: translateY(-4px);
+            box-shadow: 0 15px 35px rgba(14, 165, 233, 0.25);
+            border-color: #ffffff;
+        }
+
+        .card-icon {
+            width: 55px; height: 55px;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 26px;
+            flex-shrink: 0;
+            box-shadow: 0 5px 12px rgba(0, 0, 0, 0.12);
+        }
+
+        /* رنگ‌بندی آیکون‌های داخلی */
+        .icon-moghaddamat  { background: linear-gradient(135deg, #f472b6, #be185d); }
+        .icon-pathology    { background: linear-gradient(135deg, #ff8a8a, #c1121f); }
+        .icon-pharma       { background: linear-gradient(135deg, #a7c957, #588157); }
+
+        .card-content { flex: 1; text-align: right; }
+
+        .card-title {
+            font-size: 17px;
+            font-weight: 900;
+            color: #0c4a6e;
+            margin-bottom: 4px;
+        }
+
+        .card-desc {
+            font-size: 12px;
+            color: #475569;
+            line-height: 1.6;
+        }
+
+        .card-arrow {
+            color: #0284c7;
+            font-size: 20px;
+            font-weight: bold;
+            transition: transform 0.3s;
+        }
+
+        .card:hover .card-arrow { transform: translateX(-5px); }
+
+        .back-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            margin-top: 35px;
+            padding: 12px 28px;
+            background: rgba(255, 255, 255, 0.6);
+            backdrop-filter: blur(10px);
+            color: #0c4a6e;
+            text-decoration: none;
+            border-radius: 25px;
+            font-weight: bold;
+            font-size: 14px;
+            border: 1.5px solid rgba(255, 255, 255, 0.9);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+            transition: all 0.3s;
+            z-index: 1;
+        }
+
+        .back-btn:hover {
+            background: rgba(255, 255, 255, 0.85);
+            transform: translateY(-2px);
+        }
+
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: rgba(14, 165, 233, 0.4); border-radius: 4px; }
+    </style>
+</head>
+<body>
+
+    <div class="header">
+        <div class="header-icon">
+            <!-- مطمئن شوید عکس rheum.jpg در پوشه images وجود دارد -->
+            <img src="images/rheum.jpg" alt="کورس روماتولوژی">
+        </div>
+        <h1 class="header-title">کورس روماتولوژی</h1>
+    </div>
+
+    <p class="subtitle">یک بخش را انتخاب کنید</p>
+
+    <div class="container">
+
+        <!-- مقدمات روماتو -->
+        <a href="rheum-moghaddamat.html" class="card">
+            <div class="card-icon icon-moghaddamat">📖</div>
+            <div class="card-content">
+                <div class="card-title">مقدمات روماتو</div>
+                <div class="card-desc">فیزیولوژی و مبانی بیماری‌های روماتیسمی</div>
+            </div>
+            <div class="card-arrow">‹</div>
+        </a>
+
+        <!-- پاتو پوست، استخوان و نسج نرم -->
+        <a href="rheum-pathology.html" class="card">
+            <div class="card-icon icon-pathology">🔬</div>
+            <div class="card-content">
+                <div class="card-title">پاتو پوست، استخوان و نسج نرم</div>
+                <div class="card-desc">ضایعات پاتولوژیک روماتیسمی و خودایمنی</div>
+            </div>
+            <div class="card-arrow">‹</div>
+        </a>
+
+        <!-- فارما روماتو -->
+        <a href="rheum-pharmacology.html" class="card">
+            <div class="card-icon icon-pharma">💊</div>
+            <div class="card-content">
+                <div class="card-title">فارما روماتو</div>
+                <div class="card-desc">داروهای مؤثر در درمان بیماری‌های روماتیسمی</div>
+            </div>
+            <div class="card-arrow">‹</div>
+        </a>
+
+    </div>
+
+    <a href="index.html" class="back-btn">↩ بازگشت به خانه</a>
+
+    <!-- اسکریپت‌ها دقیقاً مشابه صفحات دیگر -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="auth.js"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="menu.js"></script>
+</body>
+</html>
