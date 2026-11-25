@@ -46,16 +46,16 @@
             z-index: 1;
         }
 
-        /* ✅ تغییرات اینجا اعمال شد: عکس مربعی شد */
+        /* ✅ اصلاح شد: عکس کاملاً مربع با گوشه‌های تیز */
         .header-icon {
             width: 55px; 
             height: 55px;
-            border-radius: 12px; /* گوشه‌های گرد مثل غدد */
-            background: white; /* پس‌زمینه سفید در صورت لود نشدن عکس */
+            border-radius: 0; /* گوشه‌های تیز */
+            background: white; 
             display: flex;
             justify-content: center;
             align-items: center;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15); /* سایه ملایم */
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15); 
             overflow: hidden;
         }
 
