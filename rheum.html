@@ -46,16 +46,16 @@
             z-index: 1;
         }
 
+        /* ✅ تغییرات اینجا اعمال شد: عکس مربعی شد */
         .header-icon {
-            width: 55px; height: 55px;
-            border-radius: 50%;
-            /* رنگ‌بندی هماهنگ با کارت روماتولوژی در صفحه اصلی */
-            background: linear-gradient(135deg, #f472b6, #be185d);
+            width: 55px; 
+            height: 55px;
+            border-radius: 12px; /* گوشه‌های گرد مثل غدد */
+            background: white; /* پس‌زمینه سفید در صورت لود نشدن عکس */
             display: flex;
             justify-content: center;
             align-items: center;
-            font-size: 28px;
-            box-shadow: 0 6px 15px rgba(190, 24, 93, 0.3);
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15); /* سایه ملایم */
             overflow: hidden;
         }
 
@@ -187,7 +187,6 @@
 
     <div class="header">
         <div class="header-icon">
-            <!-- مطمئن شوید عکس rheum.jpg در پوشه images وجود دارد -->
             <img src="images/rheum.jpg" alt="کورس روماتولوژی">
         </div>
         <h1 class="header-title">کورس روماتولوژی</h1>
@@ -231,7 +230,7 @@
 
     <a href="index.html" class="back-btn">↩ بازگشت به خانه</a>
 
-    <!-- اسکریپت‌ها دقیقاً مشابه صفحات دیگر -->
+    <!-- اسکریپت‌ها -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="auth.js"></script>
 
