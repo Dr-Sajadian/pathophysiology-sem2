@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>جزوات ۱۴۰۱ - مقدمات روماتو</title>
+    <link href="https://cdn.jsdelivr.net/gh/rastikerdar/vazirmatn@v33.003/Vazirmatn-font-face.css" rel="stylesheet" type="text/css" />
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            background: linear-gradient(135deg, #e0f2fe 0%, #bae6fd 50%, #7dd3fc 100%);
+            background-attachment: fixed;
+            font-family: Vazirmatn, Tahoma, sans-serif;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 30px 20px;
+            overflow-x: hidden;
+        }
+
+        body::before, body::after {
+            content: '';
+            position: fixed;
+            border-radius: 50%;
+            filter: blur(80px);
+            z-index: 0;
+        }
+        body::before {
+            width: 300px; height: 300px;
+            background: rgba(255, 255, 255, 0.6);
+            top: -50px; right: -50px;
+        }
+        body::after {
+            width: 400px; height: 400px;
+            background: rgba(56, 189, 248, 0.4);
+            bottom: -100px; left: -100px;
+        }
+
+        .header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 8px;
+            z-index: 1;
+        }
+
+        /* آیکون هدر با تم روماتو (صورتی/زرشکی) */
+        .header-icon {
+            width: 55px; height: 55px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #f472b6, #be185d);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 26px;
+            box-shadow: 0 6px 15px rgba(190, 24, 93, 0.3);
+        }
+
+        .header-title {
+            font-size: 24px;
+            font-weight: 900;
+            color: #0c4a6e;
+            text-shadow: 0 2px 5px rgba(255,255,255,0.8);
+        }
+
+        .subtitle {
+            font-size: 14px;
+            color: #0369a1;
+            margin-bottom: 30px;
+            text-align: center;
+            z-index: 1;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 500px;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            z-index: 1;
+        }
+
+        .card {
+            background: rgba(255, 255, 255, 0.5);
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+            border: 1.5px solid rgba(255, 255, 255, 0.85);
+            border-radius: 20px;
+            padding: 15px 20px;
+            text-decoration: none;
+            color: inherit;
+            display: flex;
+            align-items: center;
+            gap: 18px;
+            transition: all 0.35s ease;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
+        }
+
+        .card:hover {
+            background: rgba(255, 255, 255, 0.75);
+            transform: translateY(-4px);
+            box-shadow: 0 15px 35px rgba(190, 24, 93, 0.15);
+            border-color: #ffffff;
+        }
+
+        /* استایل عکس اساتید */
+        .prof-icon {
+            width: 65px; 
+            height: 65px;
+            border-radius: 50%;
+            overflow: hidden;
+            flex-shrink: 0;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+            border: 2.5px solid #ffffff;
+            background: #f0f0f0;
+        }
+
+        .prof-icon img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+
+        .card-content { flex: 1; text-align: right; }
+
+        .card-title {
+            font-size: 17px;
+            font-weight: 900;
+            color: #0c4a6e;
+            margin-bottom: 4px;
+        }
+
+        .card-desc {
+            font-size: 12px;
+            color: #475569;
+            line-height: 1.6;
+        }
+
+        .card-arrow {
+            color: #be185d;
+            font-size: 20px;
+            font-weight: bold;
+            transition: transform 0.3s;
+        }
+
+        .card:hover .card-arrow { transform: translateX(-5px); }
+
+        /* دکمه‌های پایین صفحه */
+        .buttons-container {
+            display: flex;
+            gap: 15px;
+            margin-top: 35px;
+            z-index: 1;
+            width: 100%;
+            max-width: 500px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            padding: 12px 20px;
+            border-radius: 25px;
+            font-weight: bold;
+            font-size: 14px;
+            text-decoration: none;
+            transition: all 0.3s;
+        }
+
+        /* دکمه بازگشت با تم روماتو */
+        .btn-back {
+            background: linear-gradient(135deg, #f472b6, #be185d);
+            color: white;
+            box-shadow: 0 4px 15px rgba(190, 24, 93, 0.3);
+            flex: 1;
+        }
+
+        .btn-back:hover {
+            background: linear-gradient(135deg, #ec4899, #9d174d);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(190, 24, 93, 0.4);
+        }
+
+        .btn-home {
+            background: rgba(255, 255, 255, 0.6);
+            backdrop-filter: blur(10px);
+            color: #0c4a6e;
+            border: 1.5px solid rgba(255, 255, 255, 0.9);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+            width: 110px;
+        }
+
+        .btn-home:hover {
+            background: rgba(255, 255, 255, 0.85);
+            transform: translateY(-2px);
+        }
+
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: rgba(14, 165, 233, 0.4); border-radius: 4px; }
+    </style>
+</head>
+<body>
+
+    <div class="header">
+        <div class="header-icon">📘</div>
+        <h1 class="header-title">جزوات ۱۴۰۱</h1>
+    </div>
+
+    <p class="subtitle">استاد مورد نظر را انتخاب کنید</p>
+
+    <div class="container">
+
+        <!-- استاد محتشمی -->
+        <a href="rheum-1401-mohtashami.html" class="card">
+            <div class="prof-icon">
+                <!-- توجه: عکس استاد را با این نام در پوشه images آپلود کنید -->
+                <img src="images/mohtashami.jpg" alt="استاد محتشمی">
+            </div>
+            <div class="card-content">
+                <div class="card-title">استاد محتشمی</div>
+                <div class="card-desc">جزوات و منابع مقدمات روماتو</div>
+            </div>
+            <div class="card-arrow">‹</div>
+        </a>
+
+        <!-- استاد بیات -->
+        <a href="rheum-1401-bayat.html" class="card">
+            <div class="prof-icon">
+                <!-- توجه: عکس استاد را با این نام در پوشه images آپلود کنید -->
+                <img src="images/bayat.jpg" alt="استاد بیات">
+            </div>
+            <div class="card-content">
+                <div class="card-title">استاد بیات</div>
+                <div class="card-desc">جزوات و منابع مقدمات روماتو</div>
+            </div>
+            <div class="card-arrow">‹</div>
+        </a>
+
+        <!-- استاد سبحانی -->
+        <a href="rheum-1401-sobhani.html" class="card">
+            <div class="prof-icon">
+                <!-- توجه: عکس استاد را با این نام در پوشه images آپلود کنید -->
+                <img src="images/sobhani.jpg" alt="استاد سبحانی">
+            </div>
+            <div class="card-content">
+                <div class="card-title">استاد سبحانی</div>
+                <div class="card-desc">جزوات و منابع مقدمات روماتو</div>
+            </div>
+            <div class="card-arrow">‹</div>
+        </a>
+
+        <!-- استاد شادمانفر -->
+        <a href="rheum-1401-shadmanfar.html" class="card">
+            <div class="prof-icon">
+                <!-- توجه: عکس استاد را با این نام در پوشه images آپلود کنید -->
+                <img src="images/shadmanfar.jpg" alt="استاد شادمانفر">
+            </div>
+            <div class="card-content">
+                <div class="card-title">استاد شادمانفر</div>
+                <div class="card-desc">جزوات و منابع مقدمات روماتو</div>
+            </div>
+            <div class="card-arrow">‹</div>
+        </a>
+
+    </div>
+
+    <!-- دکمه‌های پایین صفحه -->
+    <div class="buttons-container">
+        <a href="rheum-moghaddamat.html" class="btn btn-back">↩ بازگشت به مقدمات روماتو</a>
+        <a href="index.html" class="btn btn-home">خانه 🏠</a>
+    </div>
+
+    <!-- اسکریپت‌ها -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="auth.js"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="menu.js"></script>
+</body>
+</html>
